@@ -5,10 +5,11 @@ using static UnityEngine.GraphicsBuffer;
 public class EnemyBase : MonoBehaviour
 {
 
-    NavMeshAgent agent;
+    public NavMeshAgent agent;
     Rigidbody2D rigidbody2D;
 
     GameObject playerObject;
+
 
     #region Player Detection
 
@@ -23,6 +24,8 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] float detectRadiusFromBehind = 2.5f;
     [SerializeField] float DetectionCone = 10;
     [SerializeField] float attackRange = 1;
+    [SerializeField] float rotatingSpeed = 200;
+
     [SerializeField] LayerMask obsticleLayer;
 
     #endregion
@@ -63,12 +66,24 @@ public class EnemyBase : MonoBehaviour
 
         float distanceToPlayer = Vector2.Distance(transform.position, playerObject.transform.position);
 
+
+        Vector2 raycastDirection = playerObject.transform.position - transform.position;
+
+        bool playerObstructed = Physics2D.Raycast(transform.position, raycastDirection.normalized, distanceToPlayer, obsticleLayer);
+
+
         #region Attack Range
 
-        if (distanceToPlayer < attackRange && currentAngle < DetectionCone) // Kollar om spelaren är tillräckligt nära för att attackera
+        if (distanceToPlayer < attackRange && currentAngle < DetectionCone && !playerObstructed) // Kollar om spelaren är tillräckligt nära för att attackera
         {
 
-            
+            Vector2 lookDirection = new Vector2(playerObject.transform.position.x, playerObject.transform.position.y) - rigidbody2D.position;
+            float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
+
+            Quaternion targetRotation = Quaternion.Euler(0f, 0f, angle - 90f);
+
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotatingSpeed * Time.deltaTime);
+
             inRangeForAttack = true;
 
             return; // Sätter return så den inte behöver köra den nedastående koden
@@ -103,6 +118,7 @@ public class EnemyBase : MonoBehaviour
 
                 transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
+
                 aggro = true;
 
                 return;
@@ -115,16 +131,7 @@ public class EnemyBase : MonoBehaviour
 
         #region Front View
 
-        if (distanceToPlayer > detectRadiusInFront) // Kollar om spelaren är tillräckligt nära
-        {
-            return;
-        }
-
-        Vector2 raycastDirection = playerObject.transform.position - transform.position;
-
-        bool playerObstructed = Physics2D.Raycast(transform.position, raycastDirection.normalized, distanceToPlayer, obsticleLayer);
-
-        if (!playerObstructed && currentAngle < DetectionCone) // Kollar om det är någonting mellan spellaren och Fienden kollar på spelaren
+        if (!playerObstructed && currentAngle < DetectionCone && distanceToPlayer < detectRadiusInFront) // Kollar om det är någonting mellan spellaren, om de är tillräckligt nära och Fienden kollar på spelaren
         {
             agent.SetDestination(playerObject.transform.position);
 

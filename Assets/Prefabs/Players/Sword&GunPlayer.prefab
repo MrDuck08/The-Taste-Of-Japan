@@ -307,6 +307,7 @@ GameObject:
   m_Component:
   - component: {fileID: 174491943365817997}
   - component: {fileID: 946225439933776678}
+  - component: {fileID: 2318716005172368956}
   m_Layer: 7
   m_Name: ChargeAttack
   m_TagString: PlayerAttack
@@ -387,6 +388,52 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &2318716005172368956
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4240542273072960985}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &5502448033236901996
 GameObject:
   m_ObjectHideFlags: 0
@@ -567,12 +614,13 @@ MonoBehaviour:
   basicAttacking: 0
   stanceAttackObject: {fileID: 4240542273072960985}
   bulletTrail: {fileID: 1562609465452907130, guid: 1c3919ec3feb51c44ab2aa3c84b1eb45, type: 3}
-  testObject: {fileID: 0}
   bulletSpawnPos: {x: 0, y: 0}
   bullets: 6
-  bulletLayerMask:
+  bulletIgnoreLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 128
+  trailSpeed: 20
+  fadeDuration: 1
 --- !u!58 &2446766598898433917
 CircleCollider2D:
   m_ObjectHideFlags: 0

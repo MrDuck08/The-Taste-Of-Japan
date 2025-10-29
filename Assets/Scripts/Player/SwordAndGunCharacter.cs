@@ -190,9 +190,11 @@ public class SwordAndGunCharacter : Player1
 
         yield return new WaitForSeconds(0.4f);
 
-        speed = 20;
-
         stanceAttackObject.SetActive(false);
+
+        yield return new WaitForSeconds(0.2f);
+
+        speed = 20;
 
         attackStance = false;
         attacking = false;

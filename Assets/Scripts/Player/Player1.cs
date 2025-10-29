@@ -78,7 +78,14 @@ public class Player1 : MonoBehaviour
         if(stanceBoolToParent == false)
         {
 
+            myRigidbody.freezeRotation = false;
             Look();
+
+        }
+        else
+        {
+
+            myRigidbody.freezeRotation = true;
 
         }
 
@@ -180,10 +187,12 @@ public class Player1 : MonoBehaviour
 
         yield return new WaitForSeconds(0.2f);
 
+        attackObject.SetActive(false);
+
+        yield return new WaitForSeconds(0.1f);
+
         attacking = false;
         basicAttacking = false;
-
-        attackObject.SetActive(false);
 
     }
 
