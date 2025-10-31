@@ -10,7 +10,21 @@ public class SwordAndGunCharacter : Player1
 
     [SerializeField] GameObject stanceAttackObject;
 
+    #region Basic Dodge
+
+    [Header("Dodge")]
+
+    [SerializeField] float dodgeSpeed = 5;
+    [SerializeField] float dodgeTime = 0.5f;
+
+    GameObject dodgeCollider = null;
+
+
+    #endregion
+
     #region Revolver
+
+    [Header("Revolver")]
 
     [SerializeField] TrailRenderer bulletTrail;
 
@@ -29,6 +43,8 @@ public class SwordAndGunCharacter : Player1
         base.Start();
 
         maxBullets = bullets;
+
+        dodgeCollider = transform.Find("DodgeCollider").gameObject;
     }
 
     public override void Update()
@@ -52,6 +68,14 @@ public class SwordAndGunCharacter : Player1
         }
 
         #endregion
+
+        if (Input.GetKeyDown(KeyCode.Space) && dodgeLock == false)
+        {
+
+            StartCoroutine(basicDodge());
+
+
+        }
 
         #region Left Click Attack
 
@@ -180,6 +204,8 @@ public class SwordAndGunCharacter : Player1
 
     #endregion
 
+    #region Charge Attack
+
     IEnumerator ChargeAttack()
     {
         attacking = true;
@@ -202,6 +228,55 @@ public class SwordAndGunCharacter : Player1
 
 
     }
+
+    #endregion
+
+    #region basic Dodge
+
+    IEnumerator basicDodge()
+    {
+        dodgeLock = true;
+        attackObject.SetActive(false);
+
+        Vector2 tempMovementInput = movementInput;
+        bool standingStillDodge = false;
+
+        if (movementInput == Vector2.zero) // Om man står stilla så ska man dodga dit man kollar
+        {
+            standingStillDodge = true;
+
+            Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+            movementInput = mousePos - myRigidbody.position;
+
+        }
+
+        playerVelocity = new Vector2(movementInput.normalized.x * dodgeSpeed, movementInput.normalized.y * dodgeSpeed);
+        myRigidbody.linearVelocity = playerVelocity;
+
+        dodgeCollider.SetActive(true);
+        myCollider.enabled = false;
+
+
+        yield return new WaitForSeconds(dodgeTime);
+
+
+        dodgeCollider.SetActive(false);
+        myCollider.enabled = true;
+
+        if (standingStillDodge)
+        {
+            movementInput = tempMovementInput;
+        }
+        else
+        {
+            playerVelocity = new Vector2(0, 0);
+            myRigidbody.linearVelocity = playerVelocity;
+        }
+
+        dodgeLock = false;
+    }
+
+    #endregion
 
     void ThingsToFalse()
     {

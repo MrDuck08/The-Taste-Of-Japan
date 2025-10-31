@@ -111,7 +111,7 @@ public class EnemyBase : MonoBehaviour
 
             if (!playerObstructedBehind) // Kollar om det är någonting mellan spellaren och Fienden
             {
-                agent.SetDestination(playerObject.transform.position);
+                //agent.SetDestination(playerObject.transform.position);
 
                 Vector2 lookDirection = new Vector2(playerObject.transform.position.x, playerObject.transform.position.y) - rigidbody2D.position;
                 float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
@@ -121,7 +121,6 @@ public class EnemyBase : MonoBehaviour
 
                 aggro = true;
 
-                return;
             }
 
         }

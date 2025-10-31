@@ -13,20 +13,28 @@ public class PlayerHealth : MonoBehaviour
         if (collision.transform.CompareTag("EnemyAttack"))
         {
 
+            TakeDamage(1);
 
-            health--;
+        }
 
-            if(health <= 0)
-            {
 
-                sceneLoader = FindObjectOfType<SceneLoader>();
+    }
 
-                sceneLoader.playerDead = true;
+    public void TakeDamage(int damageTaken)
+    {
 
-                Destroy(gameObject);
 
-            }
 
+        health -= damageTaken;
+
+        if (health <= 0)
+        {
+
+            sceneLoader = FindObjectOfType<SceneLoader>();
+
+            sceneLoader.playerDead = true;
+
+            Destroy(gameObject);
 
         }
 

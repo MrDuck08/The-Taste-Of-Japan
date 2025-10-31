@@ -16,10 +16,10 @@ public class ShotEnemyBase : EnemyBase
     [SerializeField] float startShotingTime = 1f;
     [SerializeField] float fireRate = 1f;
     [SerializeField] float reloadTime = 3;
+    [SerializeField] int maxBullets = 2;
+
     [SerializeField] float fadeDuration = 1f;
     [SerializeField] float trailSpeed = 20f;
-
-    [SerializeField] int maxBullets = 2;
     int bullets;
 
     bool reloading = false;
@@ -30,12 +30,17 @@ public class ShotEnemyBase : EnemyBase
 
     [SerializeField] float walkBackSpeed = 2f;
 
+
+    CameraFollow cameraFollow;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void Start()
     {
         base.Start();
 
         bullets = maxBullets;
+
+        cameraFollow = FindObjectOfType<CameraFollow>();
 
     }
 
@@ -51,12 +56,10 @@ public class ShotEnemyBase : EnemyBase
 
         }
 
-        //if(reloading && inRangeForAttack)
-        //{
-        //    Debug.Log("GO BACJ");
-        //    transform.position += -transform.up * Time.deltaTime * 10f;
-
-        //}
+        if(reloading && inRangeForAttack)
+        {
+            transform.position += -transform.up * Time.deltaTime * walkBackSpeed;
+        }
 
     }
 
@@ -66,8 +69,6 @@ public class ShotEnemyBase : EnemyBase
     {
 
         attacking = true;
-
-        agent.SetDestination(transform.position); // Är här för om spelaren kommer backifrån så sätter den destinationen på spelaren, den är här för om spelaren kommer backifrån så går skjutaren ingen stans
 
 
         yield return new WaitForSeconds(startShotingTime); // Hur lång tid det tar att "sikta in"
@@ -85,13 +86,15 @@ public class ShotEnemyBase : EnemyBase
         if(hit.collider.tag == "Player")
         {
 
-            //Debug.Log(hit.collider.gameObject);
+            hit.collider.GetComponent<PlayerHealth>().TakeDamage(1);
 
         }
         if(hit.collider.tag == "PlayerAttack")
         {
 
-            Debug.Log("WALLAI IM FINISHED!!!");
+            Instantiate(bulletObject, hit.collider.transform);
+
+            cameraFollow.ChangeTargetCam(bulletObject);
 
         }
 
@@ -116,9 +119,13 @@ public class ShotEnemyBase : EnemyBase
     {
         reloading = true;
 
+        agent.enabled = false;
+
         yield return new WaitForSeconds(reloadTime);
 
         bullets = maxBullets;
+
+        agent.enabled = true;
 
         reloading = false;
 

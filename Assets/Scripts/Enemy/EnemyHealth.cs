@@ -5,6 +5,13 @@ public class EnemyHealth : MonoBehaviour
 
     [SerializeField] int health;
 
+    ScreenShake screenShake;
+
+    private void Start()
+    {
+        screenShake = FindObjectOfType<ScreenShake>();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.transform.CompareTag("PlayerAttack"))
@@ -15,7 +22,7 @@ public class EnemyHealth : MonoBehaviour
             if (health <= 0)
             {
 
-
+                screenShake.TriggerShake(0.1f);
                 Destroy(gameObject);
 
             }

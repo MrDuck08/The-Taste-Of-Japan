@@ -19,8 +19,8 @@ public class Player1 : MonoBehaviour
 
     #region Basic Movment
 
-    Vector2 movementInput;
-    Vector2 playerVelocity;
+    public Vector2 movementInput;
+    public Vector2 playerVelocity;
 
     public float speed = 5;
 
@@ -29,17 +29,7 @@ public class Player1 : MonoBehaviour
 
     #endregion
 
-    #region Basic Dodge
-
-    [SerializeField] float dodgeSpeed = 5;
-    [SerializeField] float dodgeTime = 0.5f;
-
     public bool dodgeLock = false;
-
-    GameObject dodgeCollider = null;
-
-
-    #endregion
 
     #endregion
 
@@ -52,10 +42,10 @@ public class Player1 : MonoBehaviour
 
     #endregion
 
-    Rigidbody2D myRigidbody;
-    CircleCollider2D myCollider;
+    public Rigidbody2D myRigidbody;
+    public CircleCollider2D myCollider;
 
-    Camera cam;
+    public Camera cam;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public virtual void Start()
@@ -67,7 +57,6 @@ public class Player1 : MonoBehaviour
 
         attackObject.SetActive(false);
 
-        dodgeCollider = transform.Find("DodgeCollider").gameObject;
     }
 
     // Update is called once per frame
@@ -89,13 +78,6 @@ public class Player1 : MonoBehaviour
 
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && dodgeLock == false)
-        {
-
-            StartCoroutine(basicDodge());
-
-
-        }
     }
 
     public virtual void FixedUpdate()
@@ -137,45 +119,6 @@ public class Player1 : MonoBehaviour
     }
 
     #endregion
-
-
-    #region basic Dodge
-
-    IEnumerator basicDodge()
-    {
-        dodgeLock = true;
-        attackObject.SetActive(false);
-
-        Vector2 TempMovementInput = movementInput;
-
-        if (movementInput == Vector2.zero) // Om man står stilla så ska man dodga dit man kollar
-        {
-            Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-            movementInput = mousePos - myRigidbody.position;
-
-        }
-
-        playerVelocity = new Vector2(movementInput.normalized.x * dodgeSpeed, movementInput.normalized.y * dodgeSpeed);
-        myRigidbody.linearVelocity = playerVelocity;
-
-        dodgeCollider.SetActive(true);
-        myCollider.enabled = false;
-
-        
-        yield return new WaitForSeconds(dodgeTime);
-
-
-        dodgeCollider.SetActive(false);
-        myCollider.enabled = true;
-
-        movementInput = TempMovementInput;
-
-        dodgeLock = false;
-    }
-
-    #endregion
-
-
 
     public IEnumerator BasicAttack()
     {
