@@ -21,8 +21,6 @@ public class ScreenShake : MonoBehaviour
             return;
         }
 
-        transform.position = new Vector3(playerTarget.position.x, playerTarget.position.y, transform.position.z);
-
         if (shakeDuration > 0)
         {
             transform.position += new Vector3(Random.Range(-shakeMagnitude, shakeMagnitude), Random.Range(-shakeMagnitude, shakeMagnitude), 0);
@@ -30,8 +28,9 @@ public class ScreenShake : MonoBehaviour
         }
     }
 
-    public void TriggerShake(float duration)
+    public void TriggerShake(float duration, float magnitude)
     {
+        shakeMagnitude = magnitude;
         shakeDuration = duration;
     }
 }

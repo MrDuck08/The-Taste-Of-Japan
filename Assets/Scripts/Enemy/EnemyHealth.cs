@@ -17,15 +17,7 @@ public class EnemyHealth : MonoBehaviour
         if (collision.transform.CompareTag("PlayerAttack"))
         {
 
-            health--;
-
-            if (health <= 0)
-            {
-
-                screenShake.TriggerShake(0.1f);
-                Destroy(gameObject);
-
-            }
+            TakeDamage(1);
 
         }
 
@@ -37,5 +29,19 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
+    public void TakeDamage(int takeDamage)
+    {
+
+        health -= takeDamage;
+
+        if (health <= 0)
+        {
+
+            screenShake.TriggerShake(0.1f, 0.7f);
+            Destroy(gameObject);
+
+        }
+
+    }
 
 }

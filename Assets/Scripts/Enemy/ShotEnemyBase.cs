@@ -92,9 +92,10 @@ public class ShotEnemyBase : EnemyBase
         if(hit.collider.tag == "PlayerAttack")
         {
 
-            Instantiate(bulletObject, hit.collider.transform);
+            GameObject spawnedBullet = Instantiate(bulletObject);
+            spawnedBullet.transform.position = hit.collider.transform.position;
 
-            cameraFollow.ChangeTargetCam(bulletObject);
+            cameraFollow.ChangeTargetCam(spawnedBullet, 1);
 
         }
 
@@ -171,4 +172,5 @@ public class ShotEnemyBase : EnemyBase
     }
 
     #endregion
+
 }
