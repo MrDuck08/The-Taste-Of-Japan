@@ -32,11 +32,11 @@ public class SwordAndGunCharacter : Player1
     [SerializeField] int bullets = 6;
     [SerializeField] LayerMask bulletIgnoreLayerMask;
 
-    [SerializeField] float trailSpeed = 20f;
-    [SerializeField] float fadeDuration = 1f;
     int maxBullets;
 
     #endregion
+
+    CameraFollow cameraScript;
 
     public override void Start()
     {
@@ -45,6 +45,8 @@ public class SwordAndGunCharacter : Player1
         maxBullets = bullets;
 
         dodgeCollider = transform.Find("DodgeCollider").gameObject;
+
+        cameraScript = FindObjectOfType<CameraFollow>();
     }
 
     public override void Update()
@@ -87,6 +89,7 @@ public class SwordAndGunCharacter : Player1
                 if(attackStance == false)
                 {
                     StartCoroutine(BasicAttack());
+
                 }
 
                 if (attackStance == true)
@@ -119,7 +122,7 @@ public class SwordAndGunCharacter : Player1
                 trail.transform.position = transform.position;
 
                 //SpawnTrail(trail, hit);
-                StartCoroutine(MoveAndFadeTrail(trail, hit.point));
+                StartCoroutine(trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(trail.transform.position, hit.point));
 
                 //bullets--;
 
@@ -137,6 +140,8 @@ public class SwordAndGunCharacter : Player1
             if (attacking == false)
             {
 
+                cameraScript.ChangeTargetCam(gameObject, 2);
+
                 speed = 2;
 
                 attackStance = true;
@@ -152,6 +157,8 @@ public class SwordAndGunCharacter : Player1
             if (attacking == false)
             {
 
+                cameraScript.ZoomOutAgain(2);
+
                 speed = 20;
 
                 attackStance = false;
@@ -164,45 +171,6 @@ public class SwordAndGunCharacter : Player1
         #endregion
 
     }
-
-    #region Fade & Widen Bullet
-
-    IEnumerator MoveAndFadeTrail(TrailRenderer trail, Vector2 target)
-    {
-        float elapsedTime = 0f;
-        Vector2 startPosition = transform.position;
-
-        // Cache initial alpha
-        float startAlpha = trail.startColor.a;
-        float endAlpha = trail.endColor.a;
-
-        while (elapsedTime < fadeDuration)
-        {
-            // Move the trail towards the target
-            float moveT = Mathf.Clamp01(elapsedTime * trailSpeed);
-            trail.transform.position = Vector2.Lerp(startPosition, target, moveT);
-
-            // Fade the alpha over time
-            float alphaT = 1 - (elapsedTime / fadeDuration);
-            float currentStartAlpha = startAlpha * alphaT;
-            float currentEndAlpha = endAlpha * alphaT;
-
-            trail.startWidth += 0.00015f;
-            trail.endWidth += 0.00015f;
-
-            trail.startColor = new Color(trail.startColor.r, trail.startColor.g, trail.startColor.b, currentStartAlpha);
-            trail.endColor = new Color(trail.endColor.r, trail.endColor.g, trail.endColor.b, currentEndAlpha);
-
-            elapsedTime += Time.deltaTime;
-            yield return null; // Wait for next frame
-        }
-
-        // Final position and cleanup
-        trail.transform.position = target;
-        Destroy(trail.gameObject);
-    }
-
-    #endregion
 
     #region Charge Attack
 

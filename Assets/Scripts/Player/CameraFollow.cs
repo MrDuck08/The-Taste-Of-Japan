@@ -7,9 +7,11 @@ public class CameraFollow : MonoBehaviour
     GameObject temporaryTarget;
     GameObject targetThatIsFollowed;
 
-    [SerializeField] float startZoom = 10;
+    [SerializeField] float startZoomValue = 10;
 
     bool nonPlayerZoom = false;
+
+    #region Deflect Zoom
 
     [Header("Deflect Zoom")]
 
@@ -29,7 +31,21 @@ public class CameraFollow : MonoBehaviour
     float speedToGoToBullet;
     float speedToZoomIn;
 
+    #endregion
 
+    #region Nomral Zoom
+
+    bool startZommingInB = false;
+    float timeToZoomInB;
+    float speedToZoomInB;
+    float speedToGoToTargetB;
+
+    bool startZoomingOutB = false;
+    float timeToZoomOutB;
+    float speedToZoomOutB;
+    float speedToGoBackB;
+
+    #endregion
 
     Camera cam;
 
@@ -45,7 +61,7 @@ public class CameraFollow : MonoBehaviour
         screenShake = GetComponent<ScreenShake>();
         inLevelSystems = FindObjectOfType<InLevelSystems>();
 
-        cam.orthographicSize = startZoom;
+        cam.orthographicSize = startZoomValue;
 
         zoomInTime = maxZoomInTime;
         timeToBeZommedIn = maxTimeToBeZommedIn;
@@ -60,6 +76,42 @@ public class CameraFollow : MonoBehaviour
         {
             transform.position = targetThatIsFollowed.transform.position;
         }
+
+        #region Normal Zoom In & Out
+
+        if (startZommingInB)
+        {
+            timeToZoomInB -= Time.unscaledDeltaTime;
+
+            transform.position = Vector2.Lerp(transform.position, targetThatIsFollowed.transform.position, speedToGoToTargetB * Time.unscaledDeltaTime);
+            cam.orthographicSize -= speedToZoomInB * Time.unscaledDeltaTime;
+
+            if (timeToZoomInB <= 0)
+            {
+
+                startZommingInB = false;
+
+            }
+        }
+
+        if (startZoomingOutB)
+        {
+            timeToZoomOutB -= Time.unscaledDeltaTime;
+
+            transform.position = Vector2.Lerp(transform.position, targetThatIsFollowed.transform.position, speedToGoBackB * Time.unscaledDeltaTime);
+            cam.orthographicSize += speedToZoomOutB * Time.unscaledDeltaTime;
+            Debug.Log("NONONONONO");
+            if (timeToZoomOutB <= 0)
+            {
+
+                startZoomingOutB = false;
+
+
+
+            }
+        }
+
+        #endregion
 
         #region Deflect Zoom
 
@@ -141,8 +193,9 @@ public class CameraFollow : MonoBehaviour
 
     public void ChangeTargetCam(GameObject newTarget, int forWhat)
     {
-        // forWhat
+        // forWhat 
         // 1 = Deflect Bullet
+        // 2 = R&S Charge Zoom
 
         nonPlayerZoom = true;
 
@@ -167,14 +220,36 @@ public class CameraFollow : MonoBehaviour
 
                 break;
 
+            case 2:
+
+                StartZoomIn(4, 2);
+
+                break;
+
         }
 
     }
 
-    public void TargetPlayerAgainCam()
+    void StartZoomIn(float howMuchZoom, float whatTimeToZoom)
+    {
+        Debug.Log("Happened");
+        timeToZoomInB = whatTimeToZoom;
+
+        speedToZoomInB = (cam.orthographicSize - howMuchZoom) / timeToZoomInB;
+
+        startZommingInB = true;
+
+    }
+
+    public void ZoomOutAgain(float whatTimeToZoom)
     {
 
         targetThatIsFollowed = playerTarget;
+
+        speedToZoomOutB = (cam.orthographicSize - startZoomValue) / whatTimeToZoom;
+
+
+        startZoomingOutB = true;
 
     }
 
