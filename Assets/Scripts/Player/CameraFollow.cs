@@ -83,7 +83,7 @@ public class CameraFollow : MonoBehaviour
         {
             timeToZoomInB -= Time.unscaledDeltaTime;
 
-            transform.position = Vector2.Lerp(transform.position, targetThatIsFollowed.transform.position, speedToGoToTargetB * Time.unscaledDeltaTime);
+            transform.position = Vector2.Lerp(transform.position, targetThatIsFollowed.transform.position, 1337 * Time.unscaledDeltaTime);
             cam.orthographicSize -= speedToZoomInB * Time.unscaledDeltaTime;
 
             if (timeToZoomInB <= 0)
@@ -98,15 +98,15 @@ public class CameraFollow : MonoBehaviour
         {
             timeToZoomOutB -= Time.unscaledDeltaTime;
 
-            transform.position = Vector2.Lerp(transform.position, targetThatIsFollowed.transform.position, speedToGoBackB * Time.unscaledDeltaTime);
+            transform.position = Vector2.Lerp(transform.position, targetThatIsFollowed.transform.position, 1337 * Time.unscaledDeltaTime);
             cam.orthographicSize += speedToZoomOutB * Time.unscaledDeltaTime;
-            Debug.Log("NONONONONO");
+
             if (timeToZoomOutB <= 0)
             {
 
                 startZoomingOutB = false;
 
-
+                nonPlayerZoom = false;
 
             }
         }
@@ -211,7 +211,7 @@ public class CameraFollow : MonoBehaviour
 
                 speedToGoToBullet = distanceToBullet / maxZoomInTime;
 
-                speedToZoomIn = (cam.orthographicSize - maxHowMuchZoom) / maxZoomInTime;
+                speedToZoomIn = (startZoomValue - maxHowMuchZoom) / maxZoomInTime;
 
                 startDeflectZoom = true;
                 zoomingInOnBullet = true;
@@ -222,7 +222,7 @@ public class CameraFollow : MonoBehaviour
 
             case 2:
 
-                StartZoomIn(4, 2);
+                StartZoomIn(4, 0.3f);
 
                 break;
 
@@ -232,11 +232,12 @@ public class CameraFollow : MonoBehaviour
 
     void StartZoomIn(float howMuchZoom, float whatTimeToZoom)
     {
-        Debug.Log("Happened");
+
         timeToZoomInB = whatTimeToZoom;
 
         speedToZoomInB = (cam.orthographicSize - howMuchZoom) / timeToZoomInB;
 
+        startZoomingOutB = false;
         startZommingInB = true;
 
     }
@@ -246,8 +247,11 @@ public class CameraFollow : MonoBehaviour
 
         targetThatIsFollowed = playerTarget;
 
-        speedToZoomOutB = (cam.orthographicSize - startZoomValue) / whatTimeToZoom;
+        timeToZoomOutB = whatTimeToZoom;
 
+        speedToZoomOutB = (startZoomValue - cam.orthographicSize) / timeToZoomOutB;
+
+        startZommingInB = false;
 
         startZoomingOutB = true;
 

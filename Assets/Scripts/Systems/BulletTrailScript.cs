@@ -6,8 +6,16 @@ public class BulletTrailScript : MonoBehaviour
     [SerializeField] float trailSpeed = 20f;
     [SerializeField] float fadeDuration = 1f;
 
-    public IEnumerator MoveAndFadeTrail(Vector2 fromWhere, Vector2 target)
+    public void MoveAndFadeTrail(Vector2 fromWhere, Vector2 target)
     {
+        // Behövs göras på detta vis för om den som kallar på Ienumeratorn dör fungerar den inte
+        StartCoroutine(MoveAndFadeTrailRoutine(fromWhere, target));
+
+    }
+
+    public IEnumerator MoveAndFadeTrailRoutine(Vector2 fromWhere, Vector2 target)
+    {
+
         TrailRenderer trail = GetComponent<TrailRenderer>();
 
         float elapsedTime = 0f;
@@ -28,8 +36,8 @@ public class BulletTrailScript : MonoBehaviour
             float currentStartAlpha = startAlpha * alphaT;
             float currentEndAlpha = endAlpha * alphaT;
 
-            trail.startWidth += 0.00015f;
-            trail.endWidth += 0.00015f;
+            trail.startWidth += 0.0003f * elapsedTime;
+            trail.endWidth += 0.0003f * elapsedTime;
 
             trail.startColor = new Color(trail.startColor.r, trail.startColor.g, trail.startColor.b, currentStartAlpha);
             trail.endColor = new Color(trail.endColor.r, trail.endColor.g, trail.endColor.b, currentEndAlpha);

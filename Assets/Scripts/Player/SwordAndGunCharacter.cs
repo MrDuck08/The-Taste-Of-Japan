@@ -122,7 +122,7 @@ public class SwordAndGunCharacter : Player1
                 trail.transform.position = transform.position;
 
                 //SpawnTrail(trail, hit);
-                StartCoroutine(trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(trail.transform.position, hit.point));
+                trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(trail.transform.position, hit.point);
 
                 //bullets--;
 
@@ -157,7 +157,7 @@ public class SwordAndGunCharacter : Player1
             if (attacking == false)
             {
 
-                cameraScript.ZoomOutAgain(2);
+                cameraScript.ZoomOutAgain(0.1f);
 
                 speed = 20;
 
@@ -176,6 +176,8 @@ public class SwordAndGunCharacter : Player1
 
     IEnumerator ChargeAttack()
     {
+        cameraScript.ZoomOutAgain(0.1f);
+
         attacking = true;
 
         stanceAttackObject.SetActive(true);

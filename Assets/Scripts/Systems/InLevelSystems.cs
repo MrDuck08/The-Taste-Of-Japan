@@ -54,7 +54,7 @@ public class InLevelSystems : MonoBehaviour
             TrailRenderer trail = Instantiate(bulletTrail);
             trail.transform.position = fromWhere;
 
-            StartCoroutine(trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(fromWhere, hit.point));
+            trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(fromWhere, hit.point);
 
             enemiesList[whatI].GetComponent<EnemyHealth>().TakeDamage(1);
 

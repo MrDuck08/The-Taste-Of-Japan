@@ -77,9 +77,8 @@ public class ShotEnemyBase : EnemyBase
         TrailRenderer trail = Instantiate(bulletTrail);
         trail.transform.position = transform.position;
 
-        StartCoroutine(trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(trail.transform.position, hit.point));
+        trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(trail.transform.position, hit.point);
 
-        Debug.Log(hit.collider.gameObject.name);
 
         if(hit.collider.tag == "Player")
         {
@@ -91,7 +90,7 @@ public class ShotEnemyBase : EnemyBase
         {
 
             GameObject spawnedBullet = Instantiate(bulletObject);
-            spawnedBullet.transform.position = hit.collider.transform.position;
+            spawnedBullet.transform.position = hit.point;
 
             cameraFollow.ChangeTargetCam(spawnedBullet, 1);
 
