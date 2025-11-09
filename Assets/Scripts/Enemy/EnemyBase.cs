@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using static UnityEngine.GraphicsBuffer;
@@ -30,11 +33,31 @@ public class EnemyBase : MonoBehaviour
 
     #endregion
 
+    #region Idle Behavior
+
+    [Header("Idle")]
+
+    [SerializeField] List<Vector2> positionToCycle = new List<Vector2>();
+
+    #endregion
+
+    #region After Aggro
+
+    [Header("After Aggro")]
+
+    bool startLookForPlayer = false;
+    [SerializeField] float maxHowLongLookForPlayer = 3;
+    float howLongLookForPlayer;
+
+    #endregion
+
     public virtual void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
+
+        howLongLookForPlayer = maxHowLongLookForPlayer;
 
         rigidbody2D = GetComponent<Rigidbody2D>();
 
@@ -54,7 +77,37 @@ public class EnemyBase : MonoBehaviour
 
         PlayerDetection();
 
+        #region Looking For Player After Aggro
+
+        if (startLookForPlayer)
+        {
+
+            howLongLookForPlayer -= Time.deltaTime;
+
+            if(howLongLookForPlayer < 0)
+            {
+
+                startLookForPlayer = false;
+                aggro = false;
+
+            }
+
+        }
+
+        #endregion
+
     }
+
+    #region Non Aggro Behavior
+
+    void IdleBehavior()
+    {
+
+
+
+    }
+
+    #endregion
 
     #region Detection
 
@@ -85,6 +138,8 @@ public class EnemyBase : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotatingSpeed * Time.deltaTime);
 
             inRangeForAttack = true;
+
+            aggro = true;
 
             return; // Sätter return så den inte behöver köra den nedastående koden
 
@@ -143,6 +198,14 @@ public class EnemyBase : MonoBehaviour
         }
 
         #endregion
+
+        if(aggro && rigidbody2D.angularVelocity == 0)
+        {
+            howLongLookForPlayer = maxHowLongLookForPlayer;
+
+            startLookForPlayer = true;
+
+        }
 
     }
 

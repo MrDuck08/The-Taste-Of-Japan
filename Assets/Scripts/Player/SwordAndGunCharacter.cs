@@ -227,11 +227,15 @@ public class SwordAndGunCharacter : Player1
         myCollider.enabled = false;
 
 
-        yield return new WaitForSeconds(dodgeTime);
+        yield return new WaitForSeconds(dodgeTime / 2);
 
 
         dodgeCollider.SetActive(false);
         myCollider.enabled = true;
+
+
+        yield return new WaitForSeconds(dodgeTime / 2);
+
 
         if (standingStillDodge)
         {

@@ -51,7 +51,7 @@ public class Player1 : MonoBehaviour
     public virtual void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
-        myCollider = transform.Find("CollisionObject").gameObject.GetComponent<CircleCollider2D>();
+        myCollider = GetComponent<CircleCollider2D>();
 
         cam = Camera.main;
 
