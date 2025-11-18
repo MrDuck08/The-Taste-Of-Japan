@@ -1261,6 +1261,37 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!1 &1331328990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1331328991}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1331328991
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1331328990}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -24.42, y: -0.44, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1373664669
 GameObject:
   m_ObjectHideFlags: 0
@@ -2211,7 +2242,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1839397566988880595, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: positionToCycle.Array.size
-      value: 1
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1839397566988880595, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
+      propertyPath: 'positionToCycle.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1331328991}
+    - target: {fileID: 1839397566988880595, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
+      propertyPath: 'positionToCycle.Array.data[1]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1839397566988880595, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
+      propertyPath: positionToCycle.Array.data[0].x
+      value: -16.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 1839397566988880595, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
+      propertyPath: positionToCycle.Array.data[0].y
+      value: -0.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 1839397566988880595, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
+      propertyPath: positionToCycle.Array.data[1].x
+      value: -24.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 1839397566988880595, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
+      propertyPath: positionToCycle.Array.data[1].y
+      value: -0.44
       objectReference: {fileID: 0}
     - target: {fileID: 2536596613807059317, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: m_Name
@@ -2432,6 +2487,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RangedEnemyBasic
       objectReference: {fileID: 0}
+    - target: {fileID: 7004372446033703844, guid: f5d2dfb6be3575542a609e749db09565, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2449,6 +2508,7 @@ SceneRoots:
   - {fileID: 1139476552}
   - {fileID: 7127970981068302904}
   - {fileID: 1454553143}
+  - {fileID: 1331328991}
   - {fileID: 4690552768985271110}
   - {fileID: 4448765497871094588}
   - {fileID: 8474872515067954128}

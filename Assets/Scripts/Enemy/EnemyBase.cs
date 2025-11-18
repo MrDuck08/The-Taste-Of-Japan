@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
 
 public class EnemyBase : MonoBehaviour
@@ -38,6 +39,9 @@ public class EnemyBase : MonoBehaviour
     [Header("Idle")]
 
     [SerializeField] List<Vector2> positionToCycle = new List<Vector2>();
+    int atWhatPositionInIdleList = 0;
+
+    bool idle;
 
     #endregion
 
@@ -77,6 +81,43 @@ public class EnemyBase : MonoBehaviour
 
         PlayerDetection();
 
+        if (!aggro)
+        {
+            if (!idle) // Får Ny Position att Gå Till
+            {
+                idle = true;
+
+                atWhatPositionInIdleList++;
+
+                if (atWhatPositionInIdleList >= positionToCycle.Count)
+                {
+
+                    atWhatPositionInIdleList = 0;
+
+                }
+
+                agent.SetDestination(positionToCycle[atWhatPositionInIdleList]);
+
+                Vector2 lookDirection = positionToCycle[atWhatPositionInIdleList] - rigidbody2D.position;
+                float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
+
+                transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
+
+            }
+            else // Går Till Nya Position
+            {
+                agent.SetDestination(positionToCycle[atWhatPositionInIdleList]);
+
+                if (Vector2.Distance(transform.position, positionToCycle[atWhatPositionInIdleList]) < 0.5f)
+                {
+
+                    idle = false;
+
+                }
+            }
+
+        }
+
         #region Looking For Player After Aggro
 
         if (startLookForPlayer)
@@ -84,10 +125,10 @@ public class EnemyBase : MonoBehaviour
 
             howLongLookForPlayer -= Time.deltaTime;
 
-            if(howLongLookForPlayer < 0)
+            if (howLongLookForPlayer < 0)
             {
-
                 startLookForPlayer = false;
+                idle = false;
                 aggro = false;
 
             }
@@ -103,7 +144,16 @@ public class EnemyBase : MonoBehaviour
     void IdleBehavior()
     {
 
+        idle = true;
 
+        if (atWhatPositionInIdleList > positionToCycle.Count)
+        {
+
+            atWhatPositionInIdleList = 0;
+
+        }
+        Debug.Log("YES");
+        agent.SetDestination(positionToCycle[atWhatPositionInIdleList]);
 
     }
 
@@ -194,15 +244,16 @@ public class EnemyBase : MonoBehaviour
 
             transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
+            startLookForPlayer = false;
             aggro = true;
         }
 
         #endregion
 
-        if(aggro && rigidbody2D.angularVelocity == 0)
+        if(aggro && rigidbody2D.angularVelocity == 0 && !startLookForPlayer)
         {
             howLongLookForPlayer = maxHowLongLookForPlayer;
-
+            Debug.Log("Maybe START AGGRO");
             startLookForPlayer = true;
 
         }
