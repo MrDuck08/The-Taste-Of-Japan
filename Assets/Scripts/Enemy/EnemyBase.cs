@@ -159,6 +159,7 @@ public class EnemyBase : MonoBehaviour
 
     }
 
+    #region Idle Walk Around
 
     void IddleBehavior()
     {
@@ -170,7 +171,7 @@ public class EnemyBase : MonoBehaviour
 
             atWhatPositionInIdleList++;
 
-
+            //Cyklar mellan de olika positionerna
             if (atWhatPositionInIdleList >= positionToCycle.Count)
             {
 
@@ -181,7 +182,6 @@ public class EnemyBase : MonoBehaviour
             }
 
             agent.SetDestination(positionToCycle[atWhatPositionInIdleList]);
-
 
             Vector2 lookDirection = positionToCycle[atWhatPositionInIdleList] - rigidbody2D.position;
             float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
@@ -208,6 +208,9 @@ public class EnemyBase : MonoBehaviour
 
     }
 
+    #endregion
+
+    #region Look Around
 
     void LookAround()
     {
@@ -224,6 +227,10 @@ public class EnemyBase : MonoBehaviour
 
                 isLookAround = false;
                 idle = false;
+
+                // Är Om Aggro också för detta ska också inkludera efter fienden har jagat spelaren
+                startLookForPlayer = false;
+                aggro = false;
 
 
             }
@@ -244,34 +251,7 @@ public class EnemyBase : MonoBehaviour
 
     }
 
-
-    #region Non Aggro Behavior
-
-
-    void IdleBehavior()
-    {
-
-
-        idle = true;
-
-
-        if (atWhatPositionInIdleList > positionToCycle.Count)
-        {
-
-
-            atWhatPositionInIdleList = 0;
-
-
-        }
-        Debug.Log("YES");
-        agent.SetDestination(positionToCycle[atWhatPositionInIdleList]);
-
-
-    }
-
-
     #endregion
-
 
     #region Detection
 
@@ -407,10 +387,12 @@ public class EnemyBase : MonoBehaviour
 
         if (aggro && rigidbody2D.angularVelocity == 0 && !startLookForPlayer)
         {
-            howLongLookForPlayer = maxHowLongLookForPlayer;
-            Debug.Log("Maybe START AGGRO");
-            startLookForPlayer = true;
+            // Börjar Kolla Runt
+            timeToLookAround = maxTimeToLookAround;
+            isLookAround = true;
 
+            // Så deta bara körs 1 gång
+            startLookForPlayer = true;
 
         }
 
