@@ -1,28 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+Ôªøusing System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
-using static UnityEngine.GraphicsBuffer;
+
 
 public class EnemyBase : MonoBehaviour
 {
 
+
     public NavMeshAgent agent;
     Rigidbody2D rigidbody2D;
+
 
     GameObject playerObject;
 
 
+
+
     #region Player Detection
+
 
     bool aggro = false;
 
+
     [Header("Player Detection")]
+
 
     public bool inRangeForAttack = false;
     public bool attacking = false;
+
 
     [SerializeField] float detectRadiusInFront = 5;
     [SerializeField] float detectRadiusFromBehind = 2.5f;
@@ -30,30 +35,58 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] float attackRange = 1;
     [SerializeField] float rotatingSpeed = 200;
 
+
     [SerializeField] LayerMask obsticleLayer;
+
 
     #endregion
 
+
     #region Idle Behavior
 
+
     [Header("Idle")]
+
 
     [SerializeField] List<Vector2> positionToCycle = new List<Vector2>();
     int atWhatPositionInIdleList = 0;
 
+
     bool idle;
+
 
     #endregion
 
+
+    #region Look Around For Player
+
+
+    [Header("Look Around")]
+
+    [SerializeField] float maxTimeToLookAround = 3f;
+    float timeToLookAround;
+    [SerializeField] float maxTimeUntilNewRotation = 1f;
+    float timeUntilNewRotation;
+
+    bool isLookAround;
+
+
+    #endregion
+
+
     #region After Aggro
 
+
     [Header("After Aggro")]
+
 
     bool startLookForPlayer = false;
     [SerializeField] float maxHowLongLookForPlayer = 3;
     float howLongLookForPlayer;
 
+
     #endregion
+
 
     public virtual void Awake()
     {
@@ -61,69 +94,52 @@ public class EnemyBase : MonoBehaviour
         agent.updateRotation = false;
         agent.updateUpAxis = false;
 
+
         howLongLookForPlayer = maxHowLongLookForPlayer;
+
 
         rigidbody2D = GetComponent<Rigidbody2D>();
 
+
     }
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public virtual void Start()
     {
 
+
         playerObject = GameObject.FindGameObjectWithTag("Player");
 
+
     }
+
 
     // Update is called once per frame
     public virtual void Update()
     {
 
+
         PlayerDetection();
+
 
         if (!aggro)
         {
-            if (!idle) // FÂr Ny Position att GÂ Till
-            {
-                idle = true;
-
-                atWhatPositionInIdleList++;
-
-                if (atWhatPositionInIdleList >= positionToCycle.Count)
-                {
-
-                    atWhatPositionInIdleList = 0;
-
-                }
-
-                agent.SetDestination(positionToCycle[atWhatPositionInIdleList]);
-
-                Vector2 lookDirection = positionToCycle[atWhatPositionInIdleList] - rigidbody2D.position;
-                float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
-
-                transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
-
-            }
-            else // GÂr Till Nya Position
-            {
-                agent.SetDestination(positionToCycle[atWhatPositionInIdleList]);
-
-                if (Vector2.Distance(transform.position, positionToCycle[atWhatPositionInIdleList]) < 0.5f)
-                {
-
-                    idle = false;
-
-                }
-            }
-
+            IddleBehavior();
         }
 
+        LookAround();
+
+
         #region Looking For Player After Aggro
+
 
         if (startLookForPlayer)
         {
 
+
             howLongLookForPlayer -= Time.deltaTime;
+
 
             if (howLongLookForPlayer < 0)
             {
@@ -131,67 +147,181 @@ public class EnemyBase : MonoBehaviour
                 idle = false;
                 aggro = false;
 
+
             }
+
 
         }
 
+
         #endregion
+
 
     }
 
+
+    void IddleBehavior()
+    {
+
+        if (!idle) // FÔøΩr Ny Position att GÔøΩ Till
+        {
+            idle = true;
+
+
+            atWhatPositionInIdleList++;
+
+
+            if (atWhatPositionInIdleList >= positionToCycle.Count)
+            {
+
+
+                atWhatPositionInIdleList = 0;
+
+
+            }
+
+            agent.SetDestination(positionToCycle[atWhatPositionInIdleList]);
+
+
+            Vector2 lookDirection = positionToCycle[atWhatPositionInIdleList] - rigidbody2D.position;
+            float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
+
+
+            transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
+
+            timeToLookAround = maxTimeToLookAround; // Det h√§r √§r tid f√∂r hur l√§nge man ska vara idle p√• ett st√§lle
+
+        }
+        else // GÔøΩr Till Nya Position
+        {
+            agent.SetDestination(positionToCycle[atWhatPositionInIdleList]);
+
+
+            if (Vector2.Distance(transform.position, positionToCycle[atWhatPositionInIdleList]) < 0.5f) // N√•t position
+            {
+
+                // St√• Still och kolla runt
+                isLookAround = true;
+
+            }
+        }
+
+    }
+
+
+    void LookAround()
+    {
+
+        if (isLookAround)
+        {
+
+            timeToLookAround -= Time.deltaTime;
+            timeUntilNewRotation -= Time.deltaTime;
+
+
+            if (timeToLookAround < 0) // Sluta kolla runt
+            {
+
+                isLookAround = false;
+                idle = false;
+
+
+            }
+
+
+            if (timeUntilNewRotation < 0) // Ny Rotation
+            {
+                timeUntilNewRotation = maxTimeUntilNewRotation;
+
+
+                transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
+
+
+            }
+
+
+        }
+
+    }
+
+
     #region Non Aggro Behavior
+
 
     void IdleBehavior()
     {
 
+
         idle = true;
+
 
         if (atWhatPositionInIdleList > positionToCycle.Count)
         {
 
+
             atWhatPositionInIdleList = 0;
+
 
         }
         Debug.Log("YES");
         agent.SetDestination(positionToCycle[atWhatPositionInIdleList]);
 
+
     }
+
 
     #endregion
 
+
     #region Detection
+
 
     private void PlayerDetection()
     {
 
+
         Vector2 toTarget = playerObject.transform.position - transform.position;
         float currentAngle = Vector2.Angle(transform.up, toTarget);
+
 
         float distanceToPlayer = Vector2.Distance(transform.position, playerObject.transform.position);
 
 
+
+
         Vector2 raycastDirection = playerObject.transform.position - transform.position;
+
 
         bool playerObstructed = Physics2D.Raycast(transform.position, raycastDirection.normalized, distanceToPlayer, obsticleLayer);
 
 
+
+
         #region Attack Range
 
-        if (distanceToPlayer < attackRange && currentAngle < DetectionCone && !playerObstructed) // Kollar om spelaren ‰r tillr‰ckligt n‰ra fˆr att attackera
+
+        if (distanceToPlayer < attackRange && currentAngle < DetectionCone && !playerObstructed) // Kollar om spelaren ÔøΩr tillrÔøΩckligt nÔøΩra fÔøΩr att attackera
         {
+
 
             Vector2 lookDirection = new Vector2(playerObject.transform.position.x, playerObject.transform.position.y) - rigidbody2D.position;
             float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
 
+
             Quaternion targetRotation = Quaternion.Euler(0f, 0f, angle - 90f);
+
 
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotatingSpeed * Time.deltaTime);
 
+
             inRangeForAttack = true;
+
 
             aggro = true;
 
-            return; // S‰tter return sÂ den inte behˆver kˆra den nedastÂende koden
+
+            return; // SÔøΩtter return sÔøΩ den inte behÔøΩver kÔøΩra den nedastÔøΩende koden
+
 
         }
         else
@@ -201,93 +331,138 @@ public class EnemyBase : MonoBehaviour
 
 
 
+
+
+
         #endregion
 
+
         #region Back Range
+
+
 
 
         if (distanceToPlayer < detectRadiusFromBehind)
         {
 
 
+
+
             Vector2 raycastDirectionBehind = playerObject.transform.position - transform.position;
+
 
             bool playerObstructedBehind = Physics2D.Raycast(transform.position, raycastDirectionBehind.normalized, distanceToPlayer, obsticleLayer);
 
-            if (!playerObstructedBehind) // Kollar om det ‰r nÂgonting mellan spellaren och Fienden
+
+            if (!playerObstructedBehind) // Kollar om det ÔøΩr nÔøΩgonting mellan spellaren och Fienden
             {
                 //agent.SetDestination(playerObject.transform.position);
+
 
                 Vector2 lookDirection = new Vector2(playerObject.transform.position.x, playerObject.transform.position.y) - rigidbody2D.position;
                 float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
 
+
                 transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
+
+
 
 
                 aggro = true;
 
+
             }
 
+
         }
+
 
         #endregion
 
 
+
+
         #region Front View
 
-        if (!playerObstructed && currentAngle < DetectionCone && distanceToPlayer < detectRadiusInFront) // Kollar om det ‰r nÂgonting mellan spellaren, om de ‰r tillr‰ckligt n‰ra och Fienden kollar pÂ spelaren
+
+        if (!playerObstructed && currentAngle < DetectionCone && distanceToPlayer < detectRadiusInFront) // Kollar om det ÔøΩr nÔøΩgonting mellan spellaren, om de ÔøΩr tillrÔøΩckligt nÔøΩra och Fienden kollar pÔøΩ spelaren
         {
             agent.SetDestination(playerObject.transform.position);
+
 
             Vector2 lookDirection = new Vector2(playerObject.transform.position.x, playerObject.transform.position.y) - rigidbody2D.position;
             float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
 
+
             transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
+
 
             startLookForPlayer = false;
             aggro = true;
         }
 
+
         #endregion
 
-        if(aggro && rigidbody2D.angularVelocity == 0 && !startLookForPlayer)
+
+        if (aggro && rigidbody2D.angularVelocity == 0 && !startLookForPlayer)
         {
             howLongLookForPlayer = maxHowLongLookForPlayer;
             Debug.Log("Maybe START AGGRO");
             startLookForPlayer = true;
 
+
         }
+
 
     }
 
+
     #endregion
+
+    #region Gizmo
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
 
+
         Gizmos.DrawWireSphere(transform.position, detectRadiusInFront);
 
 
-        Gizmos.color = Color.orange;
+
+
+        Gizmos.color = Color.black;
+
 
         Gizmos.DrawWireSphere(transform.position, detectRadiusFromBehind);
 
 
+
+
         Gizmos.color = Color.blue;
+
 
         Quaternion leftRotation = Quaternion.Euler(0, 0, DetectionCone);
         Quaternion rightRotation = Quaternion.Euler(0, 0, -DetectionCone);
 
+
         Vector2 leftBoundary = leftRotation * transform.up * 3f;
         Vector2 rightBoundary = rightRotation * transform.up * 3f;
+
 
         Gizmos.DrawRay(transform.position, leftBoundary);
         Gizmos.DrawRay(transform.position, rightBoundary);
 
-        Gizmos.color = Color.pink;
+
+        Gizmos.color = Color.magenta;
+
 
         Gizmos.DrawWireSphere(transform.position, attackRange);
 
+
     }
+
+    #endregion
 }
+
