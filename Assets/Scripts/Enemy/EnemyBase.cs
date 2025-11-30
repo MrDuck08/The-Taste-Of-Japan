@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,7 +9,7 @@ public class EnemyBase : MonoBehaviour
 
 
     public NavMeshAgent agent;
-    Rigidbody2D rigidbody2D;
+    Rigidbody2D myRigidbody2D;
 
 
     GameObject playerObject;
@@ -57,6 +58,17 @@ public class EnemyBase : MonoBehaviour
 
     #endregion
 
+    #region Stunned
+
+    [Header("Stunned")]
+
+    [SerializeField] float knockbackSpeed = 200000;
+
+    [SerializeField] float stunnedTimer = 5;
+    bool stunned = false;
+
+    #endregion
+
 
     #region Look Around For Player
 
@@ -98,7 +110,7 @@ public class EnemyBase : MonoBehaviour
         howLongLookForPlayer = maxHowLongLookForPlayer;
 
 
-        rigidbody2D = GetComponent<Rigidbody2D>();
+        myRigidbody2D = GetComponent<Rigidbody2D>();
 
 
     }
@@ -111,6 +123,8 @@ public class EnemyBase : MonoBehaviour
 
         playerObject = GameObject.FindGameObjectWithTag("Player");
 
+        positionToCycle.Add(transform.position);
+
 
     }
 
@@ -118,7 +132,7 @@ public class EnemyBase : MonoBehaviour
     // Update is called once per frame
     public virtual void Update()
     {
-
+        if (stunned) { return; }
 
         PlayerDetection();
 
@@ -183,7 +197,7 @@ public class EnemyBase : MonoBehaviour
 
             agent.SetDestination(positionToCycle[atWhatPositionInIdleList]);
 
-            Vector2 lookDirection = positionToCycle[atWhatPositionInIdleList] - rigidbody2D.position;
+            Vector2 lookDirection = positionToCycle[atWhatPositionInIdleList] - myRigidbody2D.position;
             float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
 
 
@@ -284,7 +298,7 @@ public class EnemyBase : MonoBehaviour
         {
 
 
-            Vector2 lookDirection = new Vector2(playerObject.transform.position.x, playerObject.transform.position.y) - rigidbody2D.position;
+            Vector2 lookDirection = new Vector2(playerObject.transform.position.x, playerObject.transform.position.y) - myRigidbody2D.position;
             float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
 
 
@@ -339,7 +353,7 @@ public class EnemyBase : MonoBehaviour
                 //agent.SetDestination(playerObject.transform.position);
 
 
-                Vector2 lookDirection = new Vector2(playerObject.transform.position.x, playerObject.transform.position.y) - rigidbody2D.position;
+                Vector2 lookDirection = new Vector2(playerObject.transform.position.x, playerObject.transform.position.y) - myRigidbody2D.position;
                 float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
 
 
@@ -370,7 +384,7 @@ public class EnemyBase : MonoBehaviour
             agent.SetDestination(playerObject.transform.position);
 
 
-            Vector2 lookDirection = new Vector2(playerObject.transform.position.x, playerObject.transform.position.y) - rigidbody2D.position;
+            Vector2 lookDirection = new Vector2(playerObject.transform.position.x, playerObject.transform.position.y) - myRigidbody2D.position;
             float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
 
 
@@ -385,13 +399,16 @@ public class EnemyBase : MonoBehaviour
         #endregion
 
 
-        if (aggro && rigidbody2D.angularVelocity == 0 && !startLookForPlayer)
+        if (aggro && myRigidbody2D.angularVelocity == 0 && !startLookForPlayer)
         {
             // Börjar Kolla Runt
+            timeUntilNewRotation = maxTimeUntilNewRotation;
             timeToLookAround = maxTimeToLookAround;
             isLookAround = true;
 
             // Så deta bara körs 1 gång
+
+            howLongLookForPlayer = maxHowLongLookForPlayer;
             startLookForPlayer = true;
 
         }
@@ -401,6 +418,39 @@ public class EnemyBase : MonoBehaviour
 
 
     #endregion
+
+    public IEnumerator BeStunned(Vector2 direction)
+    {
+        stunned = true;
+
+        agent.isStopped = true;
+
+
+        myRigidbody2D.AddForce(direction * knockbackSpeed);
+
+        SpriteRenderer visuallsChild = transform.Find("Visualls").gameObject.GetComponent<SpriteRenderer>();
+
+        visuallsChild.color = new Color32(128, (byte)visuallsChild.color.g, (byte)visuallsChild.color.b, 255);
+
+
+        yield return new WaitForSeconds(stunnedTimer / 2);
+
+
+        Debug.Log("start To Stop");
+        myRigidbody2D.linearVelocity = Vector3.zero;
+
+        myRigidbody2D.AddForce(direction * knockbackSpeed/4);
+
+
+
+
+        yield return new WaitForSeconds(stunnedTimer/2);
+
+
+        visuallsChild.color = new Color32(255, (byte)visuallsChild.color.g, (byte)visuallsChild.color.b, 255);
+
+        stunned = false;
+    }
 
     #region Gizmo
 

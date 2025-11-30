@@ -24,7 +24,6 @@ public class Player1 : MonoBehaviour
 
     public float speed = 5;
 
-    [SerializeField] float lookSpeed = 2;
     public Vector2 lookDirection;
 
     #endregion

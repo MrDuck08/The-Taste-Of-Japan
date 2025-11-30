@@ -30,7 +30,7 @@ public class PlayerHealth : MonoBehaviour
         if (health <= 0)
         {
 
-            sceneLoader = FindObjectOfType<SceneLoader>();
+            sceneLoader = FindAnyObjectByType<SceneLoader>();
 
             sceneLoader.playerDead = true;
 

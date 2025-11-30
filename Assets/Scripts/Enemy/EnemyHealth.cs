@@ -6,10 +6,13 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] int health;
 
     ScreenShake screenShake;
+    EnemyBase enemyBase;
 
     private void Start()
     {
-        screenShake = FindObjectOfType<ScreenShake>();
+        enemyBase = GetComponent<EnemyBase>();
+
+        screenShake = FindAnyObjectByType<ScreenShake>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -21,10 +24,13 @@ public class EnemyHealth : MonoBehaviour
 
         }
 
-        if (collision.gameObject.layer == 6 && collision.gameObject.GetComponent<Door>().playerPushedDoor == true && collision.GetComponent<Rigidbody2D>().linearVelocity.magnitude > 12) //Träffad av dörr
+        //Träffad av dörr, Kollar också hur snabb dörren var
+        if (collision.gameObject.layer == 6 && Door.playerPushedDoor == true && collision.GetComponent<Rigidbody2D>().linearVelocity.magnitude > 12)
         {
+            // Får vinkeln åt Vart den ska åka
+            Vector2 direction = transform.position - Door.posWhenOpened;
 
-            Destroy(gameObject); // ÄNDRA TILL STUNED
+            StartCoroutine(enemyBase.BeStunned(direction.normalized));
 
         }
     }

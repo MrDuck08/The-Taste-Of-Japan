@@ -5,13 +5,15 @@ public class Door : MonoBehaviour
 
     [SerializeField] float openSpeed = 5;
 
-    Rigidbody2D rigidbody2D;
+    Rigidbody2D myRigidbody2D;
 
-    public bool playerPushedDoor;
+    public static Vector3 posWhenOpened;
+
+    public static bool playerPushedDoor;
 
     void Start()
     {
-        rigidbody2D = GetComponent<Rigidbody2D>();
+        myRigidbody2D = GetComponent<Rigidbody2D>();
 
     }
 
@@ -28,7 +30,7 @@ public class Door : MonoBehaviour
 
             Vector2 leftOrRight = collision.transform.position - transform.position;
 
-            rigidbody2D.AddForce(leftOrRight.normalized * 10 * -openSpeed);
+            myRigidbody2D.AddForce(leftOrRight.normalized * 10 * -openSpeed);
 
             playerPushedDoor = false;
 
@@ -40,7 +42,10 @@ public class Door : MonoBehaviour
             playerPushedDoor = true;
         }
 
-        rigidbody2D.AddForce(collision.gameObject.GetComponent<Rigidbody2D>().linearVelocity * openSpeed);
+        // Får positionen från när någon nuddar dörren
+        posWhenOpened = transform.position;
+
+        myRigidbody2D.AddForce(collision.gameObject.GetComponent<Rigidbody2D>().linearVelocity * openSpeed);
 
 
     }

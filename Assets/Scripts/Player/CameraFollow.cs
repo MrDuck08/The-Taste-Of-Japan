@@ -59,7 +59,7 @@ public class CameraFollow : MonoBehaviour
         cam = Camera.main; // Det här objectet
 
         screenShake = GetComponent<ScreenShake>();
-        inLevelSystems = FindObjectOfType<InLevelSystems>();
+        inLevelSystems = FindAnyObjectByType<InLevelSystems>();
 
         cam.orthographicSize = startZoomValue;
 

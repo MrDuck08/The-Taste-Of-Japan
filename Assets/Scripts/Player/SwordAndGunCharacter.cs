@@ -46,7 +46,7 @@ public class SwordAndGunCharacter : Player1
 
         dodgeCollider = transform.Find("DodgeCollider").gameObject;
 
-        cameraScript = FindObjectOfType<CameraFollow>();
+        cameraScript = FindAnyObjectByType<CameraFollow>();
     }
 
     public override void Update()
@@ -125,6 +125,11 @@ public class SwordAndGunCharacter : Player1
                 trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(trail.transform.position, hit.point);
 
                 //bullets--;
+
+                if(hit.transform.tag == "Enemy")
+                {
+                    hit.transform.gameObject.GetComponent<EnemyHealth>().TakeDamage(1);
+                }
 
             }
 

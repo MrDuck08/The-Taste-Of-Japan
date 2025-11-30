@@ -38,7 +38,7 @@ public class ShotEnemyBase : EnemyBase
 
         bullets = maxBullets;
 
-        cameraFollow = FindObjectOfType<CameraFollow>();
+        cameraFollow = FindAnyObjectByType<CameraFollow>();
 
     }
 
