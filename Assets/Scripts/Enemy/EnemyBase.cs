@@ -58,14 +58,16 @@ public class EnemyBase : MonoBehaviour
 
     #endregion
 
-    #region Stunned
+    #region Stunned, (Removed For Now)
 
-    [Header("Stunned")]
+    //[Header("Stunned")]
 
-    [SerializeField] float knockbackSpeed = 200000;
+    //[SerializeField] float knockbackSpeed = 200000;
+    //[SerializeField] float stopSpeed = 40f;
 
-    [SerializeField] float stunnedTimer = 5;
-    bool stunned = false;
+    //[SerializeField] float knockedBackwardsTime = 0.3f;
+    //[SerializeField] float stunnedTimer = 5;
+    //bool stunned = false;
 
     #endregion
 
@@ -132,7 +134,7 @@ public class EnemyBase : MonoBehaviour
     // Update is called once per frame
     public virtual void Update()
     {
-        if (stunned) { return; }
+        //if (stunned) { return; }
 
         PlayerDetection();
 
@@ -419,38 +421,42 @@ public class EnemyBase : MonoBehaviour
 
     #endregion
 
-    public IEnumerator BeStunned(Vector2 direction)
-    {
-        stunned = true;
+    #region Knockback When Door, (Removed For Now)
 
-        agent.isStopped = true;
+    //public IEnumerator BeStunned(Vector2 direction)
+    //{
+    //    stunned = true;
 
-
-        myRigidbody2D.AddForce(direction * knockbackSpeed);
-
-        SpriteRenderer visuallsChild = transform.Find("Visualls").gameObject.GetComponent<SpriteRenderer>();
-
-        visuallsChild.color = new Color32(128, (byte)visuallsChild.color.g, (byte)visuallsChild.color.b, 255);
+    //    agent.isStopped = true;
 
 
-        yield return new WaitForSeconds(stunnedTimer / 2);
+    //    myRigidbody2D.AddForce(direction * knockbackSpeed);
+
+    //    SpriteRenderer visuallsChild = transform.Find("Visualls").gameObject.GetComponent<SpriteRenderer>();
+
+    //    visuallsChild.color = new Color32(128, (byte)visuallsChild.color.g, (byte)visuallsChild.color.b, 255);
 
 
-        Debug.Log("start To Stop");
-        myRigidbody2D.linearVelocity = Vector3.zero;
-
-        myRigidbody2D.AddForce(direction * knockbackSpeed/4);
+    //    yield return new WaitForSeconds(knockedBackwardsTime);
 
 
+    //    Debug.Log("start To Stop");
+    //    myRigidbody2D.linearVelocity = Vector3.zero;
+
+    //    //myRigidbody2D.AddForce(direction * knockbackSpeed/7);
 
 
-        yield return new WaitForSeconds(stunnedTimer/2);
 
 
-        visuallsChild.color = new Color32(255, (byte)visuallsChild.color.g, (byte)visuallsChild.color.b, 255);
+    //    yield return new WaitForSeconds(stunnedTimer);
 
-        stunned = false;
-    }
+
+    //    visuallsChild.color = new Color32(255, (byte)visuallsChild.color.g, (byte)visuallsChild.color.b, 255);
+
+    //    stunned = false;
+    //}
+
+    #endregion
 
     #region Gizmo
 

@@ -25,12 +25,18 @@ public class EnemyHealth : MonoBehaviour
         }
 
         //Träffad av dörr, Kollar också hur snabb dörren var
-        if (collision.gameObject.layer == 6 && Door.playerPushedDoor == true && collision.GetComponent<Rigidbody2D>().linearVelocity.magnitude > 12)
+        if (collision.gameObject.layer == 6 /*&& Door.playerPushedDoor == true*/ && collision.GetComponent<Rigidbody2D>().linearVelocity.magnitude > 12)
         {
-            // Får vinkeln åt Vart den ska åka
-            Vector2 direction = transform.position - Door.posWhenOpened;
+            #region For Knockback, (Removed For Now)
 
-            StartCoroutine(enemyBase.BeStunned(direction.normalized));
+            //// Får vinkeln åt Vart den ska åka
+            //Vector2 direction = transform.position - Door.posWhenOpened;
+
+            //StartCoroutine(enemyBase.BeStunned(direction.normalized));
+
+            #endregion
+
+            TakeDamage(1);
 
         }
     }

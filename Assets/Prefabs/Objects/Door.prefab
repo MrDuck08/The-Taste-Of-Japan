@@ -324,5 +324,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b7594e38274f7b4ab80ddce5c1c7827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
-  openSpeed: 100
-  playerPushedDoor: 0
+  openSpeed: 150

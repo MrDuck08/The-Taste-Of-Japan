@@ -2331,6 +2331,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1839397566988880595, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
+      propertyPath: knockbackSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1839397566988880595, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: positionToCycle.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -2547,7 +2551,11 @@ PrefabInstance:
       objectReference: {fileID: 1719772121}
     - target: {fileID: 538079878204908151, guid: f5d2dfb6be3575542a609e749db09565, type: 3}
       propertyPath: knockbackSpeed
-      value: 400000
+      value: 2000
+      objectReference: {fileID: 0}
+    - target: {fileID: 538079878204908151, guid: f5d2dfb6be3575542a609e749db09565, type: 3}
+      propertyPath: knockedBackwardsTime
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 538079878204908151, guid: f5d2dfb6be3575542a609e749db09565, type: 3}
       propertyPath: positionToCycle.Array.size
@@ -2567,7 +2575,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1372834768438976000, guid: f5d2dfb6be3575542a609e749db09565, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.12
+      value: -0.62
       objectReference: {fileID: 0}
     - target: {fileID: 1372834768438976000, guid: f5d2dfb6be3575542a609e749db09565, type: 3}
       propertyPath: m_LocalPosition.z
