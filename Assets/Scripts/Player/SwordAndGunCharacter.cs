@@ -4,9 +4,9 @@ using UnityEngine;
 public class SwordAndGunCharacter : Player1
 {
 
-    bool attackStance = false;
-
     [Header("S&G Specifics")]
+
+    bool attackStance = false;
 
     [SerializeField] GameObject stanceAttackObject;
 
@@ -36,6 +36,9 @@ public class SwordAndGunCharacter : Player1
 
     #endregion
 
+    [SerializeField] int stanceAttack = 2;
+    int maxStanceAttack;
+
     CameraFollow cameraScript;
 
     public override void Start()
@@ -43,6 +46,7 @@ public class SwordAndGunCharacter : Player1
         base.Start();
 
         maxBullets = bullets;
+        maxStanceAttack = stanceAttack;
 
         dodgeCollider = transform.Find("DodgeCollider").gameObject;
 
@@ -94,7 +98,7 @@ public class SwordAndGunCharacter : Player1
 
                 if (attackStance == true)
                 {
-
+                    stanceAttack--;
                     StartCoroutine(ChargeAttack());
 
                 }
@@ -139,13 +143,13 @@ public class SwordAndGunCharacter : Player1
 
         #region Stance
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && stanceAttack > 0)
         {
 
             if (attacking == false)
             {
 
-                cameraScript.ChangeTargetCam(gameObject, 2);
+                //cameraScript.ChangeTargetCam(gameObject, 2);
 
                 speed = 2;
 
@@ -156,13 +160,13 @@ public class SwordAndGunCharacter : Player1
 
         }
 
-        if (Input.GetKeyUp(KeyCode.LeftShift))
+        if (Input.GetKeyUp(KeyCode.LeftShift) && stanceAttack > 0)
         {
 
             if (attacking == false)
             {
 
-                cameraScript.ZoomOutAgain(0.1f);
+                //cameraScript.ZoomOutAgain(0.1f);
 
                 speed = 20;
 
@@ -256,6 +260,30 @@ public class SwordAndGunCharacter : Player1
     }
 
     #endregion
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "RechargeBullet")
+        {
+            if(bullets != maxBullets)
+            {
+                Destroy(collision.gameObject);
+
+                bullets++;
+            }
+        }
+
+        if (collision.tag == "RechargeSwordCharge")
+        {
+            if (stanceAttack != maxStanceAttack)
+            {
+                Destroy(collision.gameObject);
+
+                stanceAttack++;
+            }
+        }
+    }
 
     void ThingsToFalse()
     {

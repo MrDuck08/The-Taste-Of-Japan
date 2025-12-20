@@ -7,6 +7,8 @@ TagManager:
   - PlayerAttack
   - EnemyAttack
   - Enemy
+  - RechargeBullet
+  - RechargeSwordCharge
   layers:
   - Default
   - TransparentFX
