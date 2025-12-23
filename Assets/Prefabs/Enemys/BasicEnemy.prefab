@@ -330,8 +330,6 @@ MonoBehaviour:
     m_Bits: 72
   positionToCycle:
   - {x: -1.8947019e+35, y: 7.93e-43}
-  knockbackSpeed: 200000
-  stunnedTimer: 5
   maxTimeToLookAround: 3
   maxTimeUntilNewRotation: 1
   maxHowLongLookForPlayer: 3
@@ -351,6 +349,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   health: 1
+  rechargeBulletObject: {fileID: 3747821015776709940, guid: 5ba097891ed5a584284d543bedec33bc, type: 3}
+  rechargeStanceObject: {fileID: 5817432700007384342, guid: 3f934e058b60bf94992e1b946e387304, type: 3}
 --- !u!1 &3234579187786209557
 GameObject:
   m_ObjectHideFlags: 0

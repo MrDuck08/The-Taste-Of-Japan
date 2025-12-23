@@ -6,9 +6,9 @@ public class SwordAndGunCharacter : Player1
 
     [Header("S&G Specifics")]
 
-    bool attackStance = false;
-
     [SerializeField] GameObject stanceAttackObject;
+
+    bool attackStance = false;
 
     #region Basic Dodge
 
@@ -128,11 +128,11 @@ public class SwordAndGunCharacter : Player1
                 //SpawnTrail(trail, hit);
                 trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(trail.transform.position, hit.point);
 
-                //bullets--;
+                bullets--;
 
                 if(hit.transform.tag == "Enemy")
                 {
-                    hit.transform.gameObject.GetComponent<EnemyHealth>().TakeDamage(1);
+                    hit.transform.gameObject.GetComponent<EnemyHealth>().TakeDamage(1, 2);
                 }
 
             }
@@ -188,6 +188,8 @@ public class SwordAndGunCharacter : Player1
         cameraScript.ZoomOutAgain(0.1f);
 
         attacking = true;
+
+        stanceAttack--;
 
         stanceAttackObject.SetActive(true);
 
@@ -270,7 +272,7 @@ public class SwordAndGunCharacter : Player1
             {
                 Destroy(collision.gameObject);
 
-                bullets++;
+                RechargeBullets();
             }
         }
 
@@ -298,6 +300,13 @@ public class SwordAndGunCharacter : Player1
 
         basicAttacking = false;
         attackObject.SetActive(false);
+
+    }
+
+    public void RechargeBullets()
+    {
+
+        bullets++;
 
     }
 

@@ -327,15 +327,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 72
   positionToCycle: []
-  knockbackSpeed: 200000
-  stunnedTimer: 5
   maxTimeToLookAround: 3
   maxTimeUntilNewRotation: 1
   maxHowLongLookForPlayer: 3
   bulletIgnoreLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  bulletObject: {fileID: 0}
+  bulletObject: {fileID: 2677064501833155631, guid: 3df9550ef0af9244fac968b5bd7b5ed5, type: 3}
   bulletTrail: {fileID: 1562609465452907130, guid: 622f3c4fd67ae0b4392a99e3b04073e4, type: 3}
   startShotingTime: 0.5
   fireRate: 1
@@ -355,3 +353,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   health: 1
+  rechargeBulletObject: {fileID: 3747821015776709940, guid: 5ba097891ed5a584284d543bedec33bc, type: 3}
+  rechargeStanceObject: {fileID: 5817432700007384342, guid: 3f934e058b60bf94992e1b946e387304, type: 3}

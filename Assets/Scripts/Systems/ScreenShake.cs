@@ -1,36 +1,88 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class ScreenShake : MonoBehaviour
 {
     [SerializeField] float shakeMagnitude = 0.7f;
-    [SerializeField] Transform playerTarget;
-    Transform tempTarget;
+    [SerializeField] float maxShakeDistance = 15f;
 
     private float shakeDuration = 0f;
-    Vector3 initialPosition;
 
-    private void Start()
+    bool priorityShake = false;
+    bool shakeStop = true;
+
+    Vector3 ChangedPosition = Vector3.zero;
+
+    public static Vector3 shakePosition = Vector3.zero;
+
+
+    private void Update()
     {
-        initialPosition = transform.localPosition;
+        if (shakeDuration > 0)
+        {
+            float xMagnitude = Random.Range(-shakeMagnitude, shakeMagnitude);
+            float yMagnitude = Random.Range(-shakeMagnitude, shakeMagnitude);
+
+            if (xMagnitude > maxShakeDistance)
+            {
+                xMagnitude = maxShakeDistance;
+            }
+            if (xMagnitude < -maxShakeDistance)
+            {
+                xMagnitude = -maxShakeDistance;
+            }
+            if (yMagnitude > maxShakeDistance)
+            {
+                yMagnitude = shakeMagnitude;
+            }
+            if (yMagnitude < -maxShakeDistance)
+            {
+                yMagnitude = -maxShakeDistance;
+            }
+
+            // Sparar alla ändringar på objectet
+            ChangedPosition += new Vector3(xMagnitude, yMagnitude, 0);
+
+            shakePosition += new Vector3(xMagnitude, yMagnitude, 0);
+            shakeDuration -= Time.deltaTime;
+        }
+        else if (!shakeStop)
+        {
+            // Shake Done
+
+            StopShake();
+        }
     }
 
-    private void LateUpdate()
+    public void TriggerShake(float duration, float magnitude, bool isShakeImortant)
     {
-        if (playerTarget == null)
+
+        // En shake som har prioritet körs
+        if (priorityShake)
         {
             return;
         }
 
-        if (shakeDuration > 0)
-        {
-            transform.position += new Vector3(Random.Range(-shakeMagnitude, shakeMagnitude), Random.Range(-shakeMagnitude, shakeMagnitude), 0);
-            shakeDuration -= Time.unscaledDeltaTime;
-        }
-    }
+        shakeDuration = -1;
 
-    public void TriggerShake(float duration, float magnitude)
-    {
+        shakeStop = false;
+
+        priorityShake = isShakeImortant;
+
         shakeMagnitude = magnitude;
         shakeDuration = duration;
+    }
+
+    public void StopShake()
+    {
+        shakeStop = true;
+
+        // Ändrar tillbaka alla ändringar
+        shakePosition -= ChangedPosition;
+
+        ChangedPosition = Vector3.zero;
+
+        priorityShake = false;
+
     }
 }

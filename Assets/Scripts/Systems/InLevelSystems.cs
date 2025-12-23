@@ -56,7 +56,7 @@ public class InLevelSystems : MonoBehaviour
 
             trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(fromWhere, hit.point);
 
-            enemiesList[whatI].GetComponent<EnemyHealth>().TakeDamage(1);
+            enemiesList[whatI].GetComponent<EnemyHealth>().TakeDamage(1, 2);
 
         }
 

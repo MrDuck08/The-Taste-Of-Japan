@@ -74,7 +74,7 @@ public class CameraFollow : MonoBehaviour
 
         if (targetThatIsFollowed != null && !nonPlayerZoom)
         {
-            transform.position = targetThatIsFollowed.transform.position;
+            transform.position = targetThatIsFollowed.transform.position + ScreenShake.shakePosition;
         }
 
         #region Normal Zoom In & Out
@@ -131,7 +131,7 @@ public class CameraFollow : MonoBehaviour
                     zoomingInOnBullet = false;
                     zoomedOnBullet = true;
 
-                    screenShake.TriggerShake(maxTimeToBeZommedIn, 0.01f);
+                    screenShake.TriggerShake(maxTimeToBeZommedIn, 0.01f, true);
 
                 }
             }

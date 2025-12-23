@@ -12,8 +12,6 @@ public class SceneLoader : MonoBehaviour
         if (playerDead && Input.GetKey(KeyCode.R))
         {
             ReloadScene();
-
-
         }
 
     }

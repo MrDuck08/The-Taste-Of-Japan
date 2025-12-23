@@ -276,6 +276,8 @@ public class EnemyBase : MonoBehaviour
     {
 
 
+        if(playerObject == null) {  return; }
+
         Vector2 toTarget = playerObject.transform.position - transform.position;
         float currentAngle = Vector2.Angle(transform.up, toTarget);
 

@@ -7,15 +7,15 @@ public class Player1 : MonoBehaviour
 {
     #region Types
 
-    #region Sword & Gun
+    [Header("What Character")]
 
     public bool stanceBoolToParent = false;
 
     #endregion
 
-    #endregion
-
     #region Movment
+
+    [Header("Ignore")]
 
     #region Basic Movment
 
@@ -34,7 +34,11 @@ public class Player1 : MonoBehaviour
 
     #region Attack
 
+    [Header("Basic Attack")]
+
     public GameObject attackObject;
+
+    [Header("Ignore")]
 
     public bool attacking = false;
     public bool basicAttacking = false;

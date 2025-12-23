@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Door : MonoBehaviour
@@ -9,7 +10,7 @@ public class Door : MonoBehaviour
 
     public static Vector3 posWhenOpened;
 
-    public static bool playerPushedDoor;
+    public bool playerPushedDoor;
 
     void Start()
     {
@@ -27,20 +28,18 @@ public class Door : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Enemy"))
         {
-
             Vector2 leftOrRight = collision.transform.position - transform.position;
 
             myRigidbody2D.AddForce(leftOrRight.normalized * 10 * -openSpeed);
-
-            playerPushedDoor = false;
 
             return;
 
         }
         else
         {
-
             playerPushedDoor = true;
+
+            StartCoroutine(playerStopDoor());
         }
 
         // Får positionen från när någon nuddar dörren
@@ -48,6 +47,16 @@ public class Door : MonoBehaviour
 
         myRigidbody2D.AddForce(collision.gameObject.GetComponent<Rigidbody2D>().linearVelocity * openSpeed);
 
+
+    }
+
+    IEnumerator playerStopDoor()
+    {
+
+
+        yield return new WaitForSeconds(1);
+
+        playerPushedDoor = false;
 
     }
 
