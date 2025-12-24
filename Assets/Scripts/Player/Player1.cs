@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics.Contracts;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,6 +23,7 @@ public class Player1 : MonoBehaviour
     public Vector2 movementInput;
     public Vector2 playerVelocity;
 
+    public float maxSpeed;
     public float speed = 5;
 
     public Vector2 lookDirection;
@@ -59,6 +61,8 @@ public class Player1 : MonoBehaviour
         cam = Camera.main;
 
         attackObject.SetActive(false);
+
+        speed = maxSpeed;
 
     }
 

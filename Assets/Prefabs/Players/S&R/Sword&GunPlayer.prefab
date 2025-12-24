@@ -611,6 +611,7 @@ MonoBehaviour:
   stanceBoolToParent: 0
   movementInput: {x: 0, y: 0}
   playerVelocity: {x: 0, y: 0}
+  maxSpeed: 20
   speed: 20
   lookDirection: {x: 0, y: 0}
   dodgeLock: 0
@@ -623,6 +624,7 @@ MonoBehaviour:
   stanceAttackObject: {fileID: 4240542273072960985}
   dodgeSpeed: 50
   dodgeTime: 0.15
+  dodgeRecoveryTime: 0.1
   bulletTrail: {fileID: 1562609465452907130, guid: 1c3919ec3feb51c44ab2aa3c84b1eb45, type: 3}
   bulletSpawnPos: {x: 0, y: 0}
   bullets: 6

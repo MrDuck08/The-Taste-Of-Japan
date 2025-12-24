@@ -16,6 +16,7 @@ public class SwordAndGunCharacter : Player1
 
     [SerializeField] float dodgeSpeed = 5;
     [SerializeField] float dodgeTime = 0.5f;
+    [SerializeField] float dodgeRecoveryTime = 0.1f;
 
     GameObject dodgeCollider = null;
 
@@ -67,7 +68,7 @@ public class SwordAndGunCharacter : Player1
 
             stanceAttackObject.SetActive(false);
 
-            speed = 20;
+            speed = maxSpeed;
 
             return;
 
@@ -98,9 +99,7 @@ public class SwordAndGunCharacter : Player1
 
                 if (attackStance == true)
                 {
-                    stanceAttack--;
                     StartCoroutine(ChargeAttack());
-
                 }
 
 
@@ -168,7 +167,7 @@ public class SwordAndGunCharacter : Player1
 
                 //cameraScript.ZoomOutAgain(0.1f);
 
-                speed = 20;
+                speed = maxSpeed;
 
                 attackStance = false;
                 stanceBoolToParent = false;
@@ -201,7 +200,7 @@ public class SwordAndGunCharacter : Player1
 
         yield return new WaitForSeconds(0.2f);
 
-        speed = 20;
+        speed = maxSpeed;
 
         attackStance = false;
         attacking = false;
@@ -259,33 +258,18 @@ public class SwordAndGunCharacter : Player1
         }
 
         dodgeLock = false;
+
+        speed = maxSpeed / 2;
+
+
+        yield return new WaitForSeconds(dodgeRecoveryTime);
+
+
+        speed = maxSpeed;
+
     }
 
     #endregion
-
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.tag == "RechargeBullet")
-        {
-            if(bullets != maxBullets)
-            {
-                Destroy(collision.gameObject);
-
-                RechargeBullets();
-            }
-        }
-
-        if (collision.tag == "RechargeSwordCharge")
-        {
-            if (stanceAttack != maxStanceAttack)
-            {
-                Destroy(collision.gameObject);
-
-                stanceAttack++;
-            }
-        }
-    }
 
     void ThingsToFalse()
     {
@@ -296,7 +280,7 @@ public class SwordAndGunCharacter : Player1
         stanceBoolToParent = false;
         stanceAttackObject.SetActive(false);
 
-        speed = 20;
+        speed = maxSpeed;
 
         basicAttacking = false;
         attackObject.SetActive(false);
@@ -306,7 +290,20 @@ public class SwordAndGunCharacter : Player1
     public void RechargeBullets()
     {
 
-        bullets++;
+        if (bullets != maxBullets)
+        {
+            bullets++;
+        }
+
+    }
+
+    public void RechargeStance()
+    {
+
+        if(stanceAttack != maxStanceAttack)
+        {
+            stanceAttack++;
+        }
 
     }
 

@@ -5,17 +5,16 @@ public class EnemyHealth : MonoBehaviour
 
     [SerializeField] int health;
 
-    [SerializeField] GameObject rechargeBulletObject;
-    [SerializeField] GameObject rechargeStanceObject;
-
     ScreenShake screenShake;
     EnemyBase enemyBase;
+    SwordAndGunCharacter swordAndGun;
 
     private void Start()
     {
         enemyBase = GetComponent<EnemyBase>();
 
         screenShake = FindAnyObjectByType<ScreenShake>();
+        swordAndGun = FindAnyObjectByType<SwordAndGunCharacter>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -61,13 +60,13 @@ public class EnemyHealth : MonoBehaviour
 
                 case 1:
 
-                    Instantiate(rechargeBulletObject, transform.position, Quaternion.identity);
+                    swordAndGun.RechargeBullets();
 
                     break;
 
                 case 2:
 
-                    Instantiate(rechargeStanceObject, transform.position, Quaternion.identity);
+                    swordAndGun.RechargeStance();
 
                     break;
 

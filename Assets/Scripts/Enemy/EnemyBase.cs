@@ -199,19 +199,18 @@ public class EnemyBase : MonoBehaviour
 
             agent.SetDestination(positionToCycle[atWhatPositionInIdleList]);
 
-            Vector2 lookDirection = positionToCycle[atWhatPositionInIdleList] - myRigidbody2D.position;
-            float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
-
-
+            float angle = Mathf.Atan2(agent.velocity.y, agent.velocity.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
             timeToLookAround = maxTimeToLookAround; // Det här är tid för hur länge man ska vara idle på ett ställe
 
         }
-        else // G�r Till Nya Position
+        else if(!isLookAround) // G�r Till Nya Position
         {
             agent.SetDestination(positionToCycle[atWhatPositionInIdleList]);
 
+            float angle = Mathf.Atan2(agent.velocity.y, agent.velocity.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
             if (Vector2.Distance(transform.position, positionToCycle[atWhatPositionInIdleList]) < 0.5f) // Nåt position
             {
@@ -357,10 +356,7 @@ public class EnemyBase : MonoBehaviour
                 //agent.SetDestination(playerObject.transform.position);
 
 
-                Vector2 lookDirection = new Vector2(playerObject.transform.position.x, playerObject.transform.position.y) - myRigidbody2D.position;
-                float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
-
-
+                float angle = Mathf.Atan2(agent.velocity.y, agent.velocity.x) * Mathf.Rad2Deg;
                 transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
 
