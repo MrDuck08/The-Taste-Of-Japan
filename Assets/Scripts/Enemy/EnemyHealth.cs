@@ -6,13 +6,10 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] int health;
 
     ScreenShake screenShake;
-    EnemyBase enemyBase;
     SwordAndGunCharacter swordAndGun;
 
     private void Start()
     {
-        enemyBase = GetComponent<EnemyBase>();
-
         screenShake = FindAnyObjectByType<ScreenShake>();
         swordAndGun = FindAnyObjectByType<SwordAndGunCharacter>();
     }

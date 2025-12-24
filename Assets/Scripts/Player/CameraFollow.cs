@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
@@ -51,7 +50,6 @@ public class CameraFollow : MonoBehaviour
 
     ScreenShake screenShake;
     InLevelSystems inLevelSystems;
-    Player1 player;
 
     private void Start()
     {
@@ -60,8 +58,6 @@ public class CameraFollow : MonoBehaviour
         cam = Camera.main; // Det här objectet
 
         screenShake = GetComponent<ScreenShake>();
-        inLevelSystems = FindAnyObjectByType<InLevelSystems>();
-        player = FindAnyObjectByType<Player1>();
 
         cam.orthographicSize = startZoomValue;
 

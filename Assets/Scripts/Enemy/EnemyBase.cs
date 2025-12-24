@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,14 +6,11 @@ using UnityEngine.AI;
 public class EnemyBase : MonoBehaviour
 {
 
-
     public NavMeshAgent agent;
     Rigidbody2D myRigidbody2D;
 
 
     GameObject playerObject;
-
-
 
 
     #region Player Detection
