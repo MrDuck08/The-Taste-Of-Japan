@@ -9,7 +9,7 @@ public class Player1 : MonoBehaviour
 
     [Header("What Character")]
 
-    public bool stanceBoolToParent = false;
+    public bool lockRotationParent = false;
 
     #endregion
 
@@ -70,7 +70,7 @@ public class Player1 : MonoBehaviour
     {
         //Debug.Log(myRigidbody.linearVelocity); //
 
-        if(stanceBoolToParent == false)
+        if(lockRotationParent == false)
         {
 
             myRigidbody.freezeRotation = false;

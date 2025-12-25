@@ -37,10 +37,34 @@ public class SwordAndGunCharacter : Player1
 
     #endregion
 
+    #region Harmony
+
+    [Header("Harmony")]
+
+    [SerializeField] float decayTimeForHarmony = 7f;
+    float decayTimeForHarmonyBase;
+    float maxTimeInHarmony = 10f;
+    float maxTimeInHarmonyBase;
+
+    bool killWithRevolver = false;
+    bool killWithCharge = false;
+    bool inHarmony = false;
+
+    [SerializeField] GameObject rushAttackObject;
+
+    [SerializeField] float rushSpeed = 40f;
+
+    bool rushing = false;
+
+    Vector2 pointToRushTo = Vector2.zero;
+
+    #endregion
+
     [SerializeField] int stanceAttack = 2;
     int maxStanceAttack;
 
     CameraFollow cameraScript;
+    PlayerHealth playerHealth;
 
     public override void Start()
     {
@@ -48,23 +72,46 @@ public class SwordAndGunCharacter : Player1
 
         maxBullets = bullets;
         maxStanceAttack = stanceAttack;
+        decayTimeForHarmonyBase = decayTimeForHarmony;
+        maxTimeInHarmonyBase = maxTimeInHarmony;
 
         dodgeCollider = transform.Find("DodgeCollider").gameObject;
 
         cameraScript = FindAnyObjectByType<CameraFollow>();
+
+        playerHealth = GetComponent<PlayerHealth>();
     }
 
     public override void Update()
     {
         base.Update();
 
-        #region Dodge Lock
+        #region Rush
 
-        if (dodgeLock)
+        if (rushing)
+        {
+
+            transform.position = Vector2.MoveTowards(transform.position, pointToRushTo, rushSpeed * Time.deltaTime);
+
+            if(Vector2.Distance(transform.position, pointToRushTo) < 0.5f)
+            {
+                StartCoroutine(RushAttack());
+
+                dodgeLock = false;
+                lockRotationParent = false;
+            }
+
+        }
+
+        #endregion
+
+        #region Move Lock
+
+        if (dodgeLock || rushing)
         {
             attackStance = false;
             attacking = false;
-            stanceBoolToParent = false;
+            lockRotationParent = false;
 
             stanceAttackObject.SetActive(false);
 
@@ -84,7 +131,96 @@ public class SwordAndGunCharacter : Player1
 
         }
 
-        #region Left Click Attack
+        #region Harmony
+
+        if(killWithCharge && killWithRevolver)
+        {
+            // Enter Harmony 
+            if (Input.GetKeyDown(KeyCode.LeftControl) && !dodgeLock)
+            {
+                inHarmony = true;
+
+                Time.timeScale = 0.1f;
+            }
+
+            // In harmony now
+            if (inHarmony)
+            {
+
+                // Sword attack harmony
+                if (Input.GetMouseButtonDown(0) && !dodgeLock)
+                {
+                    float clickDistance = Vector2.Distance(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition)) - 3;
+ 
+                    RaycastHit2D hit = Physics2D.Raycast(transform.position, lookDirection, clickDistance, ~bulletIgnoreLayerMask);
+
+                    if(hit.point == Vector2.zero)
+                    {
+                        pointToRushTo = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    }
+                    else
+                    {
+                        pointToRushTo = hit.point;
+                    }
+
+                    GameObject test = Instantiate(rushAttackObject);
+                    test.transform.position = pointToRushTo;
+                    test.SetActive(true);
+
+                    rushing = true;
+
+                    dodgeLock = true;
+                    lockRotationParent = true;
+
+                    transform.LookAt(pointToRushTo);
+
+                    ResetHarmony();
+                }
+
+                // Revolver attack harmony
+                if (Input.GetMouseButtonDown(1) && !dodgeLock)
+                {
+
+                    RaycastHit2D hit = Physics2D.Raycast(transform.position, lookDirection, 1337, ~bulletIgnoreLayerMask);
+
+                    TrailRenderer trail = Instantiate(bulletTrail);
+                    trail.transform.position = transform.position;
+
+                    //SpawnTrail(trail, hit);
+                    trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(trail.transform.position, hit.point);
+
+                    if (hit.transform.tag == "Enemy")
+                    {
+                        hit.transform.gameObject.GetComponent<EnemyHealth>().TakeDamage(1, 2);
+                    }
+
+
+                    ResetHarmony();
+                }
+
+
+                maxTimeInHarmony -= Time.unscaledDeltaTime;
+
+                if(maxTimeInHarmony < 0)
+                {
+                    ResetHarmony();
+                }
+
+            }
+
+            decayTimeForHarmony -= Time.deltaTime;
+
+            if(decayTimeForHarmony < 0 && !inHarmony)
+            {
+                ResetHarmony();
+            }
+
+
+        }
+
+        #endregion
+
+        #region Left Click Attacks
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -153,7 +289,7 @@ public class SwordAndGunCharacter : Player1
                 speed = 2;
 
                 attackStance = true;
-                stanceBoolToParent = true;
+                lockRotationParent = true;
 
             }
 
@@ -170,7 +306,7 @@ public class SwordAndGunCharacter : Player1
                 speed = maxSpeed;
 
                 attackStance = false;
-                stanceBoolToParent = false;
+                lockRotationParent = false;
 
             }
 
@@ -204,7 +340,7 @@ public class SwordAndGunCharacter : Player1
 
         attackStance = false;
         attacking = false;
-        stanceBoolToParent = false;
+        lockRotationParent = false;
 
 
     }
@@ -271,24 +407,27 @@ public class SwordAndGunCharacter : Player1
 
     #endregion
 
-    void ThingsToFalse()
+    IEnumerator RushAttack()
     {
 
+        rushAttackObject.SetActive(true);
+
+        attacking = true;
+
+        yield return new WaitForSeconds(0.2f);
+
+        rushAttackObject.SetActive(false);
+
+        yield return new WaitForSeconds(0.1f);
+
+        rushing = false;
         attacking = false;
-
-        attackStance = false;
-        stanceBoolToParent = false;
-        stanceAttackObject.SetActive(false);
-
-        speed = maxSpeed;
-
-        basicAttacking = false;
-        attackObject.SetActive(false);
 
     }
 
     public void RechargeBullets()
     {
+        killWithCharge = true;
 
         if (bullets != maxBullets)
         {
@@ -299,12 +438,47 @@ public class SwordAndGunCharacter : Player1
 
     public void RechargeStance()
     {
+        killWithRevolver = true;
 
-        if(stanceAttack != maxStanceAttack)
+        if (stanceAttack != maxStanceAttack)
         {
             stanceAttack++;
         }
 
     }
+
+    void ResetHarmony()
+    {
+
+
+        decayTimeForHarmony = decayTimeForHarmonyBase;
+        maxTimeInHarmony = maxTimeInHarmonyBase;
+
+        killWithCharge = false;
+        killWithRevolver = false;
+        inHarmony = false;
+
+        Time.timeScale = 1;
+    }
+
+    #region Things To False
+
+    void ThingsToFalse()
+    {
+
+        attacking = false;
+
+        attackStance = false;
+        lockRotationParent = false;
+        stanceAttackObject.SetActive(false);
+
+        speed = maxSpeed;
+
+        basicAttacking = false;
+        attackObject.SetActive(false);
+
+    }
+
+    #endregion
 
 }

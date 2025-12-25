@@ -9,9 +9,7 @@ public class EnemyBase : MonoBehaviour
     public NavMeshAgent agent;
     Rigidbody2D myRigidbody2D;
 
-
     GameObject playerObject;
-
 
     #region Player Detection
 
@@ -37,7 +35,6 @@ public class EnemyBase : MonoBehaviour
 
 
     #endregion
-
 
     #region Idle Behavior
 
@@ -67,7 +64,6 @@ public class EnemyBase : MonoBehaviour
 
     #endregion
 
-
     #region Look Around For Player
 
 
@@ -82,7 +78,6 @@ public class EnemyBase : MonoBehaviour
 
 
     #endregion
-
 
     #region After Aggro
 
@@ -109,21 +104,15 @@ public class EnemyBase : MonoBehaviour
 
 
         myRigidbody2D = GetComponent<Rigidbody2D>();
-
-
     }
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public virtual void Start()
     {
-
-
         playerObject = GameObject.FindGameObjectWithTag("Player");
 
         positionToCycle.Add(transform.position);
-
-
     }
 
 
