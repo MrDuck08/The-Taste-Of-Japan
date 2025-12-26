@@ -10,7 +10,7 @@ public class CameraFollow : MonoBehaviour
 
     bool nonPlayerZoom = false;
 
-    #region Deflect Zoom
+    #region Deflect Zoom Variables
 
     [Header("Deflect Zoom")]
 
@@ -32,7 +32,7 @@ public class CameraFollow : MonoBehaviour
 
     #endregion
 
-    #region Nomral Zoom
+    #region Nomral Zoom Variables
 
     bool startZommingInB = false;
     float timeToZoomInB;

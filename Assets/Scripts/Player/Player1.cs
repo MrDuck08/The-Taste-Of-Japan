@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Player1 : MonoBehaviour
 {
-    #region Types
+    #region Types Variables
 
     [Header("What Character")]
 
@@ -17,7 +17,7 @@ public class Player1 : MonoBehaviour
 
     [Header("Ignore")]
 
-    #region Basic Movment
+    #region Basic Movment Variables
 
     public Vector2 movementInput;
     public Vector2 playerVelocity;
@@ -33,7 +33,7 @@ public class Player1 : MonoBehaviour
 
     #endregion
 
-    #region Attack
+    #region Attack Variables
 
     [Header("Basic Attack")]
 

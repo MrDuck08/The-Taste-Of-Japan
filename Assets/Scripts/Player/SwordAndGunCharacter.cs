@@ -1,5 +1,7 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SwordAndGunCharacter : Player1
 {
@@ -10,7 +12,7 @@ public class SwordAndGunCharacter : Player1
 
     bool attackStance = false;
 
-    #region Basic Dodge
+    #region Basic Dodge Variables
 
     [Header("Dodge")]
 
@@ -23,7 +25,7 @@ public class SwordAndGunCharacter : Player1
 
     #endregion
 
-    #region Revolver
+    #region Revolver Variables
 
     [Header("Revolver")]
 
@@ -37,7 +39,7 @@ public class SwordAndGunCharacter : Player1
 
     #endregion
 
-    #region Harmony
+    #region Harmony Variables
 
     [Header("Harmony")]
 
@@ -64,6 +66,18 @@ public class SwordAndGunCharacter : Player1
     [SerializeField] int stanceAttack = 2;
     int maxStanceAttack;
 
+    #region UI Variables
+
+    [Header("UI")]
+
+    [SerializeField] TextMeshProUGUI bulletText;
+    [SerializeField] TextMeshProUGUI ChargeText;
+
+    [SerializeField] Image bulletKillImage;
+    [SerializeField] Image ChargeKillImage;
+
+    #endregion
+
     CameraFollow cameraScript;
     PlayerHealth playerHealth;
 
@@ -75,6 +89,11 @@ public class SwordAndGunCharacter : Player1
         maxStanceAttack = stanceAttack;
         decayTimeForHarmonyBase = decayTimeForHarmony;
         maxTimeInHarmonyBase = maxTimeInHarmony;
+
+        bulletText.text = bullets.ToString();
+        ChargeText.text = stanceAttack.ToString();
+        bulletKillImage.gameObject.SetActive(false);
+        ChargeKillImage.gameObject.SetActive(false);
 
         dodgeCollider = transform.Find("DodgeCollider").gameObject;
 
@@ -94,6 +113,7 @@ public class SwordAndGunCharacter : Player1
 
             transform.position = Vector2.MoveTowards(transform.position, pointToRushTo, rushSpeed * Time.deltaTime);
 
+            // 1.7 Så den stannar innan den kommer fram
             if(Vector2.Distance(transform.position, pointToRushTo) < 1.7f)
             {
                 StartCoroutine(RushAttack());
@@ -124,7 +144,7 @@ public class SwordAndGunCharacter : Player1
 
         #endregion
 
-        if (Input.GetKeyDown(KeyCode.Space) && dodgeLock == false)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
 
             StartCoroutine(basicDodge());
@@ -143,11 +163,15 @@ public class SwordAndGunCharacter : Player1
 
                 Time.timeScale = 0.1f;
                 Time.fixedDeltaTime = 0.02F * Time.timeScale;
+
+                bulletKillImage.fillAmount = 1;
+                ChargeKillImage.fillAmount = 1;
             }
 
             // In harmony now
             if (inHarmony)
             {
+                #region Rush
 
                 // Sword attack harmony
                 if (Input.GetMouseButtonDown(0) && !dodgeLock)
@@ -172,8 +196,14 @@ public class SwordAndGunCharacter : Player1
 
                     transform.LookAt(pointToRushTo);
 
+                    playerHealth.invincible = true;
+
                     ResetHarmony();
                 }
+
+                #endregion
+
+                #region Revolver
 
                 // Revolver attack harmony
                 if (Input.GetMouseButtonDown(1) && !dodgeLock)
@@ -187,32 +217,41 @@ public class SwordAndGunCharacter : Player1
                     //SpawnTrail(trail, hit);
                     trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(trail.transform.position, hit.point);
 
+
+                    ResetHarmony();
+
+                    // Sätter den under reset så att man kan börja bygga harmoni av denna attack
                     if (hit.transform.tag == "Enemy")
                     {
                         hit.transform.gameObject.GetComponent<EnemyHealth>().TakeDamage(1, 2);
                     }
-
-
-                    ResetHarmony();
                 }
 
+                #endregion
 
                 maxTimeInHarmony -= Time.unscaledDeltaTime;
 
-                if(maxTimeInHarmony < 0)
+                bulletKillImage.fillAmount = maxTimeInHarmony / maxTimeInHarmonyBase;
+                ChargeKillImage.fillAmount = maxTimeInHarmony / maxTimeInHarmonyBase;
+
+                if (maxTimeInHarmony < 0)
                 {
                     ResetHarmony();
                 }
 
             }
-
-            decayTimeForHarmony -= Time.deltaTime;
-
-            if(decayTimeForHarmony < 0 && !inHarmony)
+            else // Har inte gått in i Harmoni ännu
             {
-                ResetHarmony();
-            }
+                decayTimeForHarmony -= Time.deltaTime;
 
+                bulletKillImage.fillAmount = decayTimeForHarmony / decayTimeForHarmonyBase;
+                ChargeKillImage.fillAmount = decayTimeForHarmony / decayTimeForHarmonyBase;
+
+                if (decayTimeForHarmony < 0)
+                {
+                    ResetHarmony();
+                }
+            }
 
         }
 
@@ -263,7 +302,9 @@ public class SwordAndGunCharacter : Player1
 
                 bullets--;
 
-                if(hit.transform.tag == "Enemy")
+                bulletText.text = bullets.ToString();
+
+                if (hit.transform.tag == "Enemy")
                 {
                     hit.transform.gameObject.GetComponent<EnemyHealth>().TakeDamage(1, 2);
                 }
@@ -323,6 +364,8 @@ public class SwordAndGunCharacter : Player1
         attacking = true;
 
         stanceAttack--;
+
+        ChargeText.text = stanceAttack.ToString();
 
         stanceAttackObject.SetActive(true);
 
@@ -419,6 +462,7 @@ public class SwordAndGunCharacter : Player1
 
         yield return new WaitForSeconds(0.1f);
 
+        playerHealth.invincible = false;
         rushing = false;
         startRushAttack = false;
         attacking = false;
@@ -428,10 +472,13 @@ public class SwordAndGunCharacter : Player1
     public void RechargeBullets()
     {
         killWithCharge = true;
+        ChargeKillImage.gameObject.SetActive(true);
 
         if (bullets != maxBullets)
         {
             bullets++;
+
+            bulletText.text = bullets.ToString();
         }
 
     }
@@ -439,10 +486,13 @@ public class SwordAndGunCharacter : Player1
     public void RechargeStance()
     {
         killWithRevolver = true;
+        bulletKillImage.gameObject.SetActive(true);
 
         if (stanceAttack != maxStanceAttack)
         {
             stanceAttack++;
+
+            ChargeText.text = stanceAttack.ToString();
         }
 
     }
@@ -457,6 +507,12 @@ public class SwordAndGunCharacter : Player1
         killWithCharge = false;
         killWithRevolver = false;
         inHarmony = false;
+
+        bulletKillImage.fillAmount = 1;
+        ChargeKillImage.fillAmount = 1;
+        bulletKillImage.gameObject.SetActive(false);
+        ChargeKillImage.gameObject.SetActive(false);
+
 
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02F;

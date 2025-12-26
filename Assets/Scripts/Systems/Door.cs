@@ -7,6 +7,7 @@ public class Door : MonoBehaviour
     [SerializeField] float openSpeed = 5;
 
     Rigidbody2D myRigidbody2D;
+    Rigidbody2D collisionRB2D;
 
     public static Vector3 posWhenOpened;
 
@@ -23,7 +24,21 @@ public class Door : MonoBehaviour
 
         if(collision.gameObject.GetComponent<Rigidbody2D>() == null)
         {
-            return;
+
+            // Finns en Rigdidbody på parent (Gjord för dodge collider är på Child)
+            if(collision.GetComponentInParent<Rigidbody2D>() != null)
+            {
+                collisionRB2D = collision.GetComponentInParent<Rigidbody2D>();
+            }
+            else
+            {
+                return;
+            }
+        }
+        else
+        {
+            // Finns en Rigidbody på objectet
+            collisionRB2D = collision.GetComponent<Rigidbody2D>();
         }
 
         if (collision.gameObject.CompareTag("Enemy"))
@@ -45,7 +60,7 @@ public class Door : MonoBehaviour
         // Får positionen från när någon nuddar dörren
         posWhenOpened = transform.position;
 
-        myRigidbody2D.AddForce(collision.gameObject.GetComponent<Rigidbody2D>().linearVelocity * openSpeed);
+        myRigidbody2D.AddForce(collisionRB2D.linearVelocity * openSpeed);
 
 
     }

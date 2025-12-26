@@ -5763,25 +5763,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 149077289677595396, guid: 88ef8ed1d6ee90d4da098bde3fe6c2d2, type: 3}
-      propertyPath: health
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5502448033236901996, guid: 88ef8ed1d6ee90d4da098bde3fe6c2d2, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5656606882981157311, guid: 88ef8ed1d6ee90d4da098bde3fe6c2d2, type: 3}
-      propertyPath: maxSpeed
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 5656606882981157311, guid: 88ef8ed1d6ee90d4da098bde3fe6c2d2, type: 3}
-      propertyPath: rushSpeed
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 5656606882981157311, guid: 88ef8ed1d6ee90d4da098bde3fe6c2d2, type: 3}
-      propertyPath: bulletIgnoreLayerMask.m_Bits
-      value: 132
       objectReference: {fileID: 0}
     - target: {fileID: 9217468368014027979, guid: 88ef8ed1d6ee90d4da098bde3fe6c2d2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8362,12 +8346,12 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 496931147}
+  - {fileID: 1759592043}
   - {fileID: 887300187}
   - {fileID: 704316049}
   - {fileID: 1697054411}
   - {fileID: 2003616424}
   - {fileID: 1651880526}
-  - {fileID: 1759592043}
   - {fileID: 1974744665}
   - {fileID: 996281781}
   - {fileID: 607995052}

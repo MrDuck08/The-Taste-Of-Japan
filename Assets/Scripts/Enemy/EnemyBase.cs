@@ -11,7 +11,7 @@ public class EnemyBase : MonoBehaviour
 
     GameObject playerObject;
 
-    #region Player Detection
+    #region Player Detection Variables
 
 
     bool aggro = false;
@@ -36,7 +36,7 @@ public class EnemyBase : MonoBehaviour
 
     #endregion
 
-    #region Idle Behavior
+    #region Idle Behavior Variables
 
 
     [Header("Idle")]
@@ -51,7 +51,7 @@ public class EnemyBase : MonoBehaviour
 
     #endregion
 
-    #region Stunned, (Removed For Now)
+    #region Stunned Variables, (Removed For Now) 
 
     //[Header("Stunned")]
 
@@ -64,7 +64,7 @@ public class EnemyBase : MonoBehaviour
 
     #endregion
 
-    #region Look Around For Player
+    #region Look Around For Player Variables
 
 
     [Header("Look Around")]
@@ -79,7 +79,7 @@ public class EnemyBase : MonoBehaviour
 
     #endregion
 
-    #region After Aggro
+    #region After Aggro Variables
 
 
     [Header("After Aggro")]

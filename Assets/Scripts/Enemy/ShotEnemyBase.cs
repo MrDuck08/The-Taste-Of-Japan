@@ -4,7 +4,7 @@ using UnityEngine;
 public class ShotEnemyBase : EnemyBase
 {
 
-    #region Shot
+    #region Shot Variables
 
     [Header("Shot")]
 

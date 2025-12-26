@@ -5,10 +5,14 @@ public class PlayerHealth : MonoBehaviour
 
     [SerializeField] int health = 1;
 
+    public bool invincible = false;
+
     SceneLoader sceneLoader;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+
+        if (invincible) { return; }
 
         if (collision.transform.CompareTag("EnemyAttack"))
         {
@@ -23,6 +27,7 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int damageTaken)
     {
 
+        if (invincible) { return; }
 
 
         health -= damageTaken;
