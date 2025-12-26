@@ -24,6 +24,7 @@ public class SceneLoader : MonoBehaviour
     public void ReloadScene()
     {
         Time.timeScale = 1;
+        Time.fixedDeltaTime = 0.02F;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

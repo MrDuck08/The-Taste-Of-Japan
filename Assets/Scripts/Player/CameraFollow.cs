@@ -59,6 +59,8 @@ public class CameraFollow : MonoBehaviour
 
         screenShake = GetComponent<ScreenShake>();
 
+        inLevelSystems = FindAnyObjectByType<InLevelSystems>();
+
         cam.orthographicSize = startZoomValue;
 
         zoomInTime = maxZoomInTime;
@@ -177,6 +179,7 @@ public class CameraFollow : MonoBehaviour
                     Destroy(temporaryTarget);
 
                     Time.timeScale = 1;
+                    Time.fixedDeltaTime = 0.02F;
 
                 }
 
@@ -215,6 +218,7 @@ public class CameraFollow : MonoBehaviour
                 zoomingInOnBullet = true;
 
                 Time.timeScale = 0;
+                Time.fixedDeltaTime = 0.02F * Time.timeScale;
 
                 break;
 

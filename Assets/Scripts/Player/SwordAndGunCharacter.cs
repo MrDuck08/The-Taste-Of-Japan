@@ -55,6 +55,7 @@ public class SwordAndGunCharacter : Player1
     [SerializeField] float rushSpeed = 40f;
 
     bool rushing = false;
+    bool startRushAttack = false;
 
     Vector2 pointToRushTo = Vector2.zero;
 
@@ -88,12 +89,12 @@ public class SwordAndGunCharacter : Player1
 
         #region Rush
 
-        if (rushing)
+        if (rushing && !startRushAttack)
         {
 
             transform.position = Vector2.MoveTowards(transform.position, pointToRushTo, rushSpeed * Time.deltaTime);
 
-            if(Vector2.Distance(transform.position, pointToRushTo) < 0.5f)
+            if(Vector2.Distance(transform.position, pointToRushTo) < 1.7f)
             {
                 StartCoroutine(RushAttack());
 
@@ -141,6 +142,7 @@ public class SwordAndGunCharacter : Player1
                 inHarmony = true;
 
                 Time.timeScale = 0.1f;
+                Time.fixedDeltaTime = 0.02F * Time.timeScale;
             }
 
             // In harmony now
@@ -150,7 +152,7 @@ public class SwordAndGunCharacter : Player1
                 // Sword attack harmony
                 if (Input.GetMouseButtonDown(0) && !dodgeLock)
                 {
-                    float clickDistance = Vector2.Distance(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition)) - 3;
+                    float clickDistance = Vector2.Distance(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
  
                     RaycastHit2D hit = Physics2D.Raycast(transform.position, lookDirection, clickDistance, ~bulletIgnoreLayerMask);
 
@@ -162,10 +164,6 @@ public class SwordAndGunCharacter : Player1
                     {
                         pointToRushTo = hit.point;
                     }
-
-                    GameObject test = Instantiate(rushAttackObject);
-                    test.transform.position = pointToRushTo;
-                    test.SetActive(true);
 
                     rushing = true;
 
@@ -413,14 +411,16 @@ public class SwordAndGunCharacter : Player1
         rushAttackObject.SetActive(true);
 
         attacking = true;
+        startRushAttack = true;
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.5f);
 
         rushAttackObject.SetActive(false);
 
         yield return new WaitForSeconds(0.1f);
 
         rushing = false;
+        startRushAttack = false;
         attacking = false;
 
     }
@@ -459,6 +459,7 @@ public class SwordAndGunCharacter : Player1
         inHarmony = false;
 
         Time.timeScale = 1;
+        Time.fixedDeltaTime = 0.02F;
     }
 
     #region Things To False
