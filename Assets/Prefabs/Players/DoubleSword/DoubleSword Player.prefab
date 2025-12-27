@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3089649026667779148}
   - component: {fileID: 5604123867054173323}
   m_Layer: 7
-  m_Name: BasicAttack
+  m_Name: SwordHitbox 1
   m_TagString: PlayerAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -471,6 +471,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoubleSwordCharacter
   lockRotationParent: 0
+  lockMoveinputParent: 0
   movementInput: {x: 0, y: 0}
   playerVelocity: {x: 0, y: 0}
   maxSpeed: 20
@@ -483,6 +484,14 @@ MonoBehaviour:
   myRigidbody: {fileID: 0}
   myCollider: {fileID: 0}
   cam: {fileID: 0}
+  sword1Hitbox: {fileID: 870510575453915554}
+  sword2Hitbox: {fileID: 8506802466448773796}
+  fist: {fileID: 0}
+  sword1: {fileID: 0}
+  sword2: {fileID: 0}
+  dodgeSpeed: 50
+  dodgeTime: 0.15
+  dodgeRecoveryTime: 0.1
 --- !u!114 &149077289677595396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -629,7 +638,7 @@ GameObject:
   - component: {fileID: 4759216934769530305}
   - component: {fileID: 3961655717650498551}
   m_Layer: 7
-  m_Name: BasicAttack (1)
+  m_Name: SwordHitbox 2
   m_TagString: PlayerAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

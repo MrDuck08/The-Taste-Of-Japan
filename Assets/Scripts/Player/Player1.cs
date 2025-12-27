@@ -10,6 +10,7 @@ public class Player1 : MonoBehaviour
     [Header("What Character")]
 
     public bool lockRotationParent = false;
+    public bool lockMoveinputParent = false;
 
     #endregion
 
@@ -20,6 +21,7 @@ public class Player1 : MonoBehaviour
     #region Basic Movment Variables
 
     public Vector2 movementInput;
+    public Vector2 inactiveMovementInput;
     public Vector2 playerVelocity;
 
     public float maxSpeed;
@@ -121,7 +123,14 @@ public class Player1 : MonoBehaviour
 
     void OnMove(InputValue value)
     {
-        movementInput = value.Get<Vector2>();
+        if (!lockMoveinputParent)
+        {
+            movementInput = value.Get<Vector2>();
+        }
+        else
+        {
+            inactiveMovementInput = value.Get<Vector2>();
+        }
     }
 
     #endregion
