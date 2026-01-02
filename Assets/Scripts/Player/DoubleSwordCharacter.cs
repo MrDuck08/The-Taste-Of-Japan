@@ -30,6 +30,14 @@ public class DoubleSwordCharacter : Player1
 
     #endregion
 
+    bool spinning = false;
+
+    [SerializeField] float spinSpeed = 70f;
+    [SerializeField] float lookSpeed = 50;
+
+    Vector3 spinAroundPos;
+    Vector3 lookWhenSpining;
+
     #region Basic Dodge Variables
 
     [Header("Dodge")]
@@ -99,10 +107,44 @@ public class DoubleSwordCharacter : Player1
 
         SprintCheck();
 
-
         if (dodgeLock || sprinting)
         {
             attacking = false;
+
+            if (sprinting)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    myRigidbody.linearVelocity = Vector2.zero;
+
+                    spinAroundPos = new Vector3(transform.position.x - 1.5f, transform.position.y);
+
+                }
+                if (Input.GetMouseButton(0))
+                {
+                    speed = 0;
+
+                    lookWhenSpining = transform.position - spinAroundPos;
+
+                    float angle = Mathf.Atan2(lookWhenSpining.y, lookWhenSpining.x) * Mathf.Rad2Deg;
+                    Quaternion targetRotation = Quaternion.Euler(0f, 0f, angle);
+
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
+
+                    spinning = true;
+                    transform.RotateAround(spinAroundPos, Vector3.forward, spinSpeed * Time.deltaTime);
+
+                }
+                if (Input.GetMouseButtonUp(0))
+                {
+                    spinning = false;
+
+                    lookOffset = 0;
+
+                    speed = maxSpeed;
+                }
+
+            }
 
             return;
         }
@@ -215,6 +257,8 @@ public class DoubleSwordCharacter : Player1
     void SprintCheck()
     {
 
+        if (spinning) { return; }
+
         // Kollar Om Man Kan Sprinta
         if (!attacking && !dodgeLock && sprintCheck)
         {
@@ -242,6 +286,13 @@ public class DoubleSwordCharacter : Player1
     }
 
     #endregion
+
+    void Spin()
+    {
+
+
+
+    }
 
     #region basic Dodge
 

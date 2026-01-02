@@ -35,6 +35,8 @@ public class Player1 : MonoBehaviour
 
     #endregion
 
+    public float lookOffset = 0;
+
     #region Attack Variables
 
     [Header("Basic Attack")]
@@ -72,19 +74,7 @@ public class Player1 : MonoBehaviour
     {
         //Debug.Log(myRigidbody.linearVelocity); //
 
-        if(lockRotationParent == false)
-        {
-
-            myRigidbody.freezeRotation = false;
-            Look();
-
-        }
-        else
-        {
-
-            myRigidbody.freezeRotation = true;
-
-        }
+        Look();
 
     }
 
@@ -116,7 +106,20 @@ public class Player1 : MonoBehaviour
         lookDirection = mousePos - myRigidbody.position;
         float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
 
-        transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
+
+        if (lockRotationParent == false)
+        {
+
+            myRigidbody.freezeRotation = false;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle - 90 + lookOffset);
+
+        }
+        else
+        {
+
+            myRigidbody.freezeRotation = true;
+
+        }
 
 
     }
