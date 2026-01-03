@@ -297,6 +297,37 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!1 &2417611318936951488
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6406872936339460179}
+  m_Layer: 7
+  m_Name: LeftSpin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6406872936339460179
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2417611318936951488}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 573137041980996225}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5502448033236901996
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,6 +366,7 @@ Transform:
   - {fileID: 5120730371122288280}
   - {fileID: 2698409381571094116}
   - {fileID: 6888786970679287554}
+  - {fileID: 573137041980996225}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6011921590915373652
@@ -473,11 +505,13 @@ MonoBehaviour:
   lockRotationParent: 0
   lockMoveinputParent: 0
   movementInput: {x: 0, y: 0}
+  inactiveMovementInput: {x: 0, y: 0}
   playerVelocity: {x: 0, y: 0}
   maxSpeed: 20
   speed: 20
   lookDirection: {x: 0, y: 0}
   dodgeLock: 0
+  lookOffset: 0
   attackObject: {fileID: 870510575453915554}
   attacking: 0
   basicAttacking: 0
@@ -489,6 +523,12 @@ MonoBehaviour:
   fist: {fileID: 0}
   sword1: {fileID: 0}
   sword2: {fileID: 0}
+  sprintSpeed: 25
+  timeToDecelerate: 0.7
+  spinSpeed: 600
+  lookSpeed: 500
+  leftSpinPos: {fileID: 2417611318936951488}
+  rightSpinPos: {fileID: 6517419919174480438}
   dodgeSpeed: 50
   dodgeTime: 0.15
   dodgeRecoveryTime: 0.1
@@ -536,6 +576,70 @@ MonoBehaviour:
   m_DefaultActionMap: 
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!1 &6517419919174480438
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2903602560799078199}
+  m_Layer: 7
+  m_Name: RightSpin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2903602560799078199
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6517419919174480438}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 573137041980996225}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6999809859587281765
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 573137041980996225}
+  m_Layer: 7
+  m_Name: SpinAroundObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &573137041980996225
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6999809859587281765}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6406872936339460179}
+  - {fileID: 2903602560799078199}
+  m_Father: {fileID: 9217468368014027979}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8286359732406662682
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,6 +22,7 @@ public class DoubleSwordCharacter : Player1
 
     bool sprinting = false;
     bool sprintCheck = false;
+    bool gotWhereToSprint = false;
 
     float afterSprintDeceleraton;
     [SerializeField] float timeToDecelerate = 0.7f;
@@ -30,10 +31,16 @@ public class DoubleSwordCharacter : Player1
 
     #endregion
 
-    bool spinning = false;
+    [Header("Spin")]
 
     [SerializeField] float spinSpeed = 70f;
     [SerializeField] float lookSpeed = 50;
+
+    bool spinning = false;
+    bool afterSpinSprint = false;
+
+    [SerializeField] GameObject leftSpinPos;
+    [SerializeField] GameObject rightSpinPos;
 
     Vector3 spinAroundPos;
     Vector3 lookWhenSpining;
@@ -79,7 +86,8 @@ public class DoubleSwordCharacter : Player1
             sprintCheck = false;
 
             // Gör så att spelaren stannar långsamt
-            if (sprinting)
+            // !spining så den inte saktar ned när mans snurrar runt
+            if (sprinting && !spinning)
             {
                 speed -= afterSprintDeceleraton * Time.deltaTime;
 
@@ -95,6 +103,7 @@ public class DoubleSwordCharacter : Player1
                     afterSprintDeceleraton = (sprintSpeed / 2) / timeToDecelerateBase;
 
                     sprinting = false;
+                    gotWhereToSprint = false;
 
                     lockRotationParent = false;
                     lockMoveinputParent = false;
@@ -113,36 +122,9 @@ public class DoubleSwordCharacter : Player1
 
             if (sprinting)
             {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    myRigidbody.linearVelocity = Vector2.zero;
 
-                    spinAroundPos = new Vector3(transform.position.x - 1.5f, transform.position.y);
 
-                }
-                if (Input.GetMouseButton(0))
-                {
-                    speed = 0;
-
-                    lookWhenSpining = transform.position - spinAroundPos;
-
-                    float angle = Mathf.Atan2(lookWhenSpining.y, lookWhenSpining.x) * Mathf.Rad2Deg;
-                    Quaternion targetRotation = Quaternion.Euler(0f, 0f, angle);
-
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
-
-                    spinning = true;
-                    transform.RotateAround(spinAroundPos, Vector3.forward, spinSpeed * Time.deltaTime);
-
-                }
-                if (Input.GetMouseButtonUp(0))
-                {
-                    spinning = false;
-
-                    lookOffset = 0;
-
-                    speed = maxSpeed;
-                }
+                Spin();
 
             }
 
@@ -262,21 +244,36 @@ public class DoubleSwordCharacter : Player1
         // Kollar Om Man Kan Sprinta
         if (!attacking && !dodgeLock && sprintCheck)
         {
-
             sprinting = true;
 
+            // Låser var man kollar och moveinput som tcingar den att springa
             lockRotationParent = true;
             lockMoveinputParent = true;
 
-            if(movementInput == Vector2.zero)
-            {
-                movementInput = lookDirection.normalized;
-            }
-            else
-            {
-                float angle = Mathf.Atan2(movementInput.y, movementInput.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
+            // Så den får vart den ska gå 1 gång
+            if (!gotWhereToSprint)
+            {
+                gotWhereToSprint = true;
+
+                if (afterSpinSprint)
+                {
+                    movementInput = transform.up; 
+
+                    return;
+                }
+
+                // Tvingar den att srpinga vart den kollar
+                if (movementInput == Vector2.zero)
+                {
+                    movementInput = lookDirection.normalized;
+                }
+                else // Tvingar den att springa åt hållet den ville senast gå
+                {
+                    float angle = Mathf.Atan2(movementInput.y, movementInput.x) * Mathf.Rad2Deg;
+                    transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
+
+                }
             }
 
             speed = sprintSpeed;
@@ -290,7 +287,94 @@ public class DoubleSwordCharacter : Player1
     void Spin()
     {
 
+        #region Left spin
 
+        if (Input.GetMouseButtonDown(0))
+        {
+            myRigidbody.linearVelocity = Vector2.zero;
+
+            spinAroundPos = leftSpinPos.transform.position;
+
+            afterSpinSprint = false;
+            gotWhereToSprint = false;
+
+        }
+        if (Input.GetMouseButton(0))
+        {
+            speed = 0;
+
+            lookWhenSpining = transform.position - spinAroundPos;
+
+            float angle = Mathf.Atan2(lookWhenSpining.y, lookWhenSpining.x) * Mathf.Rad2Deg;
+            Quaternion targetRotation = Quaternion.Euler(0f, 0f, angle);
+
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
+
+            spinning = true;
+            transform.RotateAround(spinAroundPos, Vector3.forward, spinSpeed * Time.deltaTime);
+
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+
+            spinning = false;
+
+            if (sprintCheck)
+            {
+                afterSpinSprint = true;
+            }
+            else
+            {
+                speed = maxSpeed;
+            }
+        }
+
+        #endregion
+
+        #region Right spin
+
+        // Samma sak som vänster men ändrar att den åker runt en annan position
+        if (Input.GetMouseButtonDown(1))
+        {
+            myRigidbody.linearVelocity = Vector2.zero;
+
+            spinAroundPos = rightSpinPos.transform.position; // Skillnad här
+
+            afterSpinSprint = false;
+            gotWhereToSprint = false;
+
+        }
+        if (Input.GetMouseButton(1))
+        {
+            speed = 0;
+
+            lookWhenSpining = transform.position - spinAroundPos;
+
+            float angle = Mathf.Atan2(lookWhenSpining.y, lookWhenSpining.x) * Mathf.Rad2Deg;
+            Quaternion targetRotation = Quaternion.Euler(0f, 0f, angle);
+
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, -lookSpeed * Time.deltaTime);
+
+            spinning = true;
+            transform.RotateAround(spinAroundPos, Vector3.forward, -spinSpeed * Time.deltaTime);
+
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+
+            spinning = false;
+
+            if (sprintCheck)
+            {
+                afterSpinSprint = true;
+            }
+            else
+            {
+                speed = maxSpeed;
+            }
+        }
+
+        #endregion
 
     }
 
