@@ -35,9 +35,11 @@ public class DoubleSwordCharacter : Player1
 
     [SerializeField] float spinSpeed = 70f;
     [SerializeField] float lookSpeed = 50;
+    [SerializeField] float wallCrashSpeed = 50f;
 
     bool spinning = false;
     bool afterSpinSprint = false;
+    bool stunned = false;
 
     [SerializeField] GameObject leftSpinPos;
     [SerializeField] GameObject rightSpinPos;
@@ -239,7 +241,7 @@ public class DoubleSwordCharacter : Player1
     void SprintCheck()
     {
 
-        if (spinning) { return; }
+        if (spinning || stunned) { return; }
 
         // Kollar Om Man Kan Sprinta
         if (!attacking && !dodgeLock && sprintCheck)
@@ -376,6 +378,41 @@ public class DoubleSwordCharacter : Player1
 
         #endregion
 
+    }
+
+    public override void OnCollisionEnter2D(Collision2D collision)
+    {
+        base.OnCollisionEnter2D(collision);
+
+        // Träffar en väg medans man snurrar, detta behövs för annars går man igenom vägen
+        if(collision.gameObject.layer == 3 && spinning || sprinting)
+        {
+            StartCoroutine(WallCrash());
+
+        }
+    }
+
+    IEnumerator WallCrash()
+    {
+        spinning = false;
+        sprinting = false;
+        stunned = true;
+        myRigidbody.angularVelocity = 0f;
+        speed = 0;
+        movementInput = Vector2.zero;
+
+        myRigidbody.AddForce(-transform.up * wallCrashSpeed);
+
+
+        yield return new WaitForSeconds(0.3f);
+
+
+        speed = maxSpeed;
+        lockMoveinputParent = false;
+        lockRotationParent = false;
+        stunned = false;
+        gotWhereToSprint = false;
+        movementInput = inactiveMovementInput;
     }
 
     #region basic Dodge

@@ -157,6 +157,11 @@ public class Player1 : MonoBehaviour
 
     }
 
+    public virtual void OnCollisionEnter2D(Collision2D collision)
+    {
+        
 
+
+    }
 
 }
