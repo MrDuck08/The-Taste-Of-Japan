@@ -127,6 +127,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 206252308065061850, guid: 8d177933e8582284a9cda963c3a62b6c, type: 3}
+      propertyPath: afterSpinPush
+      value: 5000
+      objectReference: {fileID: 0}
     - target: {fileID: 5502448033236901996, guid: 8d177933e8582284a9cda963c3a62b6c, type: 3}
       propertyPath: m_Name
       value: DoubleSword Player
@@ -2317,10 +2321,6 @@ PrefabInstance:
     - target: {fileID: 5502448033236901996, guid: 88ef8ed1d6ee90d4da098bde3fe6c2d2, type: 3}
       propertyPath: m_Name
       value: S&R Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5502448033236901996, guid: 88ef8ed1d6ee90d4da098bde3fe6c2d2, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9217468368014027979, guid: 88ef8ed1d6ee90d4da098bde3fe6c2d2, type: 3}
       propertyPath: m_LocalPosition.x

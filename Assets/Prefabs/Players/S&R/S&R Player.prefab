@@ -945,7 +945,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9217468368014027979
 Transform:
   m_ObjectHideFlags: 0
@@ -1072,7 +1072,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 40
   m_AngularDamping: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -1099,12 +1099,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwordAndGunCharacter
   lockRotationParent: 0
+  lockMoveinputParent: 0
   movementInput: {x: 0, y: 0}
+  inactiveMovementInput: {x: 0, y: 0}
   playerVelocity: {x: 0, y: 0}
   maxSpeed: 20
   speed: 20
   lookDirection: {x: 0, y: 0}
   dodgeLock: 0
+  lookOffset: 0
   attackObject: {fileID: 870510575453915554}
   attacking: 0
   basicAttacking: 0

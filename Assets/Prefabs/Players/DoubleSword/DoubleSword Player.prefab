@@ -476,7 +476,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 40
   m_AngularDamping: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -524,9 +524,11 @@ MonoBehaviour:
   sword1: {fileID: 0}
   sword2: {fileID: 0}
   sprintSpeed: 25
+  wallCrashSpeed: 5000
   timeToDecelerate: 0.7
   spinSpeed: 600
   lookSpeed: 500
+  afterSpinPush: 1000
   leftSpinPos: {fileID: 2417611318936951488}
   rightSpinPos: {fileID: 6517419919174480438}
   dodgeSpeed: 50

@@ -36,6 +36,7 @@ public class Player1 : MonoBehaviour
     #endregion
 
     public float lookOffset = 0;
+    [SerializeField] float lookAroundSpeed = 500f;
 
     #region Attack Variables
 
@@ -95,7 +96,8 @@ public class Player1 : MonoBehaviour
     void Moving()
     {
         playerVelocity = new Vector2(movementInput.x * speed, movementInput.y * speed);
-        myRigidbody.linearVelocity = playerVelocity;
+        myRigidbody.linearVelocity += playerVelocity;
+
 
     }
 
@@ -105,13 +107,18 @@ public class Player1 : MonoBehaviour
         Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
         lookDirection = mousePos - myRigidbody.position;
         float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
+        Quaternion targetRotation = Quaternion.Euler(0f, 0f, angle - 90);
 
 
         if (lockRotationParent == false)
         {
 
             myRigidbody.freezeRotation = false;
-            transform.rotation = Quaternion.Euler(0f, 0f, angle - 90 + lookOffset);
+
+            if(transform.rotation != targetRotation)
+            {
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, lookAroundSpeed * Time.deltaTime);
+            }
 
         }
         else

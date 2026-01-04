@@ -57,7 +57,10 @@ public class EnemyHealth : MonoBehaviour
 
                 case 1:
 
-                    swordAndGun.RechargeBullets();
+                    if(swordAndGun != null)
+                    {
+                        swordAndGun.RechargeBullets();
+                    }
 
                     break;
 

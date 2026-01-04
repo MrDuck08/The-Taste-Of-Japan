@@ -19,10 +19,12 @@ public class DoubleSwordCharacter : Player1
     [Header("Sprint")]
 
     [SerializeField] float sprintSpeed = 25f;
+    [SerializeField] float wallCrashSpeed = 50f;
 
     bool sprinting = false;
     bool sprintCheck = false;
     bool gotWhereToSprint = false;
+    bool stunned = false;
 
     float afterSprintDeceleraton;
     [SerializeField] float timeToDecelerate = 0.7f;
@@ -35,11 +37,11 @@ public class DoubleSwordCharacter : Player1
 
     [SerializeField] float spinSpeed = 70f;
     [SerializeField] float lookSpeed = 50;
-    [SerializeField] float wallCrashSpeed = 50f;
+    [SerializeField] float afterSpinPush = 1000f;
 
     bool spinning = false;
     bool afterSpinSprint = false;
-    bool stunned = false;
+    bool afterSpinBoost = false;
 
     [SerializeField] GameObject leftSpinPos;
     [SerializeField] GameObject rightSpinPos;
@@ -88,13 +90,14 @@ public class DoubleSwordCharacter : Player1
             sprintCheck = false;
 
             // Gör så att spelaren stannar långsamt
-            // !spining så den inte saktar ned när mans snurrar runt
-            if (sprinting && !spinning)
+            // !spining  Så den inte saktar ned när mans snurrar runt
+            // !afterSpinBoost  Så man får tillbaka kontrolen om man inte ska sprinta efter spin
+            if (sprinting && !spinning && !afterSpinBoost)
             {
                 speed -= afterSprintDeceleraton * Time.deltaTime;
 
                 timeToDecelerate -= Time.deltaTime;
-
+                Debug.Log("WHY");
                 if (timeToDecelerate <= 0)
                 {
 
@@ -257,6 +260,7 @@ public class DoubleSwordCharacter : Player1
             if (!gotWhereToSprint)
             {
                 gotWhereToSprint = true;
+                afterSpinBoost = false;
 
                 if (afterSpinSprint)
                 {
@@ -327,7 +331,7 @@ public class DoubleSwordCharacter : Player1
             }
             else
             {
-                speed = maxSpeed;
+                StartCoroutine(AfterSpinSpeedBoost());
             }
         }
 
@@ -372,12 +376,33 @@ public class DoubleSwordCharacter : Player1
             }
             else
             {
-                speed = maxSpeed;
+                StartCoroutine(AfterSpinSpeedBoost());
             }
         }
 
         #endregion
 
+    }
+
+    IEnumerator AfterSpinSpeedBoost()
+    {
+        movementInput = inactiveMovementInput;
+        speed = maxSpeed * 1.3f;
+        myRigidbody.AddForce(transform.up * afterSpinPush);
+        afterSpinBoost = true;
+
+
+        gotWhereToSprint = false;
+        lockRotationParent = false;
+        lockMoveinputParent = false;
+        sprinting = false;
+
+
+        yield return new WaitForSeconds(2);
+
+
+        afterSpinBoost = false;
+        speed = maxSpeed;
     }
 
     public override void OnCollisionEnter2D(Collision2D collision)
@@ -422,10 +447,10 @@ public class DoubleSwordCharacter : Player1
         dodgeLock = true;
         attackObject.SetActive(false);
 
-        Vector2 tempMovementInput = movementInput;
         bool standingStillDodge = false;
 
-        if (movementInput == Vector2.zero) // Om man står stilla så ska man dodga dit man kollar
+        // Om man står stilla så ska man dodga dit man kollar
+        if (movementInput == Vector2.zero) 
         {
             standingStillDodge = true;
 
@@ -434,8 +459,10 @@ public class DoubleSwordCharacter : Player1
 
         }
 
-        playerVelocity = new Vector2(movementInput.normalized.x * dodgeSpeed, movementInput.normalized.y * dodgeSpeed);
-        myRigidbody.linearVelocity = playerVelocity;
+        myRigidbody.linearDamping = 0;
+
+        playerVelocity = movementInput.normalized * dodgeSpeed;
+        myRigidbody.linearVelocity += playerVelocity;
 
         dodgeCollider.SetActive(true);
         myCollider.enabled = false;
@@ -450,10 +477,11 @@ public class DoubleSwordCharacter : Player1
 
         yield return new WaitForSeconds(dodgeTime / 2);
 
+        myRigidbody.linearDamping = 40;
 
         if (standingStillDodge)
         {
-            movementInput = tempMovementInput;
+            movementInput = inactiveMovementInput;
         }
         else
         {
