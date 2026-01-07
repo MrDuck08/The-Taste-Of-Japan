@@ -507,11 +507,12 @@ MonoBehaviour:
   movementInput: {x: 0, y: 0}
   inactiveMovementInput: {x: 0, y: 0}
   playerVelocity: {x: 0, y: 0}
-  maxSpeed: 20
-  speed: 20
+  maxSpeed: 950
+  speed: 950
   lookDirection: {x: 0, y: 0}
   dodgeLock: 0
   lookOffset: 0
+  lookAroundSpeed: 500
   attackObject: {fileID: 870510575453915554}
   attacking: 0
   basicAttacking: 0
@@ -528,7 +529,7 @@ MonoBehaviour:
   timeToDecelerate: 0.7
   spinSpeed: 600
   lookSpeed: 500
-  afterSpinPush: 1000
+  afterSpinPush: 5000
   leftSpinPos: {fileID: 2417611318936951488}
   rightSpinPos: {fileID: 6517419919174480438}
   dodgeSpeed: 50

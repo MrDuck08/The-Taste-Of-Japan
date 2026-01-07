@@ -1103,11 +1103,12 @@ MonoBehaviour:
   movementInput: {x: 0, y: 0}
   inactiveMovementInput: {x: 0, y: 0}
   playerVelocity: {x: 0, y: 0}
-  maxSpeed: 20
-  speed: 20
+  maxSpeed: 950
+  speed: 950
   lookDirection: {x: 0, y: 0}
   dodgeLock: 0
   lookOffset: 0
+  lookAroundSpeed: 500
   attackObject: {fileID: 870510575453915554}
   attacking: 0
   basicAttacking: 0

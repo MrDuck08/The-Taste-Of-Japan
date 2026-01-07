@@ -395,10 +395,10 @@ public class SwordAndGunCharacter : Player1
         dodgeLock = true;
         attackObject.SetActive(false);
 
-        Vector2 tempMovementInput = movementInput;
         bool standingStillDodge = false;
 
-        if (movementInput == Vector2.zero) // Om man står stilla så ska man dodga dit man kollar
+        // Om man står stilla så ska man dodga dit man kollar
+        if (movementInput == Vector2.zero)
         {
             standingStillDodge = true;
 
@@ -407,8 +407,10 @@ public class SwordAndGunCharacter : Player1
 
         }
 
-        playerVelocity = new Vector2(movementInput.normalized.x * dodgeSpeed, movementInput.normalized.y * dodgeSpeed);
-        myRigidbody.linearVelocity = playerVelocity;
+        myRigidbody.linearDamping = 0;
+
+        playerVelocity = movementInput.normalized * dodgeSpeed;
+        myRigidbody.linearVelocity += playerVelocity;
 
         dodgeCollider.SetActive(true);
         myCollider.enabled = false;
@@ -423,10 +425,11 @@ public class SwordAndGunCharacter : Player1
 
         yield return new WaitForSeconds(dodgeTime / 2);
 
+        myRigidbody.linearDamping = 40;
 
         if (standingStillDodge)
         {
-            movementInput = tempMovementInput;
+            movementInput = inactiveMovementInput;
         }
         else
         {

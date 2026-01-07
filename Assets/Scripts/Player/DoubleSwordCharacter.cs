@@ -18,7 +18,8 @@ public class DoubleSwordCharacter : Player1
 
     [Header("Sprint")]
 
-    [SerializeField] float sprintSpeed = 25f;
+    [SerializeField] float sprintSpeedMultiplier = 1.25f;
+    float sprintSpeed = 25f;
     [SerializeField] float wallCrashSpeed = 50f;
 
     bool sprinting = false;
@@ -67,6 +68,8 @@ public class DoubleSwordCharacter : Player1
     {
         base.Start();
 
+        sprintSpeed = speed * sprintSpeedMultiplier;
+
         timeToDecelerateBase = timeToDecelerate;
         // Dividerar med 2 så att man får kontroll när man har stannat med hälften av farten
         afterSprintDeceleraton = (sprintSpeed / 2) / timeToDecelerateBase;
@@ -97,7 +100,7 @@ public class DoubleSwordCharacter : Player1
                 speed -= afterSprintDeceleraton * Time.deltaTime;
 
                 timeToDecelerate -= Time.deltaTime;
-                Debug.Log("WHY");
+
                 if (timeToDecelerate <= 0)
                 {
 
