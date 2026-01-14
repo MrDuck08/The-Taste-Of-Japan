@@ -171,4 +171,11 @@ public class Player1 : MonoBehaviour
 
     }
 
+    public virtual void OnCollisionStay2D(Collision2D collision)
+    {
+        
+
+
+    }
+
 }

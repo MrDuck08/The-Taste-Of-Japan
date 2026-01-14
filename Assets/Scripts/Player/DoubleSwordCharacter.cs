@@ -104,8 +104,6 @@ public class DoubleSwordCharacter : Player1
                 if (timeToDecelerate <= 0)
                 {
 
-                    movementInput = inactiveMovementInput;
-
                     timeToDecelerate = timeToDecelerateBase;
                     // Dividerar med 2 så att man får kontroll när man har stannat med hälften av farten
                     afterSprintDeceleraton = (sprintSpeed / 2) / timeToDecelerateBase;
@@ -115,6 +113,7 @@ public class DoubleSwordCharacter : Player1
 
                     lockRotationParent = false;
                     lockMoveinputParent = false;
+                    movementInput = inactiveMovementInput;
 
                     speed = maxSpeed;
 
@@ -389,7 +388,6 @@ public class DoubleSwordCharacter : Player1
 
     IEnumerator AfterSpinSpeedBoost()
     {
-        movementInput = inactiveMovementInput;
         speed = maxSpeed * 1.3f;
         myRigidbody.AddForce(transform.up * afterSpinPush);
         afterSpinBoost = true;
@@ -398,6 +396,7 @@ public class DoubleSwordCharacter : Player1
         gotWhereToSprint = false;
         lockRotationParent = false;
         lockMoveinputParent = false;
+        movementInput = inactiveMovementInput;
         sprinting = false;
 
 
@@ -413,7 +412,18 @@ public class DoubleSwordCharacter : Player1
         base.OnCollisionEnter2D(collision);
 
         // Träffar en väg medans man snurrar, detta behövs för annars går man igenom vägen
-        if(collision.gameObject.layer == 3 && spinning || sprinting)
+        if(sprinting)
+        {
+            StartCoroutine(WallCrash());
+
+        }
+    }
+
+    public override void OnCollisionStay2D(Collision2D collision)
+    {
+        base.OnCollisionStay2D(collision);
+
+        if(collision.gameObject.layer == 3 && spinning)
         {
             StartCoroutine(WallCrash());
 
@@ -425,6 +435,7 @@ public class DoubleSwordCharacter : Player1
         spinning = false;
         sprinting = false;
         stunned = true;
+        spinAroundPos = transform.position;
         myRigidbody.angularVelocity = 0f;
         speed = 0;
         movementInput = Vector2.zero;
