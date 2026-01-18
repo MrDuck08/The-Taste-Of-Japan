@@ -22,7 +22,7 @@ public class Door : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
 
-        if(collision.gameObject.GetComponent<Rigidbody2D>() == null)
+        if (collision.gameObject.GetComponent<Rigidbody2D>() == null)
         {
 
             // Finns en Rigdidbody på parent (Gjord för dodge collider är på Child)
@@ -43,9 +43,8 @@ public class Door : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            Vector2 leftOrRight = collision.transform.position - transform.position;
 
-            myRigidbody2D.AddForce(leftOrRight.normalized * 10 * -openSpeed);
+            ArtificialPush(collision, 10);
 
             return;
 
@@ -62,6 +61,15 @@ public class Door : MonoBehaviour
 
         myRigidbody2D.AddForce(collisionRB2D.linearVelocity * openSpeed);
 
+
+    }
+
+    public void ArtificialPush(Collider2D collision, float Strengh)
+    {
+
+        Vector2 leftOrRight = collision.transform.position - transform.position;
+
+        myRigidbody2D.AddForce(leftOrRight.normalized * Strengh * -openSpeed);
 
     }
 

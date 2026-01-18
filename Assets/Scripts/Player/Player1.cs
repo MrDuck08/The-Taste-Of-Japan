@@ -137,10 +137,8 @@ public class Player1 : MonoBehaviour
         {
             movementInput = value.Get<Vector2>();
         }
-        else
-        {
-            inactiveMovementInput = value.Get<Vector2>();
-        }
+
+        inactiveMovementInput = value.Get<Vector2>();
     }
 
     #endregion
@@ -172,6 +170,13 @@ public class Player1 : MonoBehaviour
     }
 
     public virtual void OnCollisionStay2D(Collision2D collision)
+    {
+        
+
+
+    }
+
+    public virtual void OnTriggerEnter2D(Collider2D collision)
     {
         
 

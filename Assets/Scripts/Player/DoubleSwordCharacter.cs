@@ -392,7 +392,6 @@ public class DoubleSwordCharacter : Player1
         myRigidbody.AddForce(transform.up * afterSpinPush);
         afterSpinBoost = true;
 
-
         gotWhereToSprint = false;
         lockRotationParent = false;
         lockMoveinputParent = false;
@@ -403,8 +402,12 @@ public class DoubleSwordCharacter : Player1
         yield return new WaitForSeconds(2);
 
 
-        afterSpinBoost = false;
-        speed = maxSpeed;
+        // För man kan börja springa under väntan till detta så då om man sätter afterSpinBoost till falsk så förstör den inte
+        if (afterSpinBoost)
+        {
+            afterSpinBoost = false;
+            speed = maxSpeed;
+        }
     }
 
     public override void OnCollisionEnter2D(Collision2D collision)
@@ -428,6 +431,20 @@ public class DoubleSwordCharacter : Player1
             StartCoroutine(WallCrash());
 
         }
+
+    }
+
+    public override void OnTriggerEnter2D(Collider2D collision)
+    {
+        base.OnTriggerEnter2D(collision);
+
+        if (collision.gameObject.layer == 6 && spinning)
+        {
+
+            collision.gameObject.GetComponent<Door>().ArtificialPush(myCollider, 15);
+
+        }
+
     }
 
     IEnumerator WallCrash()
@@ -452,6 +469,8 @@ public class DoubleSwordCharacter : Player1
         stunned = false;
         gotWhereToSprint = false;
         movementInput = inactiveMovementInput;
+        timeToDecelerate = timeToDecelerateBase;
+        afterSprintDeceleraton = (sprintSpeed / 2) / timeToDecelerateBase;
     }
 
     #region basic Dodge
