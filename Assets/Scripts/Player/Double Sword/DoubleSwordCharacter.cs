@@ -9,8 +9,7 @@ public class DoubleSwordCharacter : Player1
     [SerializeField] GameObject sword2Hitbox;
     [SerializeField] GameObject fist;
 
-    [SerializeField] GameObject sword1;
-    [SerializeField] GameObject sword2;
+    [SerializeField] GameObject throwingSword;
 
     int numberOfSwordsHeld = 2;
 
@@ -34,6 +33,8 @@ public class DoubleSwordCharacter : Player1
 
     #endregion
 
+    #region Spin
+
     [Header("Spin")]
 
     [SerializeField] float spinSpeed = 70f;
@@ -49,6 +50,8 @@ public class DoubleSwordCharacter : Player1
 
     Vector3 spinAroundPos;
     Vector3 lookWhenSpining;
+
+    #endregion
 
     #region Basic Dodge Variables
 
@@ -165,12 +168,17 @@ public class DoubleSwordCharacter : Player1
         #endregion
     }
 
-    #region Throw Sword // Nothing yet
+    #region Throw Sword
 
     void ThrowSword()
     {
 
+        //numberOfSwordsHeld--;
 
+        GameObject thrownSwordObject = Instantiate(throwingSword);
+        thrownSwordObject.transform.position = transform.position;
+        float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
+        thrownSwordObject.transform.rotation = Quaternion.Euler(0, 0, angle - 90);
 
     }
 
@@ -257,8 +265,10 @@ public class DoubleSwordCharacter : Player1
             lockRotationParent = true;
             lockMoveinputParent = true;
 
+            #region Once
 
             // Så den får vart den ska gå 1 gång
+            // Körs 1 gång
             if (!gotWhereToSprint)
             {
                 gotWhereToSprint = true;
@@ -284,13 +294,27 @@ public class DoubleSwordCharacter : Player1
                 }
             }
 
+            #endregion
+
             speed = sprintSpeed;
+
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+  
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+
+            }
 
         }
 
     }
 
     #endregion
+
+    #region Spin
 
     void Spin()
     {
@@ -410,6 +434,10 @@ public class DoubleSwordCharacter : Player1
         }
     }
 
+    #endregion
+
+    #region Collisions
+
     public override void OnCollisionEnter2D(Collision2D collision)
     {
         base.OnCollisionEnter2D(collision);
@@ -471,7 +499,16 @@ public class DoubleSwordCharacter : Player1
         movementInput = inactiveMovementInput;
         timeToDecelerate = timeToDecelerateBase;
         afterSprintDeceleraton = (sprintSpeed / 2) / timeToDecelerateBase;
+
+        Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        lookDirection = mousePos - myRigidbody.position;
+        float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
+        Quaternion targetRotation = Quaternion.Euler(0f, 0f, angle - 90);
+
+        transform.rotation = targetRotation;
     }
+
+    #endregion
 
     #region basic Dodge
 
