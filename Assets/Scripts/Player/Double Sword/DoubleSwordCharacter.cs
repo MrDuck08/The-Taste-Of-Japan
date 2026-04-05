@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class DoubleSwordCharacter : Player1
 {
@@ -42,6 +43,8 @@ public class DoubleSwordCharacter : Player1
     [SerializeField] float afterSpinPush = 1000f;
 
     bool spinning = false;
+    bool leftSpinStart = false;
+    bool rightSpinStart = false;
     bool afterSpinSprint = false;
     bool afterSpinBoost = false;
 
@@ -66,10 +69,14 @@ public class DoubleSwordCharacter : Player1
 
     #endregion
 
+    SpriteRenderer spriteRenderer = null; // Temporärt för Debbuging
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void Start()
     {
         base.Start();
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         sprintSpeed = speed * sprintSpeedMultiplier;
 
@@ -85,6 +92,7 @@ public class DoubleSwordCharacter : Player1
     public override void Update()
     {
        base.Update();
+
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
@@ -104,6 +112,10 @@ public class DoubleSwordCharacter : Player1
 
                 timeToDecelerate -= Time.deltaTime;
 
+                ModeChangeVisuall(Color.grey);
+
+                stunned = true;
+
                 if (timeToDecelerate <= 0)
                 {
 
@@ -113,6 +125,7 @@ public class DoubleSwordCharacter : Player1
 
                     sprinting = false;
                     gotWhereToSprint = false;
+                    stunned = false;
 
                     lockRotationParent = false;
                     lockMoveinputParent = false;
@@ -120,20 +133,22 @@ public class DoubleSwordCharacter : Player1
 
                     speed = maxSpeed;
 
+                    NormalModeVisuall();
+
                 }
             }
         }
 
         SprintCheck();
 
-        if (dodgeLock || sprinting)
+        if (dodgeLock || sprinting || stunned)
         {
             attacking = false;
 
-            if (sprinting)
+            if (sprinting && !stunned)
             {
 
-
+                // Gör så att man har möjligheten att spina
                 Spin();
 
             }
@@ -269,6 +284,7 @@ public class DoubleSwordCharacter : Player1
 
             // Så den får vart den ska gå 1 gång
             // Körs 1 gång
+            // Körs inte efter spin
             if (!gotWhereToSprint)
             {
                 gotWhereToSprint = true;
@@ -292,12 +308,15 @@ public class DoubleSwordCharacter : Player1
                     transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
                 }
+
+                ModeChangeVisuall(Color.cyan);
             }
 
             #endregion
 
             speed = sprintSpeed;
 
+            // Framtida saker
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
   
@@ -319,22 +338,37 @@ public class DoubleSwordCharacter : Player1
     void Spin()
     {
 
+
+
         #region Left spin
 
-        if (Input.GetMouseButtonDown(0))
+
+
+
+        // Trycker ned för första gången
+        // Ger åt vilket håll den ska snurra
+        // !rightSpinStart så den inte kan byta håll man snurrar åt
+        if (Input.GetMouseButtonDown(0) && !rightSpinStart)
         {
+            Debug.Log("LEFT!");
+            ModeChangeVisuall(Color.green);
+
             myRigidbody.linearVelocity = Vector2.zero;
 
             spinAroundPos = leftSpinPos.transform.position;
 
+            spinning = true;
+            leftSpinStart = true;
             afterSpinSprint = false;
             gotWhereToSprint = false;
 
         }
-        if (Input.GetMouseButton(0))
+        // Håller ned den
+        // Gör så att den snurrar
+        if (Input.GetMouseButton(0) && leftSpinStart)
         {
             speed = 0;
-
+            Debug.Log("LEFT! Continius");
             lookWhenSpining = transform.position - spinAroundPos;
 
             float angle = Mathf.Atan2(lookWhenSpining.y, lookWhenSpining.x) * Mathf.Rad2Deg;
@@ -342,18 +376,22 @@ public class DoubleSwordCharacter : Player1
 
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
 
-            spinning = true;
             transform.RotateAround(spinAroundPos, Vector3.forward, spinSpeed * Time.deltaTime);
 
         }
-        if (Input.GetMouseButtonUp(0))
+        // Släpper 
+        // Vad den ska göra (om man ska fortsätta springa eller ej)
+        if (Input.GetMouseButtonUp(0) && leftSpinStart)
         {
+            Debug.Log("End RIGHT!");
 
+            leftSpinStart = false;
             spinning = false;
 
             if (sprintCheck)
             {
                 afterSpinSprint = true;
+                ModeChangeVisuall(Color.cyan);
             }
             else
             {
@@ -361,23 +399,36 @@ public class DoubleSwordCharacter : Player1
             }
         }
 
+
+
         #endregion
 
         #region Right spin
 
-        // Samma sak som vänster men ändrar att den åker runt en annan position
-        if (Input.GetMouseButtonDown(1))
+
+        // Trycker ned för första gången
+        // Ger åt vilket håll den ska snurra
+        // !leftSpinStart så den inte kan byta håll man snurrar åt
+        if (Input.GetMouseButtonDown(1) && !leftSpinStart)
         {
+            Debug.Log("RIGHT!");
+            ModeChangeVisuall(Color.green);
+
             myRigidbody.linearVelocity = Vector2.zero;
 
             spinAroundPos = rightSpinPos.transform.position; // Skillnad här
 
+            spinning = true;
+            rightSpinStart = true; // Skillnad här
             afterSpinSprint = false;
             gotWhereToSprint = false;
 
         }
-        if (Input.GetMouseButton(1))
+        // Håller ned den
+        // Gör så att den snurrar
+        if (Input.GetMouseButton(1) && rightSpinStart)
         {
+            Debug.Log("RIGHT! Continius");
             speed = 0;
 
             lookWhenSpining = transform.position - spinAroundPos;
@@ -387,24 +438,28 @@ public class DoubleSwordCharacter : Player1
 
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, -lookSpeed * Time.deltaTime);
 
-            spinning = true;
             transform.RotateAround(spinAroundPos, Vector3.forward, -spinSpeed * Time.deltaTime);
 
         }
-        if (Input.GetMouseButtonUp(1))
+        // Släpper 
+        // Vad den ska göra (om man ska fortsätta springa eller ej)
+        if (Input.GetMouseButtonUp(1) && rightSpinStart)
         {
-
+            Debug.Log("End RIGHT!");
+            rightSpinStart = false; // Skillnad här
             spinning = false;
 
             if (sprintCheck)
             {
                 afterSpinSprint = true;
+                ModeChangeVisuall(Color.cyan);
             }
             else
             {
                 StartCoroutine(AfterSpinSpeedBoost());
             }
         }
+
 
         #endregion
 
@@ -422,8 +477,9 @@ public class DoubleSwordCharacter : Player1
         movementInput = inactiveMovementInput;
         sprinting = false;
 
-
+        ModeChangeVisuall(Color.yellow);
         yield return new WaitForSeconds(2);
+        NormalModeVisuall();
 
 
         // För man kan börja springa under väntan till detta så då om man sätter afterSpinBoost till falsk så förstör den inte
@@ -478,6 +534,8 @@ public class DoubleSwordCharacter : Player1
     IEnumerator WallCrash()
     {
         spinning = false;
+        leftSpinStart = false;
+        rightSpinStart = false;
         sprinting = false;
         stunned = true;
         spinAroundPos = transform.position;
@@ -487,9 +545,9 @@ public class DoubleSwordCharacter : Player1
 
         myRigidbody.AddForce(-transform.up * wallCrashSpeed);
 
-
+        ModeChangeVisuall(Color.grey);
         yield return new WaitForSeconds(0.3f);
-
+        NormalModeVisuall();
 
         speed = maxSpeed;
         lockMoveinputParent = false;
@@ -568,6 +626,24 @@ public class DoubleSwordCharacter : Player1
 
 
         speed = maxSpeed;
+
+    }
+
+    #endregion
+
+    #region Debugging help
+
+    void ModeChangeVisuall(Color whatColour)
+    {
+
+        spriteRenderer.color = whatColour;
+
+    }
+
+    void NormalModeVisuall()
+    {
+
+        spriteRenderer.color = Color.white;
 
     }
 
