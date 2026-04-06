@@ -47,12 +47,12 @@ public class ThrowSword : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         
-        if(collision.transform.tag == "Player" && hitSomething)
-        {
+        //if(collision.transform.tag == "Player" && hitSomething)
+        //{
 
-            Destroy(gameObject);
+        //    Destroy(gameObject);
 
-        }
+        //}
 
     }
 }

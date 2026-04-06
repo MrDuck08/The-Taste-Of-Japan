@@ -526,6 +526,10 @@ MonoBehaviour:
   sword2Hitbox: {fileID: 8506802466448773796}
   fist: {fileID: 0}
   throwingSword: {fileID: 7437388662478823165, guid: 13720f9d8354e134fb0d818c83cf7b9f, type: 3}
+  launchPrepareTime: 0.5
+  launchTime: 0.075
+  launchSpeed: 20
+  reachDistance: 1.75
   sprintSpeedMultiplier: 1.25
   wallCrashSpeed: 5000
   timeToDecelerate: 0.7
