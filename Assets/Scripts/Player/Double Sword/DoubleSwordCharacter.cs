@@ -1,5 +1,8 @@
-using UnityEngine;
+using NUnit.Framework.Constraints;
 using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
 
 public class DoubleSwordCharacter : Player1
 {
@@ -9,10 +12,24 @@ public class DoubleSwordCharacter : Player1
     [SerializeField] GameObject sword2Hitbox;
     [SerializeField] GameObject fist;
 
-    [SerializeField] GameObject sword1;
-    [SerializeField] GameObject sword2;
+    [SerializeField] GameObject throwingSword;
 
     int numberOfSwordsHeld = 2;
+
+    #region Sword Launch Variables
+
+    [Header("Launch")]
+
+    [SerializeField] float launchPrepareTime = 0.5f;
+    [SerializeField] float launchTime = 0.075f;
+    [SerializeField] float launchSpeed = 25f;
+
+    [SerializeField] float reachDistance = 5;
+
+    List<GameObject> thrownSwordsObjects = new List<GameObject>();
+    bool preparingSwordLaunch = false;
+
+    #endregion
 
     #region Sprint Variables
 
@@ -34,6 +51,8 @@ public class DoubleSwordCharacter : Player1
 
     #endregion
 
+    #region Spin Variables
+
     [Header("Spin")]
 
     [SerializeField] float spinSpeed = 70f;
@@ -41,6 +60,8 @@ public class DoubleSwordCharacter : Player1
     [SerializeField] float afterSpinPush = 1000f;
 
     bool spinning = false;
+    bool leftSpinStart = false;
+    bool rightSpinStart = false;
     bool afterSpinSprint = false;
     bool afterSpinBoost = false;
 
@@ -49,6 +70,8 @@ public class DoubleSwordCharacter : Player1
 
     Vector3 spinAroundPos;
     Vector3 lookWhenSpining;
+
+    #endregion
 
     #region Basic Dodge Variables
 
@@ -63,10 +86,14 @@ public class DoubleSwordCharacter : Player1
 
     #endregion
 
+    SpriteRenderer spriteRenderer = null; // Temporärt för Debbuging
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void Start()
     {
         base.Start();
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         sprintSpeed = speed * sprintSpeedMultiplier;
 
@@ -82,6 +109,8 @@ public class DoubleSwordCharacter : Player1
     public override void Update()
     {
        base.Update();
+
+        #region Sprint + Sprint Input
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
@@ -101,6 +130,10 @@ public class DoubleSwordCharacter : Player1
 
                 timeToDecelerate -= Time.deltaTime;
 
+                ModeChangeVisuall(Color.grey);
+
+                stunned = true;
+
                 if (timeToDecelerate <= 0)
                 {
 
@@ -110,6 +143,7 @@ public class DoubleSwordCharacter : Player1
 
                     sprinting = false;
                     gotWhereToSprint = false;
+                    stunned = false;
 
                     lockRotationParent = false;
                     lockMoveinputParent = false;
@@ -117,20 +151,24 @@ public class DoubleSwordCharacter : Player1
 
                     speed = maxSpeed;
 
+                    NormalModeVisuall();
+
                 }
             }
         }
 
         SprintCheck();
 
-        if (dodgeLock || sprinting)
+        #endregion
+
+        if (dodgeLock || sprinting || stunned)
         {
             attacking = false;
 
-            if (sprinting)
+            if (sprinting && !stunned)
             {
 
-
+                // Gör så att man har möjligheten att spina
                 Spin();
 
             }
@@ -141,6 +179,36 @@ public class DoubleSwordCharacter : Player1
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            // Man har kastat iväg minnst ett svärd
+            if(numberOfSwordsHeld != 2)
+            {
+                float smallestDistance = 1337;
+                int whatSwordIsClosest = 1337;
+
+                for (int i = 0; i < thrownSwordsObjects.Count; i++)
+                {
+
+                    float distance = Vector2.Distance(transform.position, thrownSwordsObjects[i].transform.position);
+
+                    if(distance < smallestDistance && distance < reachDistance)
+                    {
+                        smallestDistance = distance;
+                        whatSwordIsClosest = i;
+                    }
+                }
+
+                // Dubbeolkolla att den hittade något
+                if(whatSwordIsClosest != 1337)
+                {
+
+                    StartCoroutine(SwordLaunch(whatSwordIsClosest));
+
+                    // Så den inte dodgar
+                    return;
+                }
+
+            }
+
             StartCoroutine(basicDodge());
         }
 
@@ -165,16 +233,72 @@ public class DoubleSwordCharacter : Player1
         #endregion
     }
 
-    #region Throw Sword // Nothing yet
+    #region Throw Sword
 
     void ThrowSword()
     {
 
+        numberOfSwordsHeld--;
 
+        GameObject thrownSwordObject = Instantiate(throwingSword);
+        thrownSwordsObjects.Add(thrownSwordObject);
+        thrownSwordObject.transform.position = transform.position;
+        float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
+        thrownSwordObject.transform.rotation = Quaternion.Euler(0, 0, angle - 90);
 
     }
 
-    #endregion 
+    #endregion
+
+    #region Sword Launch
+
+    IEnumerator SwordLaunch(int whatSword)
+    {
+        playerVelocity = Vector2.zero;
+        myRigidbody.linearVelocity = playerVelocity;
+        movementInput = Vector2.zero;
+        lockMoveinputParent = true;
+        stunned = true;
+        preparingSwordLaunch = true;
+
+        transform.position = thrownSwordsObjects[whatSword].transform.position;
+
+
+        yield return new WaitForSeconds(launchPrepareTime);
+
+
+        Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        movementInput = mousePos - myRigidbody.position;
+
+        playerVelocity = movementInput.normalized * launchSpeed;
+        myRigidbody.linearVelocity += playerVelocity;
+
+
+        yield return new WaitForSeconds(launchTime);
+
+
+        numberOfSwordsHeld++;
+        Destroy(thrownSwordsObjects[whatSword]);
+        thrownSwordsObjects.RemoveAt(whatSword);
+
+
+        lockMoveinputParent = false;
+        stunned = false;
+        preparingSwordLaunch = false;
+
+        myRigidbody.linearDamping = 40;
+        movementInput = inactiveMovementInput;
+
+        speed = maxSpeed / 2;
+
+
+        yield return new WaitForSeconds(dodgeRecoveryTime);
+
+
+        speed = maxSpeed;
+    }
+
+    #endregion
 
     #region Basic Attack
 
@@ -257,8 +381,11 @@ public class DoubleSwordCharacter : Player1
             lockRotationParent = true;
             lockMoveinputParent = true;
 
+            #region Once
 
             // Så den får vart den ska gå 1 gång
+            // Körs 1 gång
+            // Körs inte efter spin
             if (!gotWhereToSprint)
             {
                 gotWhereToSprint = true;
@@ -282,9 +409,24 @@ public class DoubleSwordCharacter : Player1
                     transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
                 }
+
+                ModeChangeVisuall(Color.cyan);
             }
 
+            #endregion
+
             speed = sprintSpeed;
+
+            // Framtida saker
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+  
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+
+            }
 
         }
 
@@ -292,25 +434,36 @@ public class DoubleSwordCharacter : Player1
 
     #endregion
 
+    #region Spin
+
     void Spin()
     {
 
         #region Left spin
 
-        if (Input.GetMouseButtonDown(0))
+
+        // Trycker ned för första gången
+        // Ger åt vilket håll den ska snurra
+        // !rightSpinStart så den inte kan byta håll man snurrar åt
+        if (Input.GetMouseButtonDown(0) && !rightSpinStart)
         {
+            ModeChangeVisuall(Color.green);
+
             myRigidbody.linearVelocity = Vector2.zero;
 
             spinAroundPos = leftSpinPos.transform.position;
 
+            spinning = true;
+            leftSpinStart = true;
             afterSpinSprint = false;
             gotWhereToSprint = false;
 
         }
-        if (Input.GetMouseButton(0))
+        // Håller ned den
+        // Gör så att den snurrar
+        if (Input.GetMouseButton(0) && leftSpinStart)
         {
             speed = 0;
-
             lookWhenSpining = transform.position - spinAroundPos;
 
             float angle = Mathf.Atan2(lookWhenSpining.y, lookWhenSpining.x) * Mathf.Rad2Deg;
@@ -318,18 +471,21 @@ public class DoubleSwordCharacter : Player1
 
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
 
-            spinning = true;
             transform.RotateAround(spinAroundPos, Vector3.forward, spinSpeed * Time.deltaTime);
 
         }
-        if (Input.GetMouseButtonUp(0))
+        // Släpper 
+        // Vad den ska göra (om man ska fortsätta springa eller ej)
+        if (Input.GetMouseButtonUp(0) && leftSpinStart)
         {
 
+            leftSpinStart = false;
             spinning = false;
 
             if (sprintCheck)
             {
                 afterSpinSprint = true;
+                ModeChangeVisuall(Color.cyan);
             }
             else
             {
@@ -341,18 +497,27 @@ public class DoubleSwordCharacter : Player1
 
         #region Right spin
 
-        // Samma sak som vänster men ändrar att den åker runt en annan position
-        if (Input.GetMouseButtonDown(1))
+
+        // Trycker ned för första gången
+        // Ger åt vilket håll den ska snurra
+        // !leftSpinStart så den inte kan byta håll man snurrar åt
+        if (Input.GetMouseButtonDown(1) && !leftSpinStart)
         {
+            ModeChangeVisuall(Color.green);
+
             myRigidbody.linearVelocity = Vector2.zero;
 
             spinAroundPos = rightSpinPos.transform.position; // Skillnad här
 
+            spinning = true;
+            rightSpinStart = true; // Skillnad här
             afterSpinSprint = false;
             gotWhereToSprint = false;
 
         }
-        if (Input.GetMouseButton(1))
+        // Håller ned den
+        // Gör så att den snurrar
+        if (Input.GetMouseButton(1) && rightSpinStart)
         {
             speed = 0;
 
@@ -363,18 +528,20 @@ public class DoubleSwordCharacter : Player1
 
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, -lookSpeed * Time.deltaTime);
 
-            spinning = true;
             transform.RotateAround(spinAroundPos, Vector3.forward, -spinSpeed * Time.deltaTime);
 
         }
-        if (Input.GetMouseButtonUp(1))
+        // Släpper 
+        // Vad den ska göra (om man ska fortsätta springa eller ej)
+        if (Input.GetMouseButtonUp(1) && rightSpinStart)
         {
-
+            rightSpinStart = false; // Skillnad här
             spinning = false;
 
             if (sprintCheck)
             {
                 afterSpinSprint = true;
+                ModeChangeVisuall(Color.cyan);
             }
             else
             {
@@ -398,8 +565,9 @@ public class DoubleSwordCharacter : Player1
         movementInput = inactiveMovementInput;
         sprinting = false;
 
-
+        ModeChangeVisuall(Color.yellow);
         yield return new WaitForSeconds(2);
+        NormalModeVisuall();
 
 
         // För man kan börja springa under väntan till detta så då om man sätter afterSpinBoost till falsk så förstör den inte
@@ -409,6 +577,10 @@ public class DoubleSwordCharacter : Player1
             speed = maxSpeed;
         }
     }
+
+    #endregion
+
+    #region Collisions
 
     public override void OnCollisionEnter2D(Collision2D collision)
     {
@@ -450,6 +622,8 @@ public class DoubleSwordCharacter : Player1
     IEnumerator WallCrash()
     {
         spinning = false;
+        leftSpinStart = false;
+        rightSpinStart = false;
         sprinting = false;
         stunned = true;
         spinAroundPos = transform.position;
@@ -459,9 +633,9 @@ public class DoubleSwordCharacter : Player1
 
         myRigidbody.AddForce(-transform.up * wallCrashSpeed);
 
-
+        ModeChangeVisuall(Color.grey);
         yield return new WaitForSeconds(0.3f);
-
+        NormalModeVisuall();
 
         speed = maxSpeed;
         lockMoveinputParent = false;
@@ -471,7 +645,16 @@ public class DoubleSwordCharacter : Player1
         movementInput = inactiveMovementInput;
         timeToDecelerate = timeToDecelerateBase;
         afterSprintDeceleraton = (sprintSpeed / 2) / timeToDecelerateBase;
+
+        Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        lookDirection = mousePos - myRigidbody.position;
+        float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
+        Quaternion targetRotation = Quaternion.Euler(0f, 0f, angle - 90);
+
+        transform.rotation = targetRotation;
     }
+
+    #endregion
 
     #region basic Dodge
 
@@ -535,4 +718,32 @@ public class DoubleSwordCharacter : Player1
     }
 
     #endregion
+
+    #region Debugging help
+
+    void ModeChangeVisuall(Color whatColour)
+    {
+
+        spriteRenderer.color = whatColour;
+
+    }
+
+    void NormalModeVisuall()
+    {
+
+        spriteRenderer.color = Color.white;
+
+    }
+
+    #endregion
+
+    private void OnDrawGizmosSelected()
+    {
+
+        Gizmos.color = Color.red;
+
+
+        Gizmos.DrawWireSphere(transform.position, reachDistance);
+
+    }
 }
