@@ -56,6 +56,7 @@ public class ThrowSword : MonoBehaviour
                         
                     }
 
+                    // Väggar är roterade så man kan inte ta scala x som exempel
                     Debug.Log("X Hit Pos: " + hit.point.x);
                     Debug.Log("Obj X + Scale: " + (Mathf.Abs(collisionObject.transform.position.x) + collisionObject.transform.localScale.y / 2));
                     float distanceToXWall = Mathf.Abs(hit.point.x - collisionObject.transform.position.x) + collisionObject.transform.localScale.x/2;
