@@ -302,11 +302,19 @@ public class SwordAndGunCharacter : Player1
 
                 bullets--;
 
+                audioManager.PlayShellSound(transform.position);
+
                 bulletText.text = bullets.ToString();
 
                 if (hit.transform.tag == "Enemy")
                 {
                     hit.transform.gameObject.GetComponent<EnemyHealth>().TakeDamage(1, 2);
+                }
+                else
+                {
+
+                    audioManager.PlayBulletHitWall(hit.point);
+
                 }
 
             }
@@ -325,10 +333,10 @@ public class SwordAndGunCharacter : Player1
 
                 //cameraScript.ChangeTargetCam(gameObject, 2);
 
-                speed = 2;
+                speed = maxSpeed/10;
 
                 attackStance = true;
-                lockRotationParent = true;
+                lookAroundSpeed = 1;
 
             }
 
@@ -343,6 +351,7 @@ public class SwordAndGunCharacter : Player1
                 //cameraScript.ZoomOutAgain(0.1f);
 
                 speed = maxSpeed;
+                lookAroundSpeed = maxLookAroundSpeed;
 
                 attackStance = false;
                 lockRotationParent = false;
@@ -378,6 +387,7 @@ public class SwordAndGunCharacter : Player1
         yield return new WaitForSeconds(0.2f);
 
         speed = maxSpeed;
+        lookAroundSpeed = maxLookAroundSpeed;
 
         attackStance = false;
         attacking = false;
@@ -440,6 +450,7 @@ public class SwordAndGunCharacter : Player1
         dodgeLock = false;
 
         speed = maxSpeed / 2;
+        lookAroundSpeed = maxLookAroundSpeed;
 
 
         yield return new WaitForSeconds(dodgeRecoveryTime);
@@ -502,7 +513,7 @@ public class SwordAndGunCharacter : Player1
 
     void ResetHarmony()
     {
-
+        
 
         decayTimeForHarmony = decayTimeForHarmonyBase;
         maxTimeInHarmony = maxTimeInHarmonyBase;
@@ -521,7 +532,7 @@ public class SwordAndGunCharacter : Player1
         Time.fixedDeltaTime = 0.02F;
     }
 
-    #region Things To False
+    #region Reset
 
     void ThingsToFalse()
     {
@@ -533,6 +544,7 @@ public class SwordAndGunCharacter : Player1
         stanceAttackObject.SetActive(false);
 
         speed = maxSpeed;
+        lookAroundSpeed = maxLookAroundSpeed;
 
         basicAttacking = false;
         attackObject.SetActive(false);

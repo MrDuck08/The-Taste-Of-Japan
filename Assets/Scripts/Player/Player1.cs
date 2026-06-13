@@ -9,34 +9,35 @@ public class Player1 : MonoBehaviour
 
     [Header("What Character")]
 
-    public bool lockRotationParent = false;
-    public bool lockMoveinputParent = false;
+    [HideInInspector] public bool lockRotationParent = false;
+    [HideInInspector] public bool lockMoveinputParent = false;
 
     #endregion
 
     #region Movment
 
-    [Header("Ignore")]
 
     #region Basic Movment Variables
 
-    public Vector2 movementInput;
-    public Vector2 inactiveMovementInput;
-    public Vector2 playerVelocity;
+    [HideInInspector] public Vector2 movementInput;
+    [HideInInspector] public Vector2 inactiveMovementInput;
+    [HideInInspector] public Vector2 playerVelocity;
 
     public float maxSpeed;
     public float speed = 5;
 
-    public Vector2 lookDirection;
+    [HideInInspector] public Vector2 lookDirection;
 
     #endregion
 
-    public bool dodgeLock = false;
+    [HideInInspector] public bool dodgeLock = false;
+
 
     #endregion
 
-    public float lookOffset = 0;
-    [SerializeField] float lookAroundSpeed = 500f;
+    [HideInInspector] public float lookOffset = 0;
+    [HideInInspector] public float lookAroundSpeed = 500f;
+    public float maxLookAroundSpeed = 500f;
 
     #region Attack Variables
 
@@ -44,15 +45,15 @@ public class Player1 : MonoBehaviour
 
     public GameObject attackObject;
 
-    [Header("Ignore")]
-
-    public bool attacking = false;
-    public bool basicAttacking = false;
+    [HideInInspector] public bool attacking = false;
+    [HideInInspector] public bool basicAttacking = false;
 
     #endregion
 
-    public Rigidbody2D myRigidbody;
-    public CircleCollider2D myCollider;
+    [HideInInspector] public Rigidbody2D myRigidbody;
+    [HideInInspector] public CircleCollider2D myCollider;
+
+    [HideInInspector] public AudioManager audioManager;
 
     public Camera cam;
 
@@ -62,11 +63,14 @@ public class Player1 : MonoBehaviour
         myRigidbody = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<CircleCollider2D>();
 
+        audioManager = FindAnyObjectByType<AudioManager>();
+
         cam = Camera.main;
 
         attackObject.SetActive(false);
 
         speed = maxSpeed;
+        lookAroundSpeed = maxLookAroundSpeed;
 
     }
 
@@ -150,6 +154,8 @@ public class Player1 : MonoBehaviour
 
         attacking = true;
         basicAttacking = true;
+
+        audioManager.PlayPlayerSlashSound(transform.position);
 
         yield return new WaitForSeconds(0.2f);
 

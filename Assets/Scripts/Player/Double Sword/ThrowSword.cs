@@ -10,8 +10,11 @@ public class ThrowSword : MonoBehaviour
     bool hitEnemy = false;
 
     [SerializeField] float speed = 50;
-    [SerializeField] float distanceAfterHit = 0.4f;
+    [SerializeField] float distanceToHit = 0.4f;
+    float afterHitRange = 1337;
     [SerializeField] LayerMask ignoreMask;
+
+    Vector2 originalPos = Vector2.zero;
 
     GameObject collisionObject = null;
 
@@ -36,13 +39,24 @@ public class ThrowSword : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, hit.point, speed * Time.deltaTime);
 
             float distance = Vector2.Distance(hit.point, transform.position);
+            float distanceAfterHit = Vector2.Distance(transform.position, originalPos);
 
-            if (distance < distanceAfterHit)
+            if (distance < distanceToHit || distanceAfterHit > afterHitRange)
             {
                 hitSomething = true;
                 myRigidbody2D.linearVelocity = Vector2.zero;
 
+                if(distanceAfterHit > afterHitRange)
+                {
+                    Debug.Log(distanceAfterHit);
+
+
+                    return;
+
+                }
+                Debug.Log("Hit");
                 collisionObject = hit.transform.gameObject;
+
                 if (collisionObject.tag == "Enemy")
                 {
                     hitEnemy = true;
@@ -56,6 +70,9 @@ public class ThrowSword : MonoBehaviour
                     float angle = Mathf.Atan2(reflectDir.y, reflectDir.x) * Mathf.Rad2Deg;
 
                     transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
+
+                    afterHitRange = 5f;
+                    originalPos = transform.position;
 
                     hitSomething = false;
 
