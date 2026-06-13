@@ -300,9 +300,11 @@ public class SwordAndGunCharacter : Player1
                 //SpawnTrail(trail, hit);
                 trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(trail.transform.position, hit.point);
 
-                bullets--;
+                //bullets--;
 
                 audioManager.PlayShellSound(transform.position);
+                audioManager.PlayShootSound(transform.position);
+                audioManager.PlayRevolverClickSound(transform.position);
 
                 bulletText.text = bullets.ToString();
 
@@ -372,7 +374,7 @@ public class SwordAndGunCharacter : Player1
 
         attacking = true;
 
-        stanceAttack--;
+        //stanceAttack--;
 
         ChargeText.text = stanceAttack.ToString();
 
@@ -380,7 +382,13 @@ public class SwordAndGunCharacter : Player1
 
         speed = 0;
 
-        yield return new WaitForSeconds(0.4f);
+        audioManager.PlayUnsheatheSound(transform.position);
+
+        yield return new WaitForSeconds(0.05f);
+
+        audioManager.PlayPlayerChargeSlashSound(transform.position);
+
+        yield return new WaitForSeconds(0.35f);
 
         stanceAttackObject.SetActive(false);
 
