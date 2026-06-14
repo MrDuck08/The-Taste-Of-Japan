@@ -1,14 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 public class AudioManager : MonoBehaviour
 {
 
-    public float fadeInTargetVolume = 0.7f;
-    public float fadeOutTargetVolume;
-    public float fadeSpeed = 0.3f;
-
+    List<AudioSource> allAudioSource = new List<AudioSource>();
     List<GameObject> objThatHaveInfSoundOnList = new List<GameObject>();
     List<GameObject> infSoundList = new List<GameObject>();
     GameObject playerObj;
@@ -26,6 +24,11 @@ public class AudioManager : MonoBehaviour
     [SerializeField] GameObject playerChargeShlashSound;
     [SerializeField] GameObject playerUnsheatheSound;
 
+    [SerializeField] GameObject harmonyWindSound;
+    GameObject currentHarmonyWindSound;
+    [SerializeField] GameObject harmonyChoirSound;
+    GameObject currentharmonyChoirSound;
+
     [SerializeField] List<GameObject> ShootSoundList = new List<GameObject>();
     [SerializeField] List<GameObject> ClickSoundList = new List<GameObject>();
     [SerializeField] List<GameObject> shellSoundList = new List<GameObject>();
@@ -42,6 +45,8 @@ public class AudioManager : MonoBehaviour
     {
         
     }
+
+    #region Walking
 
     public void playWalkingSound(Vector2 newPos, GameObject parent)
     {
@@ -81,6 +86,8 @@ public class AudioManager : MonoBehaviour
         // 
         ChangePith(whoCalled, walkingSound, 1337, false);
     }
+
+    #endregion
 
     public void PlayPlayerSlashSound(Vector2 newPos)
     {
@@ -140,6 +147,51 @@ public class AudioManager : MonoBehaviour
     }
 
     #endregion
+
+    public void PlayHarmonySounds()
+    {
+
+        allAudioSource.Clear();
+        allAudioSource.AddRange(FindObjectsByType<AudioSource>(FindObjectsSortMode.None));
+
+        for(int i = 0; i < allAudioSource.Count; i++ )
+        {
+            allAudioSource[i].pitch = 0.3f;
+        }
+
+        currentHarmonyWindSound = Instantiate(harmonyWindSound);
+        currentharmonyChoirSound = Instantiate(harmonyChoirSound);
+
+        AudioSource windSource = currentHarmonyWindSound.GetComponent<AudioSource>();
+        AudioSource choirSource = currentharmonyChoirSound.GetComponent<AudioSource>();
+
+        windSource.GetComponent<AudioSource>().time = Random.Range(0f, windSource.GetComponent<AudioSource>().clip.length);
+        choirSource.GetComponent<AudioSource>().time = Random.Range(0f, choirSource.GetComponent<AudioSource>().clip.length);
+
+        windSource.pitch = 1f;
+        choirSource.pitch = 1f;
+
+        currentHarmonyWindSound.GetComponent<AudioFade>().StartFadeIn();
+        currentharmonyChoirSound.GetComponent<AudioFade>().StartFadeIn();
+
+    }
+
+    public void StopHarmonySounds()
+    {
+
+        allAudioSource.Clear();
+        allAudioSource.AddRange(FindObjectsByType<AudioSource>(FindObjectsSortMode.None));
+
+        for (int i = 0; i < allAudioSource.Count; i++)
+        {
+            allAudioSource[i].pitch = 1f;
+        }
+
+        currentHarmonyWindSound.GetComponent<AudioFade>().StartFadeOut();
+        currentharmonyChoirSound.GetComponent<AudioFade>().StartFadeOut();
+
+    }
+
 
     #region Shoot Sounds
 
@@ -270,38 +322,5 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    #region Fade in & Out
 
-    public void StartFadeIn()
-    {
-        StopAllCoroutines();
-        StartCoroutine("DoFadeIn");
-    }
-    public void StartFadeOut()
-    {
-        StopAllCoroutines();
-        StartCoroutine("DoFadeOut");
-    }
-    private IEnumerator DoFadeIn(AudioSource source)
-    {
-        while (source.volume != fadeInTargetVolume)
-        {
-            source.volume = Mathf.MoveTowards(source.volume, fadeInTargetVolume,
-            fadeSpeed * Time.deltaTime);
-            yield return null;
-        }
-        StopAllCoroutines();
-    }
-    private IEnumerator DoFadeOut(AudioSource source)
-    {
-        while (source.volume != fadeOutTargetVolume)
-        {
-            source.volume = Mathf.MoveTowards(source.volume, fadeOutTargetVolume,
-            fadeSpeed * Time.deltaTime);
-            yield return null;
-        }
-        StopAllCoroutines();
-    }
-
-    #endregion
 }

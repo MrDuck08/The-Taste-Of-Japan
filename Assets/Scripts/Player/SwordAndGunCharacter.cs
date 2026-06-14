@@ -159,6 +159,8 @@ public class SwordAndGunCharacter : Player1
                 bulletKillImage.fillAmount = 1;
                 ChargeKillImage.fillAmount = 1;
 
+                audioManager.PlayHarmonySounds();
+
                 ThingsToFalse();
             }
 
@@ -552,6 +554,8 @@ public class SwordAndGunCharacter : Player1
 
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02F;
+
+        audioManager.StopHarmonySounds();
     }
 
     #region Reset
