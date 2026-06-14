@@ -144,17 +144,9 @@ public class SwordAndGunCharacter : Player1
 
         #endregion
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-
-            StartCoroutine(basicDodge());
-
-
-        }
-
         #region Harmony
 
-        if(killWithCharge && killWithRevolver)
+        if (killWithCharge && killWithRevolver)
         {
             // Enter Harmony 
             if (Input.GetKeyDown(KeyCode.LeftControl) && !dodgeLock)
@@ -166,6 +158,8 @@ public class SwordAndGunCharacter : Player1
 
                 bulletKillImage.fillAmount = 1;
                 ChargeKillImage.fillAmount = 1;
+
+                ThingsToFalse();
             }
 
             // In harmony now
@@ -177,10 +171,10 @@ public class SwordAndGunCharacter : Player1
                 if (Input.GetMouseButtonDown(0) && !dodgeLock)
                 {
                     float clickDistance = Vector2.Distance(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
- 
+
                     RaycastHit2D hit = Physics2D.Raycast(transform.position, lookDirection, clickDistance, ~bulletIgnoreLayerMask);
 
-                    if(hit.point == Vector2.zero)
+                    if (hit.point == Vector2.zero)
                     {
                         pointToRushTo = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     }
@@ -255,7 +249,17 @@ public class SwordAndGunCharacter : Player1
 
         }
 
+        if (inHarmony) { return; }
+
         #endregion
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+
+            StartCoroutine(basicDodge());
+
+
+        }
 
         #region Left Click Attacks
 
@@ -335,6 +339,8 @@ public class SwordAndGunCharacter : Player1
 
                 //cameraScript.ChangeTargetCam(gameObject, 2);
 
+                audioManager.ChangeWalkingPtch(gameObject, 0.3f);
+
                 speed = maxSpeed/10;
 
                 attackStance = true;
@@ -351,6 +357,8 @@ public class SwordAndGunCharacter : Player1
             {
 
                 //cameraScript.ZoomOutAgain(0.1f);
+
+                audioManager.RevertWalkingPitch(gameObject);
 
                 speed = maxSpeed;
                 lookAroundSpeed = maxLookAroundSpeed;
@@ -370,7 +378,7 @@ public class SwordAndGunCharacter : Player1
 
     IEnumerator ChargeAttack()
     {
-        cameraScript.ZoomOutAgain(0.1f);
+        //cameraScript.ZoomOutAgain(0.1f);
 
         attacking = true;
 
@@ -385,9 +393,7 @@ public class SwordAndGunCharacter : Player1
         audioManager.PlayUnsheatheSound(transform.position);
 
         yield return new WaitForSeconds(0.05f);
-
-        audioManager.PlayPlayerChargeSlashSound(transform.position);
-
+        audioManager.PlayPlayerChargeSlashSound(transform.position); // Mini paus för att spela ljud
         yield return new WaitForSeconds(0.35f);
 
         stanceAttackObject.SetActive(false);
@@ -400,6 +406,7 @@ public class SwordAndGunCharacter : Player1
         attackStance = false;
         attacking = false;
         lockRotationParent = false;
+        audioManager.RevertWalkingPitch(gameObject);
 
 
     }
@@ -412,6 +419,8 @@ public class SwordAndGunCharacter : Player1
     {
         dodgeLock = true;
         attackObject.SetActive(false);
+
+        audioManager.StopWalkingSound(gameObject);
 
         bool standingStillDodge = false;
 
@@ -459,6 +468,11 @@ public class SwordAndGunCharacter : Player1
 
         speed = maxSpeed / 2;
         lookAroundSpeed = maxLookAroundSpeed;
+
+        if(movementInput != Vector2.zero && !lockMoveinputParent)
+        {
+            audioManager.playWalkingSound(transform.position, gameObject);
+        }
 
 
         yield return new WaitForSeconds(dodgeRecoveryTime);
@@ -556,6 +570,8 @@ public class SwordAndGunCharacter : Player1
 
         basicAttacking = false;
         attackObject.SetActive(false);
+
+        audioManager.RevertWalkingPitch(gameObject);
 
     }
 

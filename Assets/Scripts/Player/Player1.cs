@@ -28,6 +28,8 @@ public class Player1 : MonoBehaviour
 
     [HideInInspector] public Vector2 lookDirection;
 
+    bool walking = false;
+
     #endregion
 
     [HideInInspector] public bool dodgeLock = false;
@@ -80,6 +82,24 @@ public class Player1 : MonoBehaviour
         //Debug.Log(myRigidbody.linearVelocity); //
 
         Look();
+
+        if(movementInput == Vector2.zero)
+        {
+
+            if (walking)
+            {
+                audioManager.StopWalkingSound(gameObject);
+            }
+            walking = false;
+        }
+        else if (!lockMoveinputParent)
+        {
+            if (!walking)
+            {
+                audioManager.playWalkingSound(transform.position, gameObject);
+            }
+            walking = true;
+        }
 
     }
 

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Unity.VisualScripting.Member;
 
 public class AudioManager : MonoBehaviour
 {
@@ -10,10 +9,15 @@ public class AudioManager : MonoBehaviour
     public float fadeOutTargetVolume;
     public float fadeSpeed = 0.3f;
 
+    List<GameObject> objThatHaveInfSoundOnList = new List<GameObject>();
+    List<GameObject> infSoundList = new List<GameObject>();
+    GameObject playerObj;
+
     [Header("General")]
 
     [SerializeField] GameObject bulletHitWall;
     [SerializeField] GameObject walkingSound;
+    [SerializeField] List<GameObject> doorSlamSound = new List<GameObject>();
 
 
     [Header("S & G Player")]
@@ -30,7 +34,7 @@ public class AudioManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        playerObj = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
@@ -39,19 +43,73 @@ public class AudioManager : MonoBehaviour
         
     }
 
+    public void playWalkingSound(Vector2 newPos, GameObject parent)
+    {
+
+        GameObject walkingSoundObj = Instantiate(walkingSound);
+        // Behöver ändra namnet eftersom annars kommer den ha "clone" i sig som blir problem eftersom jag kollar på namn senare
+        walkingSoundObj.name = walkingSound.name;
+
+        // Sätter den till child av player så ljudet följer med
+        walkingSoundObj.transform.parent = parent.transform;
+
+        objThatHaveInfSoundOnList.Add(parent);
+        infSoundList.Add(walkingSoundObj);
+
+
+        SoundGeneral(walkingSoundObj, newPos, true);
+
+
+    }
+
+    public void StopWalkingSound(GameObject whoCalled)
+    {
+
+        StopInfiniteSounds(whoCalled, walkingSound);
+
+    }
+
+    public void ChangeWalkingPtch(GameObject whoCalled, float newPitch)
+    {
+
+        ChangePith(whoCalled, walkingSound, newPitch, true);
+
+    }
+
+    public void RevertWalkingPitch(GameObject whoCalled)
+    {
+        // 
+        ChangePith(whoCalled, walkingSound, 1337, false);
+    }
+
     public void PlayPlayerSlashSound(Vector2 newPos)
     {
 
         GameObject slashSound = Instantiate(playerShlashSound);
 
         // Sätter den till child av player så ljudet följer med
-        slashSound.transform.parent = GameObject.FindGameObjectWithTag("Player").transform;
+        slashSound.transform.parent = playerObj.transform;
 
 
-        SoundGeneral(slashSound, newPos);
+        SoundGeneral(slashSound, newPos, false);
 
 
     }
+
+    public void PlayDoorSlamSound(Vector2 newPos)
+    {
+
+        int whatDoorSound = Random.Range(0, doorSlamSound.Count);
+
+        GameObject doorSound = Instantiate(doorSlamSound[whatDoorSound]);
+
+
+        SoundGeneral(doorSound, newPos, false);
+
+
+    }
+
+    #region S & G Charge Slash
 
     public void PlayPlayerChargeSlashSound(Vector2 newPos)
     {
@@ -59,10 +117,10 @@ public class AudioManager : MonoBehaviour
         GameObject chargeSlashSound = Instantiate(playerChargeShlashSound);
 
         // Sätter den till child av player så ljudet följer med
-        chargeSlashSound.transform.parent = GameObject.FindGameObjectWithTag("Player").transform;
+        chargeSlashSound.transform.parent = playerObj.transform;
 
 
-        SoundGeneral(chargeSlashSound, newPos);
+        SoundGeneral(chargeSlashSound, newPos, false);
 
 
     }
@@ -73,13 +131,17 @@ public class AudioManager : MonoBehaviour
         GameObject unsheatheSound = Instantiate(playerUnsheatheSound);
 
         // Sätter den till child av player så ljudet följer med
-        unsheatheSound.transform.parent = GameObject.FindGameObjectWithTag("Player").transform;
+        unsheatheSound.transform.parent = playerObj.transform;
 
 
-        SoundGeneral(unsheatheSound, newPos);
+        SoundGeneral(unsheatheSound, newPos, false);
 
 
     }
+
+    #endregion
+
+    #region Shoot Sounds
 
     public void PlayShellSound(Vector2 newPos)
     {
@@ -89,7 +151,7 @@ public class AudioManager : MonoBehaviour
         GameObject shellSound = Instantiate(shellSoundList[whatShellSound]);
 
 
-        SoundGeneral(shellSound, newPos);
+        SoundGeneral(shellSound, newPos, false);
 
 
     }
@@ -102,9 +164,9 @@ public class AudioManager : MonoBehaviour
         GameObject shootSound = Instantiate(ShootSoundList[whatShootSound]);
 
         // Sätter den till child av player så ljudet följer med
-        shootSound.transform.parent = GameObject.FindGameObjectWithTag("Player").transform;
+        shootSound.transform.parent = playerObj.transform;
 
-        SoundGeneral(shootSound, newPos);
+        SoundGeneral(shootSound, newPos, false);
 
 
     }
@@ -117,10 +179,10 @@ public class AudioManager : MonoBehaviour
         GameObject revolverClickSound = Instantiate(ClickSoundList[whatClickSound]);
 
         // Sätter den till child av player så ljudet följer med
-        revolverClickSound.transform.parent = GameObject.FindGameObjectWithTag("Player").transform;
+        revolverClickSound.transform.parent = playerObj.transform;
 
 
-        SoundGeneral(revolverClickSound, newPos);
+        SoundGeneral(revolverClickSound, newPos, false);
 
 
     }
@@ -131,12 +193,14 @@ public class AudioManager : MonoBehaviour
         GameObject wallHitSound = Instantiate(bulletHitWall);
 
 
-        SoundGeneral(wallHitSound, newPos);
+        SoundGeneral(wallHitSound, newPos, false);
 
 
     }
 
-    void SoundGeneral(GameObject sound, Vector2 newPos)
+    #endregion
+
+    void SoundGeneral(GameObject sound, Vector2 newPos, bool infinite)
     {
 
 
@@ -145,7 +209,10 @@ public class AudioManager : MonoBehaviour
         sound.GetComponent<AudioSource>().Play();
         float soundLenght = sound.GetComponent<AudioSource>().clip.length;
 
-        StartCoroutine(DestroySound(soundLenght, sound));
+        if(infinite == false)
+        {
+            StartCoroutine(DestroySound(soundLenght, sound));
+        }
 
     }
 
@@ -157,6 +224,50 @@ public class AudioManager : MonoBehaviour
         yield return new WaitForSeconds(soundLenght);
 
         Destroy(soundToDestroy);
+    }
+
+
+    void StopInfiniteSounds(GameObject whatObj, GameObject whatSound)
+    {
+
+        for (var i = 0; i < infSoundList.Count; i++)
+        {
+
+            // Kollar så att det är rätt ljud på rätt object (plats) sitter på samma ställe och sedan tar bort dem
+            if (objThatHaveInfSoundOnList[i].name == whatObj.name && infSoundList[i].name == whatSound.name)
+            {
+                Destroy(infSoundList[i]);
+                infSoundList.RemoveAt(i);
+                objThatHaveInfSoundOnList.RemoveAt(i);
+
+            }
+
+        }
+
+    }
+
+    void ChangePith(GameObject whatObj, GameObject whatSound, float whatPitch, bool newPitch)
+    {
+
+        for (var i = 0; i < infSoundList.Count; i++)
+        {
+
+            // Kollar så att det är rätt ljud på rätt object (plats) sitter på samma ställe och sedan tar bort dem
+            if (objThatHaveInfSoundOnList[i].name == whatObj.name && infSoundList[i].name == whatSound.name)
+            {
+                if (newPitch)
+                {
+                    infSoundList[i].GetComponent<AudioSource>().pitch = whatPitch;
+                }
+                else
+                {
+                    infSoundList[i].GetComponent<AudioSource>().pitch = 1;
+                }
+
+            }
+
+        }
+
     }
 
     #region Fade in & Out
