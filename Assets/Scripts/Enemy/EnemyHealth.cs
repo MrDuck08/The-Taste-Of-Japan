@@ -8,10 +8,13 @@ public class EnemyHealth : MonoBehaviour
     ScreenShake screenShake;
     SwordAndGunCharacter swordAndGun;
 
+    AudioManager audioManager;
+
     private void Start()
     {
         screenShake = FindAnyObjectByType<ScreenShake>();
         swordAndGun = FindAnyObjectByType<SwordAndGunCharacter>();
+        audioManager = FindAnyObjectByType<AudioManager>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -52,6 +55,8 @@ public class EnemyHealth : MonoBehaviour
         if (health <= 0)
         {
 
+            audioManager.PlayEnemyDeathSound(transform.position);
+
             switch (whatTypeOfAttack)
             {
 
@@ -67,12 +72,13 @@ public class EnemyHealth : MonoBehaviour
                 case 2:
 
                     swordAndGun.RechargeStance();
+                    audioManager.PlayEnemyBulletDeathSound(transform.position);
 
                     break;
 
             }
 
-            screenShake.TriggerShake(0.05f, 0.7f, false);
+            screenShake.TriggerShake(0.05f, 0.35f, false);
             Destroy(gameObject);
 
         }

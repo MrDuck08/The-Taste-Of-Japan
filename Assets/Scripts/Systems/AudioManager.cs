@@ -34,6 +34,12 @@ public class AudioManager : MonoBehaviour
     [SerializeField] List<GameObject> shellSoundList = new List<GameObject>();
 
 
+    [Header("Enemy")]
+
+    [SerializeField] List<GameObject> enemyDeathSoundList = new List<GameObject>();
+    [SerializeField] List<GameObject> enemyBulletDeathSoundList = new List<GameObject>();
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -148,6 +154,7 @@ public class AudioManager : MonoBehaviour
 
     #endregion
 
+    #region Harmony
     public void PlayHarmonySounds()
     {
 
@@ -192,6 +199,7 @@ public class AudioManager : MonoBehaviour
 
     }
 
+    #endregion
 
     #region Shoot Sounds
 
@@ -251,6 +259,32 @@ public class AudioManager : MonoBehaviour
     }
 
     #endregion
+
+    public void PlayEnemyDeathSound(Vector2 newPos)
+    {
+
+        int whatDeathSound = Random.Range(0, enemyDeathSoundList.Count);
+
+        GameObject deathSound = Instantiate(enemyDeathSoundList[whatDeathSound]);
+
+
+        SoundGeneral(deathSound, newPos, false);
+
+
+    }
+
+    public void PlayEnemyBulletDeathSound(Vector2 newPos)
+    {
+
+        int whatBulletDeathSound = Random.Range(0, enemyBulletDeathSoundList.Count);
+
+        GameObject bulletDeathSound = Instantiate(enemyBulletDeathSoundList[whatBulletDeathSound]);
+
+
+        SoundGeneral(bulletDeathSound, newPos, false);
+
+
+    }
 
     void SoundGeneral(GameObject sound, Vector2 newPos, bool infinite)
     {

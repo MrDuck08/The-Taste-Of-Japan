@@ -74,7 +74,7 @@ public class CameraFollow : MonoBehaviour
 
         if (targetThatIsFollowed != null && !nonPlayerZoom)
         {
-            transform.position = targetThatIsFollowed.transform.position + ScreenShake.shakePosition;
+            transform.position = targetThatIsFollowed.transform.position + ScreenShake.cameraOffset + ScreenShake.recoilOffset;
         }
 
         #region Normal Zoom In & Out

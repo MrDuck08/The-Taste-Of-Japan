@@ -79,6 +79,7 @@ public class SwordAndGunCharacter : Player1
     #endregion
 
     CameraFollow cameraScript;
+    ScreenShake screenShake;
     PlayerHealth playerHealth;
 
     public override void Start()
@@ -98,6 +99,7 @@ public class SwordAndGunCharacter : Player1
         dodgeCollider = transform.Find("DodgeCollider").gameObject;
 
         cameraScript = FindAnyObjectByType<CameraFollow>();
+        screenShake = FindAnyObjectByType<ScreenShake>();
 
         playerHealth = GetComponent<PlayerHealth>();
     }
@@ -194,6 +196,7 @@ public class SwordAndGunCharacter : Player1
 
                     playerHealth.invincible = true;
 
+                    audioManager.StopHarmonySounds();
                     ResetHarmony();
                 }
 
@@ -213,7 +216,7 @@ public class SwordAndGunCharacter : Player1
                     //SpawnTrail(trail, hit);
                     trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(trail.transform.position, hit.point);
 
-
+                    audioManager.StopHarmonySounds();
                     ResetHarmony();
 
                     // Sätter den under reset så att man kan börja bygga harmoni av denna attack
@@ -232,6 +235,7 @@ public class SwordAndGunCharacter : Player1
 
                 if (maxTimeInHarmony < 0)
                 {
+                    audioManager.StopHarmonySounds();
                     ResetHarmony();
                 }
 
@@ -306,11 +310,13 @@ public class SwordAndGunCharacter : Player1
                 //SpawnTrail(trail, hit);
                 trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(trail.transform.position, hit.point);
 
-                //bullets--;
+                bullets--;
 
                 audioManager.PlayShellSound(transform.position);
                 audioManager.PlayShootSound(transform.position);
                 audioManager.PlayRevolverClickSound(transform.position);
+
+                screenShake.ScreenRecoil(0.1f, 0.3f);
 
                 bulletText.text = bullets.ToString();
 
@@ -384,7 +390,7 @@ public class SwordAndGunCharacter : Player1
 
         attacking = true;
 
-        //stanceAttack--;
+        stanceAttack--;
 
         ChargeText.text = stanceAttack.ToString();
 
@@ -554,8 +560,6 @@ public class SwordAndGunCharacter : Player1
 
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02F;
-
-        audioManager.StopHarmonySounds();
     }
 
     #region Reset

@@ -39,6 +39,8 @@ public class PlayerHealth : MonoBehaviour
 
             sceneLoader.playerDead = true;
 
+            Camera.main.GetComponent<AudioListener>().enabled = true;
+
             Destroy(gameObject);
 
         }
