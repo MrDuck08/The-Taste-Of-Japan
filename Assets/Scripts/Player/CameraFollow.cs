@@ -1,12 +1,17 @@
+using Unity.Cinemachine;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class CameraFollow : MonoBehaviour
 {
     [SerializeField] GameObject playerTarget;
+    [SerializeField] CinemachineCamera cinemachine;
     GameObject temporaryTarget;
     GameObject targetThatIsFollowed;
 
     [SerializeField] float startZoomValue = 10;
+
+    CinemachineBrain brain;
 
     bool nonPlayerZoom = false;
 
@@ -28,7 +33,7 @@ public class CameraFollow : MonoBehaviour
     float zoomOutTime;
 
     float speedToGoToBullet;
-    float speedToZoomIn;
+    float speedToZoom;
 
     #endregion
 
@@ -56,6 +61,9 @@ public class CameraFollow : MonoBehaviour
         targetThatIsFollowed = playerTarget;
 
         cam = Camera.main; // Det här objectet
+        brain = GetComponent<CinemachineBrain>(); 
+        brain.IgnoreTimeScale = true;
+        
 
         screenShake = GetComponent<ScreenShake>();
 
@@ -68,14 +76,11 @@ public class CameraFollow : MonoBehaviour
         zoomOutTime = maxZoomOutTime;
     }
 
+
     // Update is called once per frame
     void Update()
     {
 
-        if (targetThatIsFollowed != null && !nonPlayerZoom)
-        {
-            transform.position = targetThatIsFollowed.transform.position + ScreenShake.cameraOffset + ScreenShake.recoilOffset;
-        }
 
         #region Normal Zoom In & Out
 
@@ -121,8 +126,8 @@ public class CameraFollow : MonoBehaviour
             {
                 zoomInTime -= Time.unscaledDeltaTime;
 
-                transform.position = Vector2.Lerp(transform.position, targetThatIsFollowed.transform.position, speedToGoToBullet * Time.unscaledDeltaTime);
-                cam.orthographicSize -= speedToZoomIn * Time.unscaledDeltaTime;
+                //transform.position = Vector2.Lerp(transform.position, targetThatIsFollowed.transform.position, speedToGoToBullet * Time.unscaledDeltaTime);
+                cinemachine.Lens.OrthographicSize = Mathf.Lerp(cinemachine.Lens.OrthographicSize, 2, speedToZoom * Time.unscaledDeltaTime);
 
                 if (zoomInTime <= 0)
                 {
@@ -131,7 +136,7 @@ public class CameraFollow : MonoBehaviour
                     zoomingInOnBullet = false;
                     zoomedOnBullet = true;
 
-                    screenShake.TriggerShake(maxTimeToBeZommedIn, 0.01f, true);
+                    screenShake.TriggerShakeTime(maxTimeToBeZommedIn, 0.01f, true);
 
                 }
             }
@@ -159,7 +164,8 @@ public class CameraFollow : MonoBehaviour
                 zoomOutTime -= Time.unscaledDeltaTime;
 
                 transform.position = Vector2.Lerp(targetThatIsFollowed.transform.position, transform.position, speedToGoToBullet * Time.unscaledDeltaTime);
-                cam.orthographicSize += speedToZoomIn * Time.unscaledDeltaTime;
+                //cinemachine.Lens.OrthographicSize += speedToZoomIn * Time.unscaledDeltaTime;
+                cinemachine.Lens.OrthographicSize = Mathf.Lerp(cinemachine.Lens.OrthographicSize, 10, speedToZoom * Time.unscaledDeltaTime);
 
 
                 if (zoomOutTime <= 0)
@@ -173,6 +179,9 @@ public class CameraFollow : MonoBehaviour
                     nonPlayerZoom = false;
 
                     targetThatIsFollowed = playerTarget;
+                    cinemachine.Follow = playerTarget.transform;
+                    brain.UpdateMethod = CinemachineBrain.UpdateMethods.FixedUpdate;
+                    cinemachine.Lens.OrthographicSize = 10;
 
                     inLevelSystems.ShootBackDeflectedBullet(temporaryTarget.transform.position);
                     
@@ -202,8 +211,9 @@ public class CameraFollow : MonoBehaviour
 
         temporaryTarget = newTarget;
         targetThatIsFollowed = temporaryTarget;
+        cinemachine.Follow = targetThatIsFollowed.transform;
 
-        switch(forWhat)
+        switch (forWhat)
         {
 
             case 1:
@@ -212,13 +222,17 @@ public class CameraFollow : MonoBehaviour
 
                 speedToGoToBullet = distanceToBullet / maxZoomInTime;
 
-                speedToZoomIn = (startZoomValue - maxHowMuchZoom) / maxZoomInTime;
+                speedToZoom = (startZoomValue - maxHowMuchZoom) / maxZoomInTime;
+                speedToZoom /= 2;
 
                 startDeflectZoom = true;
                 zoomingInOnBullet = true;
+                brain.UpdateMethod = CinemachineBrain.UpdateMethods.LateUpdate;
 
                 Time.timeScale = 0;
-                Time.fixedDeltaTime = 0.02F * Time.timeScale;
+                //Time.fixedDeltaTime = 0.02F * Time.timeScale;
+
+                screenShake.TriggerShakeTime(55, 35f, false);
 
                 break;
 

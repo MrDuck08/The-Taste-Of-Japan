@@ -1,19 +1,21 @@
-using Unity.VisualScripting;
+using System.Reflection;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class ScreenShake : MonoBehaviour
 {
     [SerializeField] float shakeMagnitude = 0.7f;
     [SerializeField] float maxShakeDistance = 15f;
-    float recoilMagnitude = 0f;
+
+    [SerializeField] CinemachineImpulseListener impulseListener;
+    [SerializeField] CinemachineImpulseSource recoilSource;
+    [SerializeField] CinemachineImpulseSource standardScreenShakeSource;
+    CinemachineBrain brain;
 
     float shakeDuration = 0f;
-    float recoilDuration = 0f;
 
     bool priorityShake = false;
     bool shakeStop = true;
-
-    Vector3 changedShakePos = Vector3.zero;
 
     public static Vector3 cameraOffset = Vector3.zero;
     public static Vector3 recoilOffset = Vector3.zero;
@@ -23,26 +25,18 @@ public class ScreenShake : MonoBehaviour
     private void Start()
     {
         player = FindAnyObjectByType<Player1>();
+        brain = GetComponent<CinemachineBrain>();
     }
 
 
     private void Update()
     {
-        if(recoilDuration > 0f)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-
-            recoilOffset = Vector2.Lerp(recoilOffset, -player.lookDirection.normalized * recoilMagnitude, 0.1f);
-
-
-            recoilDuration -= Time.deltaTime;
-
+            Time.timeScale = 0;
+            TriggerShakeTime(5, 35f, false);
         }
-        else if(recoilOffset.x != 0 || recoilOffset.y != 0)
-        {
 
-            recoilOffset = Vector2.Lerp(recoilOffset, Vector2.zero, 0.2f);
-
-        }
 
         if (shakeDuration > 0)
         {
@@ -67,22 +61,21 @@ public class ScreenShake : MonoBehaviour
                 yMagnitude = -maxShakeDistance;
             }
 
-            // Sparar alla ändringar på objectet, om vi vill ha flera shakes som går tillbaka till sin position
-            changedShakePos += new Vector3(xMagnitude, yMagnitude, 0);
-
-            // Ändreing på postiion körs i "CameraFollow" Script
-            cameraOffset += new Vector3(xMagnitude, yMagnitude, 0);
-            shakeDuration -= Time.deltaTime;
+            Debug.Log("Screen Shake");
+            brain.UpdateMethod = CinemachineBrain.UpdateMethods.LateUpdate;
+            standardScreenShakeSource.GenerateImpulse(new Vector2(xMagnitude, yMagnitude));
+            brain.UpdateMethod = CinemachineBrain.UpdateMethods.LateUpdate;
+            shakeDuration -= Time.unscaledDeltaTime;
         }
         else if (!shakeStop)
         {
             // Shake Done
-
+            Time.timeScale = 1;
             StopShake();
         }
     }
 
-    public void TriggerShake(float duration, float magnitude, bool isShakeImortant)
+    public void TriggerShakeTime(float duration, float magnitude, bool isShakeImortant)
     {
 
         // En shake som har prioritet körs
@@ -105,11 +98,6 @@ public class ScreenShake : MonoBehaviour
     {
         shakeStop = true;
 
-        // Ändrar tillbaka alla ändringar
-        cameraOffset -= changedShakePos;
-
-        changedShakePos = Vector3.zero;
-
         priorityShake = false;
 
     }
@@ -117,10 +105,8 @@ public class ScreenShake : MonoBehaviour
     public void ScreenRecoil(float duration, float magnitude)
     {
 
+        recoilSource.GenerateImpulse(-player.lookDirection.normalized);
 
-
-        recoilDuration = duration;
-        recoilMagnitude = magnitude;
 
     }
 }
