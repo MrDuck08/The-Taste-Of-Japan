@@ -78,7 +78,6 @@ public class SwordAndGunCharacter : Player1
 
     #endregion
 
-    CameraFollow cameraScript;
     ScreenShake screenShake;
     PlayerHealth playerHealth;
 
@@ -98,7 +97,6 @@ public class SwordAndGunCharacter : Player1
 
         dodgeCollider = transform.Find("DodgeCollider").gameObject;
 
-        cameraScript = FindAnyObjectByType<CameraFollow>();
         screenShake = FindAnyObjectByType<ScreenShake>();
 
         playerHealth = GetComponent<PlayerHealth>();

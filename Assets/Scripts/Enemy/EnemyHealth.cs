@@ -4,9 +4,11 @@ public class EnemyHealth : MonoBehaviour
 {
 
     [SerializeField] int health;
+    [SerializeField] LayerMask obsticleCheck;
 
     ScreenShake screenShake;
     SwordAndGunCharacter swordAndGun;
+    Player1 player1;
 
     AudioManager audioManager;
 
@@ -14,6 +16,7 @@ public class EnemyHealth : MonoBehaviour
     {
         screenShake = FindAnyObjectByType<ScreenShake>();
         swordAndGun = FindAnyObjectByType<SwordAndGunCharacter>();
+        player1 = FindAnyObjectByType<Player1>();
         audioManager = FindAnyObjectByType<AudioManager>();
     }
 
@@ -21,8 +24,15 @@ public class EnemyHealth : MonoBehaviour
     {
         if (collision.transform.CompareTag("PlayerAttack"))
         {
+            Vector2 direction = player1.transform.position - transform.position;
+            float lenght = Vector2.Distance(player1.transform.position, transform.position);
 
-            TakeDamage(1, 1);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght, obsticleCheck);
+
+            if (!hit)
+            {
+                TakeDamage(1, 1);
+            }
 
         }
 
