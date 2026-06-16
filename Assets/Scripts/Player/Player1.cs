@@ -115,7 +115,7 @@ public class Player1 : MonoBehaviour
 
     }
 
-    #region Moving
+    #region Moving + Look
 
     void Moving()
     {
@@ -137,7 +137,7 @@ public class Player1 : MonoBehaviour
         if (lockRotationParent == false)
         {
 
-            myRigidbody.freezeRotation = false;
+
 
             if(transform.rotation != targetRotation)
             {
@@ -145,12 +145,7 @@ public class Player1 : MonoBehaviour
             }
 
         }
-        else
-        {
 
-            myRigidbody.freezeRotation = true;
-
-        }
 
 
     }

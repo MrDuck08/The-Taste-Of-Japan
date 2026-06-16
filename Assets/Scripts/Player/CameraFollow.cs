@@ -63,7 +63,7 @@ public class CameraFollow : MonoBehaviour
         cam = Camera.main; // Det här objectet
         brain = GetComponent<CinemachineBrain>(); 
         brain.IgnoreTimeScale = true;
-        
+
 
         screenShake = GetComponent<ScreenShake>();
 
@@ -126,7 +126,6 @@ public class CameraFollow : MonoBehaviour
             {
                 zoomInTime -= Time.unscaledDeltaTime;
 
-                //transform.position = Vector2.Lerp(transform.position, targetThatIsFollowed.transform.position, speedToGoToBullet * Time.unscaledDeltaTime);
                 cinemachine.Lens.OrthographicSize = Mathf.Lerp(cinemachine.Lens.OrthographicSize, 2, speedToZoom * Time.unscaledDeltaTime);
 
                 if (zoomInTime <= 0)
@@ -163,8 +162,7 @@ public class CameraFollow : MonoBehaviour
 
                 zoomOutTime -= Time.unscaledDeltaTime;
 
-                transform.position = Vector2.Lerp(targetThatIsFollowed.transform.position, transform.position, speedToGoToBullet * Time.unscaledDeltaTime);
-                //cinemachine.Lens.OrthographicSize += speedToZoomIn * Time.unscaledDeltaTime;
+
                 cinemachine.Lens.OrthographicSize = Mathf.Lerp(cinemachine.Lens.OrthographicSize, 10, speedToZoom * Time.unscaledDeltaTime);
 
 
@@ -188,7 +186,6 @@ public class CameraFollow : MonoBehaviour
                     Destroy(temporaryTarget);
 
                     Time.timeScale = 1;
-                    Time.fixedDeltaTime = 0.02F;
 
                 }
 
@@ -223,7 +220,7 @@ public class CameraFollow : MonoBehaviour
                 speedToGoToBullet = distanceToBullet / maxZoomInTime;
 
                 speedToZoom = (startZoomValue - maxHowMuchZoom) / maxZoomInTime;
-                speedToZoom /= 2;
+                speedToZoom /= 3;
 
                 startDeflectZoom = true;
                 zoomingInOnBullet = true;
@@ -232,7 +229,7 @@ public class CameraFollow : MonoBehaviour
                 Time.timeScale = 0;
                 //Time.fixedDeltaTime = 0.02F * Time.timeScale;
 
-                screenShake.TriggerShakeTime(55, 35f, false);
+                screenShake.TriggerShakeTime(maxTimeToBeZommedIn + maxZoomInTime, 0.005f, false);
 
                 break;
 

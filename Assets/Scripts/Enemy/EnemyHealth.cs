@@ -88,7 +88,7 @@ public class EnemyHealth : MonoBehaviour
 
             }
 
-            screenShake.TriggerShakeTime(0.05f, 0.35f, false);
+            screenShake.TriggerShakeTime(0.05f, 0.25f, false);
             Destroy(gameObject);
 
         }

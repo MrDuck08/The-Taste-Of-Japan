@@ -10,6 +10,7 @@ public class ScreenShake : MonoBehaviour
     [SerializeField] CinemachineImpulseListener impulseListener;
     [SerializeField] CinemachineImpulseSource recoilSource;
     [SerializeField] CinemachineImpulseSource standardScreenShakeSource;
+
     CinemachineBrain brain;
 
     float shakeDuration = 0f;
@@ -26,6 +27,8 @@ public class ScreenShake : MonoBehaviour
     {
         player = FindAnyObjectByType<Player1>();
         brain = GetComponent<CinemachineBrain>();
+
+        CinemachineImpulseManager.Instance.IgnoreTimeScale = true;
     }
 
 
@@ -34,7 +37,7 @@ public class ScreenShake : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Time.timeScale = 0;
-            TriggerShakeTime(5, 35f, false);
+            TriggerShakeTime(5, 0.01f, false);
         }
 
 
@@ -61,10 +64,9 @@ public class ScreenShake : MonoBehaviour
                 yMagnitude = -maxShakeDistance;
             }
 
-            Debug.Log("Screen Shake");
-            brain.UpdateMethod = CinemachineBrain.UpdateMethods.LateUpdate;
+
             standardScreenShakeSource.GenerateImpulse(new Vector2(xMagnitude, yMagnitude));
-            brain.UpdateMethod = CinemachineBrain.UpdateMethods.LateUpdate;
+
             shakeDuration -= Time.unscaledDeltaTime;
         }
         else if (!shakeStop)

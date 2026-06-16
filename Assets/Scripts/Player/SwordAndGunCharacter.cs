@@ -214,6 +214,8 @@ public class SwordAndGunCharacter : Player1
                     //SpawnTrail(trail, hit);
                     trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(trail.transform.position, hit.point);
 
+                    screenShake.ScreenRecoil(0.1f, 0.3f);
+
                     audioManager.StopHarmonySounds();
                     ResetHarmony();
 
