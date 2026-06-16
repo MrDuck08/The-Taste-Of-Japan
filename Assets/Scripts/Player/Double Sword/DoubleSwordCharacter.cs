@@ -238,7 +238,7 @@ public class DoubleSwordCharacter : Player1
     void ThrowSword()
     {
 
-        numberOfSwordsHeld--;
+        //numberOfSwordsHeld--;
 
         GameObject thrownSwordObject = Instantiate(throwingSword);
         thrownSwordsObjects.Add(thrownSwordObject);
