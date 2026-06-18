@@ -5,6 +5,7 @@ public class EnemyHealth : MonoBehaviour
 
     [SerializeField] int health;
     [SerializeField] LayerMask obsticleCheck;
+    [SerializeField] GameObject fadeEffectObj;
 
     ScreenShake screenShake;
     SwordAndGunCharacter swordAndGun;
@@ -87,6 +88,9 @@ public class EnemyHealth : MonoBehaviour
                     break;
 
             }
+
+            GameObject fadeObj = Instantiate(fadeEffectObj);
+            fadeObj.GetComponent<FadeEffect>().InstanciateInfo(player1.gameObject.GetComponent<SpriteRenderer>(), player1.transform);
 
             screenShake.TriggerShakeTime(0.05f, 0.25f, false);
             Destroy(gameObject);
