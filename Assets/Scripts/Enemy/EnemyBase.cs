@@ -329,7 +329,6 @@ public class EnemyBase : MonoBehaviour
 
 
 
-
             Vector2 raycastDirectionBehind = playerObject.transform.position - transform.position;
 
 
@@ -340,8 +339,8 @@ public class EnemyBase : MonoBehaviour
             {
                 //agent.SetDestination(playerObject.transform.position);
 
-
-                float angle = Mathf.Atan2(agent.velocity.y, agent.velocity.x) * Mathf.Rad2Deg;
+                Vector2 lookDirection = playerObject.transform.position - transform.position;
+                float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
                 transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
 

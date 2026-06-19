@@ -1092,7 +1092,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &5656606882981157311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1133,7 +1133,7 @@ MonoBehaviour:
   bullets: 3
   bulletIgnoreLayerMask:
     serializedVersion: 2
-    m_Bits: 132
+    m_Bits: 644
   decayTimeForHarmony: 7
   rushAttackObject: {fileID: 9046596892632325241}
   rushSpeed: 50
@@ -1304,7 +1304,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -50.970703, y: 28.158905}
+  m_AnchoredPosition: {x: -50.970703, y: 28.158936}
   m_SizeDelta: {x: 101.9415, y: 56.3178}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6369641907739082325
