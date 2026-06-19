@@ -35,6 +35,7 @@ public class EnemyHealth : MonoBehaviour
                 TakeDamage(1, 1);
             }
 
+
         }
 
         //Träffad av dörr, Kollar också hur snabb dörren var

@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
 
 public class EnemyBase : MonoBehaviour
 {
 
-    public NavMeshAgent agent;
+    [HideInInspector] public NavMeshAgent agent;
     Rigidbody2D myRigidbody2D;
 
-    GameObject playerObject;
+    [HideInInspector] public GameObject playerObject;
 
     #region Player Detection Variables
 
@@ -53,14 +54,14 @@ public class EnemyBase : MonoBehaviour
 
     #region Stunned Variables, (Removed For Now) 
 
-    //[Header("Stunned")]
+    [Header("Stunned")]
 
-    //[SerializeField] float knockbackSpeed = 200000;
-    //[SerializeField] float stopSpeed = 40f;
+    [SerializeField] float knockbackSpeed = 200000;
+    [SerializeField] float stopSpeed = 40f;
 
-    //[SerializeField] float knockedBackwardsTime = 0.3f;
-    //[SerializeField] float stunnedTimer = 5;
-    //bool stunned = false;
+    [SerializeField] float knockedBackwardsTime = 0.3f;
+    [SerializeField] float stunnedTimer = 5;
+    bool stunned = false;
 
     #endregion
 
@@ -119,7 +120,7 @@ public class EnemyBase : MonoBehaviour
     // Update is called once per frame
     public virtual void Update()
     {
-        //if (stunned) { return; }
+        if (stunned) { return; }
 
         PlayerDetection();
 
@@ -375,6 +376,8 @@ public class EnemyBase : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
 
+
+
             startLookForPlayer = false;
             aggro = true;
         }
@@ -383,7 +386,7 @@ public class EnemyBase : MonoBehaviour
         #endregion
 
 
-        if (aggro && myRigidbody2D.angularVelocity == 0 && !startLookForPlayer)
+        if (aggro && agent.velocity == Vector3.zero && !startLookForPlayer)
         {
             // Börjar Kolla Runt
             timeUntilNewRotation = maxTimeUntilNewRotation;
@@ -403,40 +406,40 @@ public class EnemyBase : MonoBehaviour
 
     #endregion
 
-    #region Knockback When Door, (Removed For Now)
+    #region Knockback
 
-    //public IEnumerator BeStunned(Vector2 direction)
-    //{
-    //    stunned = true;
+    public IEnumerator BeStunned(Vector2 direction)
+    {
+        stunned = true;
 
-    //    agent.isStopped = true;
-
-
-    //    myRigidbody2D.AddForce(direction * knockbackSpeed);
-
-    //    SpriteRenderer visuallsChild = transform.Find("Visualls").gameObject.GetComponent<SpriteRenderer>();
-
-    //    visuallsChild.color = new Color32(128, (byte)visuallsChild.color.g, (byte)visuallsChild.color.b, 255);
+        agent.isStopped = true;
 
 
-    //    yield return new WaitForSeconds(knockedBackwardsTime);
+        myRigidbody2D.AddForce(direction * knockbackSpeed);
+
+        SpriteRenderer visuallsChild = transform.Find("Visualls").gameObject.GetComponent<SpriteRenderer>();
+
+        visuallsChild.color = new Color32(128, (byte)visuallsChild.color.g, (byte)visuallsChild.color.b, 255);
 
 
-    //    Debug.Log("start To Stop");
-    //    myRigidbody2D.linearVelocity = Vector3.zero;
-
-    //    //myRigidbody2D.AddForce(direction * knockbackSpeed/7);
+        yield return new WaitForSeconds(knockedBackwardsTime);
 
 
+        Debug.Log("start To Stop");
+        myRigidbody2D.linearVelocity = Vector3.zero;
+
+        //myRigidbody2D.AddForce(direction * knockbackSpeed/7);
 
 
-    //    yield return new WaitForSeconds(stunnedTimer);
 
 
-    //    visuallsChild.color = new Color32(255, (byte)visuallsChild.color.g, (byte)visuallsChild.color.b, 255);
+        yield return new WaitForSeconds(stunnedTimer);
 
-    //    stunned = false;
-    //}
+
+        visuallsChild.color = new Color32(255, (byte)visuallsChild.color.g, (byte)visuallsChild.color.b, 255);
+
+        stunned = false;
+    }
 
     #endregion
 

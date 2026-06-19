@@ -6,7 +6,7 @@ public class ShieldEnemy : EnemyBase
     [Header("Shield Enemy Specifik")]
 
     [SerializeField] GameObject attackObject;
-    [SerializeField] GameObject Shield;
+    [SerializeField] GameObject ShieldObj;
 
     [SerializeField] float timeForAttack = 0.2f;
     [SerializeField] float timeForAttackToDisaappear = 0.1f;
@@ -46,5 +46,14 @@ public class ShieldEnemy : EnemyBase
 
         attacking = false;
 
+    }
+
+    public void ShieldRemove()
+    {
+        ShieldObj.SetActive(false);
+
+        Vector2 toTarget = playerObject.transform.position - transform.position;
+
+        StartCoroutine(BeStunned(-toTarget.normalized));
     }
 }

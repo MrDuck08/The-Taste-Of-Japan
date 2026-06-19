@@ -1133,7 +1133,7 @@ MonoBehaviour:
   bullets: 3
   bulletIgnoreLayerMask:
     serializedVersion: 2
-    m_Bits: 644
+    m_Bits: 132
   decayTimeForHarmony: 7
   rushAttackObject: {fileID: 9046596892632325241}
   rushSpeed: 50

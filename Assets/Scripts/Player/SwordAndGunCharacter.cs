@@ -282,7 +282,7 @@ public class SwordAndGunCharacter : Player1
 
                 if (attackStance == true)
                 {
-                    StartCoroutine(ChargeAttack());
+                    StartCoroutine(StanceAttack());
                 }
 
 
@@ -328,6 +328,13 @@ public class SwordAndGunCharacter : Player1
                 {
 
                     audioManager.PlayBulletHitWall(hit.point);
+
+                }
+
+                if(hit.transform.gameObject.layer == 9)
+                {
+
+                    hit.transform.GetComponentInParent<ShieldEnemy>().ShieldRemove();
 
                 }
 
@@ -382,9 +389,9 @@ public class SwordAndGunCharacter : Player1
 
     }
 
-    #region Charge Attack
+    #region Stance Attack
 
-    IEnumerator ChargeAttack()
+    IEnumerator StanceAttack()
     {
         //cameraScript.ZoomOutAgain(0.1f);
 
