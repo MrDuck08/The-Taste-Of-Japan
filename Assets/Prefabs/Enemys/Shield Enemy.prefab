@@ -636,14 +636,14 @@ MonoBehaviour:
   obsticleLayer:
     serializedVersion: 2
     m_Bits: 72
-  positionToCycle:
-  - {x: 25.86, y: -16.292}
+  positionToCycle: []
   knockbackSpeed: 50
   knockedBackwardsTime: 0.3
   stunnedTimer: 2
   maxTimeToLookAround: 3
   maxTimeUntilNewRotation: 1
   maxHowLongLookForPlayer: 3
+  audioManager: {fileID: 0}
   attackObject: {fileID: 3114962772734142546}
   ShieldObj: {fileID: 4336936812702198675}
   timeForAttack: 0.1

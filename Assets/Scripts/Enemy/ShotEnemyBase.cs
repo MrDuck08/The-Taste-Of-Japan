@@ -86,7 +86,7 @@ public class ShotEnemyBase : EnemyBase
             hit.collider.GetComponent<PlayerHealth>().TakeDamage(1);
 
         }
-        if(hit.collider.tag == "PlayerAttack")
+        if(hit.collider.tag == "PlayerAttack" || hit.collider.tag == "StanceAttack")
         {
 
             GameObject spawnedBullet = Instantiate(bulletObject);

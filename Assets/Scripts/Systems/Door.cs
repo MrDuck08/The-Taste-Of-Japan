@@ -25,6 +25,8 @@ public class Door : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // 3 = Wall
+        if (collision.gameObject.layer == 3) { return; }
 
         if (collision.gameObject.GetComponent<Rigidbody2D>() == null)
         {
@@ -63,7 +65,7 @@ public class Door : MonoBehaviour
         // Får positionen från när någon nuddar dörren
         posWhenOpened = transform.position;
 
-        audioManager.PlayDoorSlamSound(transform.position);
+        audioManager.PlayDoorSlamSound(transform.position, true);
 
         myRigidbody2D.AddForce(collisionRB2D.linearVelocity * openSpeed);
 
@@ -73,7 +75,7 @@ public class Door : MonoBehaviour
     public void ArtificialPush(Collider2D collision, float Strengh)
     {
 
-        audioManager.PlayDoorSlamSound(transform.position);
+        audioManager.PlayDoorSlamSound(transform.position, false);
 
         Vector2 leftOrRight = collision.transform.position - transform.position;
 

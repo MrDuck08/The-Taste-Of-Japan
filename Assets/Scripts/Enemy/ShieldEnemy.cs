@@ -68,7 +68,12 @@ public class ShieldEnemy : EnemyBase
 
         if (collision.transform.CompareTag("StanceAttack"))
         {
-            if(ShieldObj != null)
+            Vector2 direction = playerObject.transform.position - transform.position;
+            float lenght = Vector2.Distance(playerObject.transform.position, transform.position);
+
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght, health.obsticleCheck);
+
+            if (ShieldObj != null && hit)
             {
                 audioManager.PlayShieldDestroySound(transform.position);
             }

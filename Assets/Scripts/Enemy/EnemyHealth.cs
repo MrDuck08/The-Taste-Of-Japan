@@ -7,6 +7,10 @@ public class EnemyHealth : MonoBehaviour
     public LayerMask obsticleCheck;
     [SerializeField] GameObject fadeEffectObj;
 
+    bool startDoubleCheck = false;
+    float doubleCheckTime;
+    float maxDoubleCheckTime = 1f;
+
     ScreenShake screenShake;
     SwordAndGunCharacter swordAndGun;
     Player1 player1;
@@ -19,6 +23,35 @@ public class EnemyHealth : MonoBehaviour
         swordAndGun = FindAnyObjectByType<SwordAndGunCharacter>();
         player1 = FindAnyObjectByType<Player1>();
         audioManager = FindAnyObjectByType<AudioManager>();
+
+        doubleCheckTime = maxDoubleCheckTime;
+    }
+
+    private void Update()
+    {
+        if (startDoubleCheck)
+        {
+            doubleCheckTime -= Time.deltaTime;
+
+            if (doubleCheckTime < 0)
+            {
+                startDoubleCheck = false;
+                doubleCheckTime = maxDoubleCheckTime;
+
+            }
+
+
+            Vector2 direction = player1.transform.position - transform.position;
+            float lenght = Vector2.Distance(player1.transform.position, transform.position);
+
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght, obsticleCheck);
+
+            if (!hit)
+            {
+                TakeDamage(1, 1);
+            }
+
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -33,6 +66,11 @@ public class EnemyHealth : MonoBehaviour
             if (!hit)
             {
                 TakeDamage(1, 1);
+            }
+            else if(hit.transform.name != "Sheild") // Dubbelkollar så länge spelaren inte träffade en sköld (annars kan man springa igenom och döda)
+            {
+                doubleCheckTime = maxDoubleCheckTime;
+                startDoubleCheck = true;
             }
 
 
@@ -63,6 +101,8 @@ public class EnemyHealth : MonoBehaviour
         // 2 = S&R Revolver Hit
 
         health -= takeDamage;
+
+        startDoubleCheck = false;
 
         if (health <= 0)
         {

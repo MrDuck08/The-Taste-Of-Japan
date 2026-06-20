@@ -43,7 +43,7 @@ public class AudioManager : MonoBehaviour
     [Header("Shield")]
 
     [SerializeField] GameObject shieldDeflectSound;
-    [SerializeField] GameObject shieldDestroySound;
+    [SerializeField] List<GameObject> shieldDestroySound = new List<GameObject>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -51,10 +51,24 @@ public class AudioManager : MonoBehaviour
         playerObj = GameObject.FindGameObjectWithTag("Player");
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PlayDoorSlamSound(Vector2 newPos, bool playerPush)
     {
-        
+
+        int whatDoorSound = Random.Range(0, doorSlamSound.Count);
+
+        GameObject doorSound = Instantiate(doorSlamSound[whatDoorSound]);
+
+        if (playerPush)
+        {
+            // Sätter den till child av player så ljudet följer med
+            doorSound.transform.parent = playerObj.transform;
+            doorSound.GetComponent<AudioSource>().spatialBlend = 0;
+        }
+
+
+        SoundGeneral(doorSound, newPos, false);
+
+
     }
 
     #region Walking
@@ -112,19 +126,6 @@ public class AudioManager : MonoBehaviour
 
 
         SoundGeneral(slashSound, newPos, false);
-
-
-    }
-
-    public void PlayDoorSlamSound(Vector2 newPos)
-    {
-
-        int whatDoorSound = Random.Range(0, doorSlamSound.Count);
-
-        GameObject doorSound = Instantiate(doorSlamSound[whatDoorSound]);
-
-
-        SoundGeneral(doorSound, newPos, false);
 
 
     }
@@ -322,10 +323,15 @@ public class AudioManager : MonoBehaviour
     public void PlayShieldDestroySound(Vector2 newPos)
     {
 
-        GameObject shieldDestroy = Instantiate(shieldDestroySound);
+        for (var i = 0; i < shieldDestroySound.Count; i++)
+        {
+
+            GameObject shieldDestroy = Instantiate(shieldDestroySound[i]);
 
 
-        SoundGeneral(shieldDestroy, newPos, false);
+            SoundGeneral(shieldDestroy, newPos, false);
+
+        }
 
     }
 
