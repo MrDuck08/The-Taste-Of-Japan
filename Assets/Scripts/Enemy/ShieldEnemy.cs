@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class ShieldEnemy : EnemyBase
 {
@@ -11,10 +12,15 @@ public class ShieldEnemy : EnemyBase
     [SerializeField] float timeForAttack = 0.2f;
     [SerializeField] float timeForAttackToDisaappear = 0.1f;
 
+    EnemyHealth health;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void Start()
     {
         base.Start();
+
+        health = GetComponent<EnemyHealth>();
 
         attackObject.SetActive(false);
 
@@ -53,7 +59,39 @@ public class ShieldEnemy : EnemyBase
         ShieldObj.SetActive(false);
 
         Vector2 toTarget = playerObject.transform.position - transform.position;
-
+        audioManager.PlayShieldDestroySound(transform.position);
         StartCoroutine(BeStunned(-toTarget.normalized));
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+
+        if (collision.transform.CompareTag("StanceAttack"))
+        {
+            if(ShieldObj != null)
+            {
+                audioManager.PlayShieldDestroySound(transform.position);
+            }
+            health.TakeDamage(1, 1);
+
+        }
+
+        if (collision.transform.CompareTag("PlayerAttack"))
+        {
+            Vector2 direction = playerObject.transform.position - transform.position;
+            float lenght = Vector2.Distance(playerObject.transform.position, transform.position);
+
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght, health.obsticleCheck);
+
+            if (hit)
+            {
+
+                audioManager.PlayShieldDeflectSound(transform.position);
+
+            }
+
+
+        }
+
     }
 }

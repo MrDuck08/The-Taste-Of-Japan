@@ -629,24 +629,24 @@ MonoBehaviour:
   inRangeForAttack: 0
   attacking: 0
   detectRadiusInFront: 15
-  detectRadiusFromBehind: 6
+  detectRadiusFromBehind: 2
   DetectionCone: 96
   attackRange: 2
   rotatingSpeed: 200
   obsticleLayer:
     serializedVersion: 2
     m_Bits: 72
-  positionToCycle: []
-  knockbackSpeed: 200000
-  stopSpeed: 40
+  positionToCycle:
+  - {x: 25.86, y: -16.292}
+  knockbackSpeed: 50
   knockedBackwardsTime: 0.3
-  stunnedTimer: 5
+  stunnedTimer: 2
   maxTimeToLookAround: 3
   maxTimeUntilNewRotation: 1
   maxHowLongLookForPlayer: 3
   attackObject: {fileID: 3114962772734142546}
   ShieldObj: {fileID: 4336936812702198675}
-  timeForAttack: 0.2
+  timeForAttack: 0.1
   timeForAttackToDisaappear: 0.1
 --- !u!114 &4424384088439388291
 MonoBehaviour:

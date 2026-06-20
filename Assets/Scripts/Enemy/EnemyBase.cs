@@ -47,17 +47,16 @@ public class EnemyBase : MonoBehaviour
     int atWhatPositionInIdleList = 0;
 
 
-    bool idle;
+    bool startIdle;
 
 
     #endregion
 
-    #region Stunned Variables, (Removed For Now) 
+    #region Stunned Variables
 
     [Header("Stunned")]
 
-    [SerializeField] float knockbackSpeed = 200000;
-    [SerializeField] float stopSpeed = 40f;
+    [SerializeField] float knockbackSpeed = 50;
 
     [SerializeField] float knockedBackwardsTime = 0.3f;
     [SerializeField] float stunnedTimer = 5;
@@ -93,16 +92,14 @@ public class EnemyBase : MonoBehaviour
 
     #endregion
 
+    [HideInInspector] public AudioManager audioManager;
+
 
     public virtual void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
-
-
-        howLongLookForPlayer = maxHowLongLookForPlayer;
-
 
         myRigidbody2D = GetComponent<Rigidbody2D>();
     }
@@ -112,8 +109,13 @@ public class EnemyBase : MonoBehaviour
     public virtual void Start()
     {
         playerObject = GameObject.FindGameObjectWithTag("Player");
+        audioManager = FindAnyObjectByType<AudioManager>();
 
         positionToCycle.Add(transform.position);
+
+        timeUntilNewRotation = maxTimeUntilNewRotation;
+        timeToLookAround = maxTimeToLookAround;
+        howLongLookForPlayer = maxHowLongLookForPlayer;
     }
 
 
@@ -146,7 +148,7 @@ public class EnemyBase : MonoBehaviour
             if (howLongLookForPlayer < 0)
             {
                 startLookForPlayer = false;
-                idle = false;
+                startIdle = true;
                 aggro = false;
 
 
@@ -166,9 +168,9 @@ public class EnemyBase : MonoBehaviour
     void IddleBehavior()
     {
 
-        if (!idle) // F�r Ny Position att G� Till
+        if (startIdle) // F�r Ny Position att G� Till
         {
-            idle = true;
+            startIdle = false;
 
 
             atWhatPositionInIdleList++;
@@ -223,21 +225,26 @@ public class EnemyBase : MonoBehaviour
             timeUntilNewRotation -= Time.deltaTime;
 
 
-            if (timeToLookAround < 0) // Sluta kolla runt
+            // Sluta kolla runt
+            if (timeToLookAround < 0) 
             {
 
                 isLookAround = false;
-                idle = false;
+                startIdle = true;
 
                 // Är Om Aggro också för detta ska också inkludera efter fienden har jagat spelaren
                 startLookForPlayer = false;
                 aggro = false;
 
+                timeUntilNewRotation = maxTimeUntilNewRotation;
+                timeToLookAround = maxTimeToLookAround;
+
 
             }
 
 
-            if (timeUntilNewRotation < 0) // Ny Rotation
+            // Ny Rotation
+            if (timeUntilNewRotation < 0) 
             {
                 timeUntilNewRotation = maxTimeUntilNewRotation;
 
@@ -364,7 +371,8 @@ public class EnemyBase : MonoBehaviour
         #region Front View
 
 
-        if (!playerObstructed && currentAngle < DetectionCone && distanceToPlayer < detectRadiusInFront) // Kollar om det �r n�gonting mellan spellaren, om de �r tillr�ckligt n�ra och Fienden kollar p� spelaren
+        // Kollar om det �r n�gonting mellan spellaren, om de �r tillr�ckligt n�ra och Fienden kollar p� spelaren
+        if (!playerObstructed && currentAngle < DetectionCone && distanceToPlayer < detectRadiusInFront) 
         {
             agent.SetDestination(playerObject.transform.position);
 
@@ -380,13 +388,14 @@ public class EnemyBase : MonoBehaviour
 
             startLookForPlayer = false;
             aggro = true;
+            isLookAround = false;
         }
 
 
         #endregion
 
-
-        if (aggro && agent.velocity == Vector3.zero && !startLookForPlayer)
+        // Efter den har hittat spelaren och har gått till dess senaste position
+        if (aggro && agent.remainingDistance <= agent.stoppingDistance && !startLookForPlayer)
         {
             // Börjar Kolla Runt
             timeUntilNewRotation = maxTimeUntilNewRotation;
@@ -397,6 +406,7 @@ public class EnemyBase : MonoBehaviour
 
             howLongLookForPlayer = maxHowLongLookForPlayer;
             startLookForPlayer = true;
+
 
         }
 
@@ -425,10 +435,8 @@ public class EnemyBase : MonoBehaviour
         yield return new WaitForSeconds(knockedBackwardsTime);
 
 
-        Debug.Log("start To Stop");
-        myRigidbody2D.linearVelocity = Vector3.zero;
 
-        //myRigidbody2D.AddForce(direction * knockbackSpeed/7);
+        agent.velocity = Vector3.zero;
 
 
 
@@ -438,10 +446,28 @@ public class EnemyBase : MonoBehaviour
 
         visuallsChild.color = new Color32(255, (byte)visuallsChild.color.g, (byte)visuallsChild.color.b, 255);
 
-        stunned = false;
+        Reset();
+        aggro = true;
+        startIdle = false;
     }
 
     #endregion
+
+    private void Reset()
+    {
+        agent.isStopped = false;
+        stunned = false;
+        aggro = false;
+        inRangeForAttack = false;
+
+        timeUntilNewRotation = maxTimeUntilNewRotation;
+        timeToLookAround = maxTimeToLookAround;
+        isLookAround = false;
+        howLongLookForPlayer = maxHowLongLookForPlayer;
+        startLookForPlayer = false;
+        startIdle = true;
+
+    }
 
     #region Gizmo
 

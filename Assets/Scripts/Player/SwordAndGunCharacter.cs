@@ -436,6 +436,7 @@ public class SwordAndGunCharacter : Player1
         attackObject.SetActive(false);
 
         audioManager.StopWalkingSound(gameObject);
+        audioManager.PlayDashSound();
 
         bool standingStillDodge = false;
 
@@ -456,6 +457,7 @@ public class SwordAndGunCharacter : Player1
 
         dodgeCollider.SetActive(true);
         myCollider.enabled = false;
+
 
 
         yield return new WaitForSeconds(dodgeTime / 2);

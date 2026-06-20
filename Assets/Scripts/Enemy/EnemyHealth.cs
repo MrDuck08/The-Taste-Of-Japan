@@ -4,7 +4,7 @@ public class EnemyHealth : MonoBehaviour
 {
 
     [SerializeField] int health;
-    [SerializeField] LayerMask obsticleCheck;
+    public LayerMask obsticleCheck;
     [SerializeField] GameObject fadeEffectObj;
 
     ScreenShake screenShake;
@@ -23,7 +23,7 @@ public class EnemyHealth : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.CompareTag("PlayerAttack"))
+        if (collision.transform.CompareTag("PlayerAttack") || collision.transform.CompareTag("StanceAttack"))
         {
             Vector2 direction = player1.transform.position - transform.position;
             float lenght = Vector2.Distance(player1.transform.position, transform.position);

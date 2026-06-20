@@ -667,7 +667,7 @@ GameObject:
   - component: {fileID: 2318716005172368956}
   m_Layer: 7
   m_Name: ChargeAttack
-  m_TagString: PlayerAttack
+  m_TagString: StanceAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

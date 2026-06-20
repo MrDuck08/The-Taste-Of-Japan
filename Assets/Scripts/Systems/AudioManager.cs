@@ -20,6 +20,7 @@ public class AudioManager : MonoBehaviour
 
     [Header("S & G Player")]
 
+    [SerializeField] GameObject playerDashSound;
     [SerializeField] GameObject playerShlashSound;
     [SerializeField] GameObject playerChargeShlashSound;
     [SerializeField] GameObject playerUnsheatheSound;
@@ -39,6 +40,10 @@ public class AudioManager : MonoBehaviour
     [SerializeField] List<GameObject> enemyDeathSoundList = new List<GameObject>();
     [SerializeField] List<GameObject> enemyBulletDeathSoundList = new List<GameObject>();
 
+    [Header("Shield")]
+
+    [SerializeField] GameObject shieldDeflectSound;
+    [SerializeField] GameObject shieldDestroySound;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -95,6 +100,8 @@ public class AudioManager : MonoBehaviour
 
     #endregion
 
+    #region Player Generic
+
     public void PlayPlayerSlashSound(Vector2 newPos)
     {
 
@@ -121,6 +128,18 @@ public class AudioManager : MonoBehaviour
 
 
     }
+
+    public void PlayDashSound()
+    {
+
+        GameObject dashSound = Instantiate(playerDashSound);
+
+
+        SoundGeneral(dashSound, Vector2.zero, false);
+
+    }
+
+    #endregion
 
     #region S & G Charge Slash
 
@@ -260,6 +279,8 @@ public class AudioManager : MonoBehaviour
 
     #endregion
 
+    #region Enemy
+
     public void PlayEnemyDeathSound(Vector2 newPos)
     {
 
@@ -285,6 +306,32 @@ public class AudioManager : MonoBehaviour
 
 
     }
+
+    #region Shield
+
+    public void PlayShieldDeflectSound(Vector2 newPos)
+    {
+
+        GameObject deflectSound = Instantiate(shieldDeflectSound);
+
+
+        SoundGeneral(deflectSound, newPos, false);
+
+    }
+
+    public void PlayShieldDestroySound(Vector2 newPos)
+    {
+
+        GameObject shieldDestroy = Instantiate(shieldDestroySound);
+
+
+        SoundGeneral(shieldDestroy, newPos, false);
+
+    }
+
+    #endregion
+
+    #endregion
 
     void SoundGeneral(GameObject sound, Vector2 newPos, bool infinite)
     {

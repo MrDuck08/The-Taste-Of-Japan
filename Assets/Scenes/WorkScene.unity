@@ -457,6 +457,135 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1139476552}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &470311607
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 470311608}
+  - component: {fileID: 470311609}
+  m_Layer: 0
+  m_Name: ShieldDestroyGunSound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &470311608
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 470311607}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 714495171}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &470311609
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 470311607}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: e8f434ddec95e0544a8ea72fcc8b33d5, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.7
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 21.28
+  Pan2D: 0
+  rolloffMode: 1
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -649,6 +778,11 @@ MonoBehaviour:
   m_Area: 0
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!4 &714495171 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1848986439385544962, guid: 7fa7ef09fb9e5304f9965302ae143d93, type: 3}
+  m_PrefabInstance: {fileID: 1505253602}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &831649115
 GameObject:
   m_ObjectHideFlags: 0
@@ -1551,9 +1685,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: AudioManager
       objectReference: {fileID: 0}
+    - target: {fileID: 8101889561361772875, guid: 7fa7ef09fb9e5304f9965302ae143d93, type: 3}
+      propertyPath: shieldDestroySound
+      value: 
+      objectReference: {fileID: 470311607}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1848986439385544962, guid: 7fa7ef09fb9e5304f9965302ae143d93, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 470311608}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7fa7ef09fb9e5304f9965302ae143d93, type: 3}
 --- !u!1 &1565029041
@@ -2375,6 +2516,10 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 1177360961}
+    - target: {fileID: 9046596892632325241, guid: 88ef8ed1d6ee90d4da098bde3fe6c2d2, type: 3}
+      propertyPath: m_TagString
+      value: StanceAttack
+      objectReference: {fileID: 0}
     - target: {fileID: 9217468368014027979, guid: 88ef8ed1d6ee90d4da098bde3fe6c2d2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.67
@@ -2531,6 +2676,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BasicEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 2536596613807059317, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5220295993572481151, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: m_LocalPosition.x
       value: -16.09
@@ -2655,7 +2804,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3402026093432382808, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.9
+      value: 14.8
       objectReference: {fileID: 0}
     - target: {fileID: 3402026093432382808, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2696,10 +2845,6 @@ PrefabInstance:
     - target: {fileID: 4432085355494031465, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
       propertyPath: m_Name
       value: Shield Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 6761150139801235623, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
-      propertyPath: knockbackSpeed
-      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
