@@ -79,6 +79,7 @@ public class Door : MonoBehaviour
 
         Vector2 leftOrRight = collision.transform.position - transform.position;
 
+
         myRigidbody2D.AddForce(leftOrRight.normalized * Strengh * -openSpeed);
 
     }

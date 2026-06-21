@@ -174,7 +174,10 @@ public class SwordAndGunCharacter : Player1
                 {
                     float clickDistance = Vector2.Distance(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
+                    // Tar bort och lägger till dör layer så man kan åka igenom den. 
+                    bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Door"));
                     RaycastHit2D hit = Physics2D.Raycast(transform.position, lookDirection, clickDistance, ~bulletIgnoreLayerMask);
+                    bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Door"));
 
                     if (hit.point == Vector2.zero)
                     {
@@ -570,6 +573,7 @@ public class SwordAndGunCharacter : Player1
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02F;
     }
+
 
     #region Reset
 

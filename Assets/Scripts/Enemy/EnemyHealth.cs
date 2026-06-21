@@ -8,6 +8,7 @@ public class EnemyHealth : MonoBehaviour
     public LayerMask obsticleCheck;
     [SerializeField] GameObject fadeEffectObj;
     [SerializeField] GameObject objBloodAnimation;
+    [SerializeField] List<GameObject> bloodSpreadObject = new List<GameObject>();
 
     bool startDoubleCheck = false;
     float doubleCheckTime;
@@ -141,6 +142,43 @@ public class EnemyHealth : MonoBehaviour
             GameObject bloodAnimationObj = Instantiate(objBloodAnimation);
             bloodAnimationObj.transform.position = transform.position;
             bloodAnimationObj.GetComponent<Animator>().SetInteger("WhatAnimation", whatBloodAnimation);
+
+            int howManySpawns = Random.Range(6, 8);
+
+            while (howManySpawns > 0) 
+            {
+                int whatBloodSpread = Random.Range(0, bloodSpreadObject.Count);
+
+                GameObject bloodSpreadObj = Instantiate(bloodSpreadObject[whatBloodSpread]);
+                bloodSpreadObj.transform.position = transform.position;
+
+                Vector2 dir = Vector2.zero;
+                float angle = 0;
+                float spd = Random.Range(20, 25);
+
+                if (whatTypeOfAttack == 1)
+                {
+                    dir = Random.onUnitSphere;
+
+                    angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                    bloodSpreadObj.transform.rotation = Quaternion.Euler(0, 0, angle - 90);
+                }
+                else
+                {
+                    dir = transform.position - player1.transform.position;
+                    angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+                    float randomOffset = Random.Range(-30f, 30f);
+                    bloodSpreadObj.transform.rotation = Quaternion.Euler(0, 0, angle - 90 + randomOffset);
+
+                    spd *= 1.5f;
+                    dir = Quaternion.Euler(0, 0, randomOffset) * dir.normalized;
+                }
+
+                bloodSpreadObj.GetComponent<Rigidbody2D>().linearVelocity = dir * spd;
+
+                howManySpawns--; 
+            }
 
             screenShake.TriggerShakeTime(0.05f, 0.25f, false);
             Destroy(gameObject);
