@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
@@ -6,6 +7,7 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] int health;
     public LayerMask obsticleCheck;
     [SerializeField] GameObject fadeEffectObj;
+    [SerializeField] GameObject objBloodAnimation;
 
     bool startDoubleCheck = false;
     float doubleCheckTime;
@@ -132,6 +134,13 @@ public class EnemyHealth : MonoBehaviour
 
             GameObject fadeObj = Instantiate(fadeEffectObj);
             fadeObj.GetComponent<FadeEffect>().InstanciateInfo(player1.gameObject.GetComponent<SpriteRenderer>(), player1.transform);
+
+            // Hur många blood animationer det finns
+            int whatBloodAnimation = Random.Range(0, 3);
+
+            GameObject bloodAnimationObj = Instantiate(objBloodAnimation);
+            bloodAnimationObj.transform.position = transform.position;
+            bloodAnimationObj.GetComponent<Animator>().SetInteger("WhatAnimation", whatBloodAnimation);
 
             screenShake.TriggerShakeTime(0.05f, 0.25f, false);
             Destroy(gameObject);

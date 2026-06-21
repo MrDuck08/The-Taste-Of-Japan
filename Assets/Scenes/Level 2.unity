@@ -2454,7 +2454,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1839397566988880595, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: positionToCycle.Array.data[0].x
-      value: -24.70005
+      value: -22.75
       objectReference: {fileID: 0}
     - target: {fileID: 1839397566988880595, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: positionToCycle.Array.data[0].y
@@ -2466,7 +2466,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5220295993572481151, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -11.34
+      value: -10.12
       objectReference: {fileID: 0}
     - target: {fileID: 5220295993572481151, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: m_LocalPosition.y

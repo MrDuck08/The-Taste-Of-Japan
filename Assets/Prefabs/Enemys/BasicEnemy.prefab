@@ -320,6 +320,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicEnemy
   agent: {fileID: 0}
+  playerObject: {fileID: 0}
   inRangeForAttack: 0
   attacking: 0
   detectRadiusInFront: 10
@@ -332,9 +333,13 @@ MonoBehaviour:
     m_Bits: 72
   positionToCycle:
   - {x: -1.8947019e+35, y: 7.93e-43}
+  knockbackSpeed: 50
+  knockedBackwardsTime: 0.3
+  stunnedTimer: 5
   maxTimeToLookAround: 3
   maxTimeUntilNewRotation: 1
   maxHowLongLookForPlayer: 3
+  audioManager: {fileID: 0}
   attackObject: {fileID: 3234579187786209557}
   timeForAttack: 0.05
   timeForAttackToDisaappear: 0.1
@@ -355,6 +360,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 72
   fadeEffectObj: {fileID: 6334758901914313067, guid: 13d684d6cf8bd1f4aa8ac868f255932d, type: 3}
+  objBloodAnimation: {fileID: 6375250694531802770, guid: d7134cc28971a5647ac58a3dee1ce021, type: 3}
 --- !u!1 &3234579187786209557
 GameObject:
   m_ObjectHideFlags: 0

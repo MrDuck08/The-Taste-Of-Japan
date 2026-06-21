@@ -516,11 +516,13 @@ MonoBehaviour:
   dodgeLock: 0
   lookOffset: 0
   lookAroundSpeed: 500
+  maxLookAroundSpeed: 500
   attackObject: {fileID: 870510575453915554}
   attacking: 0
   basicAttacking: 0
   myRigidbody: {fileID: 0}
   myCollider: {fileID: 0}
+  audioManager: {fileID: 0}
   cam: {fileID: 0}
   sword1Hitbox: {fileID: 870510575453915554}
   sword2Hitbox: {fileID: 8506802466448773796}
@@ -554,6 +556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   health: 1
+  objBloodAnimation: {fileID: 6375250694531802770, guid: d7134cc28971a5647ac58a3dee1ce021, type: 3}
   invincible: 0
 --- !u!114 &1486136262639455129
 MonoBehaviour:

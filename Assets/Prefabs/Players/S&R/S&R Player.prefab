@@ -1155,6 +1155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   health: 1
+  objBloodAnimation: {fileID: 6375250694531802770, guid: d7134cc28971a5647ac58a3dee1ce021, type: 3}
   invincible: 0
 --- !u!114 &1486136262639455129
 MonoBehaviour:
