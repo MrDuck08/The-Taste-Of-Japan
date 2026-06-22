@@ -50,7 +50,7 @@ public class Door : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
 
-            ArtificialPush(collision, 10);
+            ArtificialPush(collision.transform.position, 10);
 
             return;
 
@@ -72,12 +72,12 @@ public class Door : MonoBehaviour
 
     }
 
-    public void ArtificialPush(Collider2D collision, float Strengh)
+    public void ArtificialPush(Vector3 collision, float Strengh)
     {
 
         audioManager.PlayDoorSlamSound(transform.position, false);
 
-        Vector2 leftOrRight = collision.transform.position - transform.position;
+        Vector2 leftOrRight = collision - transform.position;
 
 
         myRigidbody2D.AddForce(leftOrRight.normalized * Strengh * -openSpeed);

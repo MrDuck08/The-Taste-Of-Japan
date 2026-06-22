@@ -52,6 +52,9 @@ public class SwordAndGunCharacter : Player1
     bool killWithCharge = false;
     bool inHarmony = false;
 
+    bool harmonyDoorHit = false;
+    Vector3 harmonyDoorHitPos = Vector3.zero;
+
     [SerializeField] GameObject rushAttackObject;
 
     [SerializeField] float rushSpeed = 40f;
@@ -174,11 +177,15 @@ public class SwordAndGunCharacter : Player1
                 {
                     float clickDistance = Vector2.Distance(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
-                    // Tar bort och lägger till dör layer så man kan åka igenom den. 
+                    // Behöver manuelt kolla om man träffar en dörr eftersom man åker för snabbt.
+                    RaycastHit2D doorCheckHit = Physics2D.Raycast(transform.position, lookDirection, clickDistance, ~bulletIgnoreLayerMask);
+
+                    // Tar bort och lägger till door layer så man kan åka igenom den. 
                     bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Door"));
                     RaycastHit2D hit = Physics2D.Raycast(transform.position, lookDirection, clickDistance, ~bulletIgnoreLayerMask);
                     bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Door"));
 
+                    // Objekt var för långt bort
                     if (hit.point == Vector2.zero)
                     {
                         pointToRushTo = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -186,6 +193,16 @@ public class SwordAndGunCharacter : Player1
                     else
                     {
                         pointToRushTo = hit.point;
+                    }
+
+                    // Dörr layer
+                    if (doorCheckHit.transform.gameObject.layer == 6)
+                    {
+
+                        harmonyDoorHit = true;
+
+                        harmonyDoorHitPos = transform.position;
+
                     }
 
                     rushing = true;
@@ -572,6 +589,20 @@ public class SwordAndGunCharacter : Player1
 
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02F;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        
+        // Dörr Layer, behövs för att i harmony Rush så åker man för snabbt för att dörren ska få rätt pos
+        if(collision.transform.gameObject.layer == 6 && harmonyDoorHit)
+        {
+            harmonyDoorHit = false;
+
+            collision.GetComponent<Door>().ArtificialPush(harmonyDoorHitPos, 15);
+
+        }
+
     }
 
 

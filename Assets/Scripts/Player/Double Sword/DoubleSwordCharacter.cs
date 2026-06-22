@@ -613,7 +613,7 @@ public class DoubleSwordCharacter : Player1
         if (collision.gameObject.layer == 6 && spinning)
         {
 
-            collision.gameObject.GetComponent<Door>().ArtificialPush(myCollider, 15);
+            collision.gameObject.GetComponent<Door>().ArtificialPush(transform.position, 15);
 
         }
 
