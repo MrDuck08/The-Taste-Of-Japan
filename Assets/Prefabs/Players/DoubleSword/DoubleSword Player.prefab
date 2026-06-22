@@ -557,6 +557,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   health: 1
   objBloodAnimation: {fileID: 6375250694531802770, guid: d7134cc28971a5647ac58a3dee1ce021, type: 3}
+  bloodParticles: {fileID: 7878858006430758484, guid: 62d36a989f2c8c64585840ac659c24bc, type: 3}
+  bloodSpreadObject:
+  - {fileID: 7314585900889671728, guid: 47868979080a24345a9aa68320812c28, type: 3}
+  - {fileID: 7314585900889671728, guid: ec3c47fc91594ad4397fd062dbb1aea0, type: 3}
+  - {fileID: 7314585900889671728, guid: ddacab429165c014c9667cdf8fed9127, type: 3}
   invincible: 0
 --- !u!114 &1486136262639455129
 MonoBehaviour:

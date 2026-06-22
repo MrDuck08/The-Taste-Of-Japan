@@ -361,6 +361,7 @@ MonoBehaviour:
     m_Bits: 72
   fadeEffectObj: {fileID: 6334758901914313067, guid: 13d684d6cf8bd1f4aa8ac868f255932d, type: 3}
   objBloodAnimation: {fileID: 6375250694531802770, guid: d7134cc28971a5647ac58a3dee1ce021, type: 3}
+  bloodParticles: {fileID: 7878858006430758484, guid: 62d36a989f2c8c64585840ac659c24bc, type: 3}
   bloodSpreadObject:
   - {fileID: 7314585900889671728, guid: 47868979080a24345a9aa68320812c28, type: 3}
   - {fileID: 7314585900889671728, guid: ec3c47fc91594ad4397fd062dbb1aea0, type: 3}

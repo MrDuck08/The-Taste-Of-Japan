@@ -47,7 +47,7 @@ public class ShotEnemyBase : EnemyBase
     {
         base.Update();
 
-        if (inRangeForAttack && !attacking && !reloading)
+        if (inRangeForAttack && !attacking && !reloading && playerObject != null)
         {
 
             StartCoroutine(ShotRoutine());
@@ -83,7 +83,7 @@ public class ShotEnemyBase : EnemyBase
         if(hit.collider.tag == "Player")
         {
 
-            hit.collider.GetComponent<PlayerHealth>().TakeDamage(1);
+            hit.collider.GetComponent<PlayerHealth>().TakeDamage(1, false, transform);
 
         }
         if(hit.collider.tag == "PlayerAttack" || hit.collider.tag == "StanceAttack")

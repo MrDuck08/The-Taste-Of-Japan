@@ -25,7 +25,7 @@ public class BasicEnemy : EnemyBase
     {
         base.Update();
 
-        if (inRangeForAttack && !attacking)
+        if (inRangeForAttack && !attacking && playerObject != null)
         {
             StartCoroutine(BasicAttackRoutine());
         }

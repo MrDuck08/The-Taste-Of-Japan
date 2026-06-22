@@ -8,6 +8,7 @@ public class EnemyHealth : MonoBehaviour
     public LayerMask obsticleCheck;
     [SerializeField] GameObject fadeEffectObj;
     [SerializeField] GameObject objBloodAnimation;
+    [SerializeField] ParticleSystem bloodParticles;
     [SerializeField] List<GameObject> bloodSpreadObject = new List<GameObject>();
 
     bool startDoubleCheck = false;
@@ -142,6 +143,12 @@ public class EnemyHealth : MonoBehaviour
             GameObject bloodAnimationObj = Instantiate(objBloodAnimation);
             bloodAnimationObj.transform.position = transform.position;
             bloodAnimationObj.GetComponent<Animator>().SetInteger("WhatAnimation", whatBloodAnimation);
+
+            ParticleSystem spawnedBloodParticles = Instantiate(bloodParticles);
+            spawnedBloodParticles.transform.position = transform.position;
+            bloodParticles.Play();
+            float totalDuration = bloodParticles.duration + bloodParticles.startLifetime;
+            Destroy(spawnedBloodParticles.gameObject, totalDuration);
 
             int howManySpawns = Random.Range(6, 8);
 
