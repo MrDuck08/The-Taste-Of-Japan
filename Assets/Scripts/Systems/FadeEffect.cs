@@ -21,11 +21,12 @@ public class FadeEffect : MonoBehaviour
         }
     }
 
-    public void InstanciateInfo(SpriteRenderer newSprite, Transform newTransform)
+    public void InstanciateInfo(SpriteRenderer newSprite, Transform newTransform, Color32 newColor)
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         spriteRenderer.sprite = newSprite.sprite;
+        spriteRenderer.color = newColor;
 
         transform.position = newTransform.position;
         transform.localScale = newTransform.localScale;

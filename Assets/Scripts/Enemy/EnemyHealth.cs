@@ -135,7 +135,8 @@ public class EnemyHealth : MonoBehaviour
             }
 
             GameObject fadeObj = Instantiate(fadeEffectObj);
-            fadeObj.GetComponent<FadeEffect>().InstanciateInfo(player1.gameObject.GetComponent<SpriteRenderer>(), player1.transform);
+            SpriteRenderer playerSpriterenderer = player1.gameObject.GetComponent<SpriteRenderer>();
+            fadeObj.GetComponent<FadeEffect>().InstanciateInfo(playerSpriterenderer, player1.transform, playerSpriterenderer.color);
 
             // Hur många blood animationer det finns
             int whatBloodAnimation = Random.Range(0, 3);

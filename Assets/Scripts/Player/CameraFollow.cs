@@ -6,7 +6,7 @@ public class CameraFollow : MonoBehaviour
 {
     [SerializeField] GameObject playerTarget;
     [SerializeField] CinemachineCamera cinemachine;
-    GameObject temporaryTarget;
+    GameObject tempCamTarget;
     GameObject targetThatIsFollowed;
 
     [SerializeField] float startZoomValue = 10;
@@ -181,9 +181,9 @@ public class CameraFollow : MonoBehaviour
                     brain.UpdateMethod = CinemachineBrain.UpdateMethods.FixedUpdate;
                     cinemachine.Lens.OrthographicSize = 10;
 
-                    inLevelSystems.ShootBackDeflectedBullet(temporaryTarget.transform.position);
+                    inLevelSystems.ShootBackDeflectedBullet(tempCamTarget.transform.position);
                     
-                    Destroy(temporaryTarget);
+                    Destroy(tempCamTarget);
 
                     Time.timeScale = 1;
 
@@ -206,8 +206,8 @@ public class CameraFollow : MonoBehaviour
 
         nonPlayerZoom = true;
 
-        temporaryTarget = newTarget;
-        targetThatIsFollowed = temporaryTarget;
+        tempCamTarget = newTarget;
+        targetThatIsFollowed = tempCamTarget;
         cinemachine.Follow = targetThatIsFollowed.transform;
 
         switch (forWhat)

@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class SwordAndGunCharacter : Player1
 {
@@ -58,11 +59,13 @@ public class SwordAndGunCharacter : Player1
     [SerializeField] GameObject rushAttackObject;
 
     [SerializeField] float rushSpeed = 40f;
-
     bool rushing = false;
-    bool startRushAttack = false;
-
+    bool rushAttackHasStarted = false;
     Vector2 pointToRushTo = Vector2.zero;
+
+    [SerializeField] GameObject fadeEffectObj;
+    float harmonyFadeEffectTime;
+    float maxHarmonyFadeEffectTime = 0.3f;
 
     #endregion
 
@@ -92,6 +95,7 @@ public class SwordAndGunCharacter : Player1
         maxStanceAttack = stanceAttack;
         decayTimeForHarmonyBase = decayTimeForHarmony;
         maxTimeInHarmonyBase = maxTimeInHarmony;
+        harmonyFadeEffectTime = maxHarmonyFadeEffectTime;
 
         bulletText.text = bullets.ToString();
         ChargeText.text = stanceAttack.ToString();
@@ -108,19 +112,35 @@ public class SwordAndGunCharacter : Player1
     public override void Update()
     {
         base.Update();
-
+        Debug.Log(Time.fixedDeltaTime);
         #region Rush
 
-        if (rushing && !startRushAttack)
+        if (rushing && !rushAttackHasStarted)
         {
 
+            // BARA VISUELLT
+            // Gör en after image med mellanrum
+
+            //harmonyFadeEffectTime -= 0.1f;
+            harmonyFadeEffectTime -= 20 * Time.deltaTime;
+            if (harmonyFadeEffectTime < 0)
+            {
+
+                harmonyFadeEffectTime = maxHarmonyFadeEffectTime;
+                GameObject fadeObj = Instantiate(fadeEffectObj);
+                fadeObj.GetComponent<FadeEffect>().InstanciateInfo(gameObject.GetComponent<SpriteRenderer>(), transform, new Color32(170, 170, 170, 255));
+            }
+
+            //Åker mot position
             transform.position = Vector2.MoveTowards(transform.position, pointToRushTo, rushSpeed * Time.deltaTime);
+
 
             // 1.7 Så den stannar innan den kommer fram
             if(Vector2.Distance(transform.position, pointToRushTo) < 1.7f)
             {
                 StartCoroutine(RushAttack());
 
+                harmonyFadeEffectTime = maxHarmonyFadeEffectTime;
                 dodgeLock = false;
                 lockRotationParent = false;
             }
@@ -157,7 +177,8 @@ public class SwordAndGunCharacter : Player1
                 inHarmony = true;
 
                 Time.timeScale = 0.1f;
-                Time.fixedDeltaTime = 0.02F * Time.timeScale;
+                // Måste ändra fixedDeltaTime annars laggar allting
+                Time.fixedDeltaTime = 0.016F * Time.timeScale;
 
                 bulletKillImage.fillAmount = 1;
                 ChargeKillImage.fillAmount = 1;
@@ -195,14 +216,17 @@ public class SwordAndGunCharacter : Player1
                         pointToRushTo = hit.point;
                     }
 
-                    // Dörr layer
-                    if (doorCheckHit.transform.gameObject.layer == 6)
+                    if (hit)
                     {
+                        // Dörr layer
+                        if (doorCheckHit.transform.gameObject.layer == 6)
+                        {
 
-                        harmonyDoorHit = true;
+                            harmonyDoorHit = true;
 
-                        harmonyDoorHitPos = transform.position;
+                            harmonyDoorHitPos = transform.position;
 
+                        }
                     }
 
                     rushing = true;
@@ -247,6 +271,15 @@ public class SwordAndGunCharacter : Player1
                 }
 
                 #endregion
+
+                // Gör en after image med mellanrum
+                harmonyFadeEffectTime -= Time.unscaledDeltaTime;
+                if(harmonyFadeEffectTime < 0 )
+                {
+                    harmonyFadeEffectTime = maxHarmonyFadeEffectTime;
+                    GameObject fadeObj = Instantiate(fadeEffectObj);
+                    fadeObj.GetComponent<FadeEffect>().InstanciateInfo(gameObject.GetComponent<SpriteRenderer>(), transform, new Color32(170, 170, 170,255));
+                }
 
                 maxTimeInHarmony -= Time.unscaledDeltaTime;
 
@@ -527,7 +560,7 @@ public class SwordAndGunCharacter : Player1
         rushAttackObject.SetActive(true);
 
         attacking = true;
-        startRushAttack = true;
+        rushAttackHasStarted = true;
 
         yield return new WaitForSeconds(0.5f);
 
@@ -537,7 +570,7 @@ public class SwordAndGunCharacter : Player1
 
         playerHealth.invincible = false;
         rushing = false;
-        startRushAttack = false;
+        rushAttackHasStarted = false;
         attacking = false;
 
     }
@@ -576,6 +609,7 @@ public class SwordAndGunCharacter : Player1
 
         decayTimeForHarmony = decayTimeForHarmonyBase;
         maxTimeInHarmony = maxTimeInHarmonyBase;
+        harmonyFadeEffectTime = maxHarmonyFadeEffectTime;
 
         killWithCharge = false;
         killWithRevolver = false;
@@ -588,7 +622,7 @@ public class SwordAndGunCharacter : Player1
 
 
         Time.timeScale = 1;
-        Time.fixedDeltaTime = 0.02F;
+        Time.fixedDeltaTime = 0.016F;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
