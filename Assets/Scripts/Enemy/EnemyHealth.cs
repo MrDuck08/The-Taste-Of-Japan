@@ -4,6 +4,8 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
 
+    [SerializeField] bool amISuicideEnemy = false;
+
     [SerializeField] int health;
     public LayerMask obsticleCheck;
     [SerializeField] GameObject fadeEffectObj;
@@ -99,10 +101,32 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(int takeDamage, int whatTypeOfAttack)
     {
+
         // whatTypeOfAttack
         // 0 = Door hit
         // 1 = S&R Basic Hit
         // 2 = S&R Revolver Hit
+
+        if(amISuicideEnemy == true)
+        {
+
+            SuicideEnemy suicideComponent = gameObject.GetComponent<SuicideEnemy>();
+
+            if (suicideComponent == null) { return; }
+
+            if(whatTypeOfAttack == 2)
+            {
+                suicideComponent.Explode();
+            }
+            else
+            {
+                suicideComponent.KnockBack();
+            }
+
+            return;
+        }
+
+        #region Normal Health
 
         health -= takeDamage;
 
@@ -192,6 +216,8 @@ public class EnemyHealth : MonoBehaviour
             Destroy(gameObject);
 
         }
+
+        #endregion
 
     }
 

@@ -112,7 +112,7 @@ public class SwordAndGunCharacter : Player1
     public override void Update()
     {
         base.Update();
-        Debug.Log(Time.fixedDeltaTime);
+
         #region Rush
 
         if (rushing && !rushAttackHasStarted)
@@ -202,8 +202,10 @@ public class SwordAndGunCharacter : Player1
                     RaycastHit2D doorCheckHit = Physics2D.Raycast(transform.position, lookDirection, clickDistance, ~bulletIgnoreLayerMask);
 
                     // Tar bort och lägger till door layer så man kan åka igenom den. 
+                    // Lägger till
                     bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Door"));
                     RaycastHit2D hit = Physics2D.Raycast(transform.position, lookDirection, clickDistance, ~bulletIgnoreLayerMask);
+                    // tar bort
                     bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Door"));
 
                     // Objekt var för långt bort
@@ -250,7 +252,13 @@ public class SwordAndGunCharacter : Player1
                 if (Input.GetMouseButtonDown(1) && !dodgeLock)
                 {
 
+                    bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Door"));
+                    bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Wall"));
+                    bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Shield"));
                     RaycastHit2D hit = Physics2D.Raycast(transform.position, lookDirection, 1337, ~bulletIgnoreLayerMask);
+                    bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Door"));
+                    bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Wall"));
+                    bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Shield"));
 
                     TrailRenderer trail = Instantiate(bulletTrail);
                     trail.transform.position = transform.position;
