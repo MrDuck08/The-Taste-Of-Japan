@@ -8,6 +8,7 @@ TagManager:
   - EnemyAttack
   - Enemy
   - StanceAttack
+  - Explosion
   layers:
   - Default
   - TransparentFX

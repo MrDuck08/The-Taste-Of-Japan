@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Unity.VisualScripting.Member;
 
 public class AudioManager : MonoBehaviour
 {
@@ -16,6 +15,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField] GameObject bulletHitWall;
     [SerializeField] GameObject walkingSound;
     [SerializeField] List<GameObject> doorSlamSound = new List<GameObject>();
+    [SerializeField] GameObject explosionSound;
+    [SerializeField] GameObject explosionKillSound;
+    [SerializeField] List<GameObject> explosionImpactSoundList = new List<GameObject>();
 
 
     [Header("S & G Player")]
@@ -45,6 +47,11 @@ public class AudioManager : MonoBehaviour
     [SerializeField] GameObject shieldDeflectSound;
     [SerializeField] List<GameObject> shieldDestroySound = new List<GameObject>();
 
+    [Header("Suicide")]
+
+    [SerializeField] GameObject pinPullSound;
+    [SerializeField] List<GameObject> pinDroppSound = new List<GameObject>();
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -70,6 +77,37 @@ public class AudioManager : MonoBehaviour
 
 
     }
+
+    #region Explosion
+
+    public void ExplosionSound(Vector2 newPos)
+    {
+
+        GameObject explosionSoundTemp = Instantiate(explosionSound);
+
+        SoundGeneral(explosionSoundTemp, newPos, false);
+
+
+
+        int whatImpactSound = Random.Range(0, explosionImpactSoundList.Count);
+
+        GameObject explosionImpactSound = Instantiate(explosionImpactSoundList[whatImpactSound]);
+
+
+        SoundGeneral(explosionImpactSound, newPos, false);
+
+    }
+
+    public void ExplosionKillSound(Vector2 newPos)
+    {
+
+        GameObject killExlosionSound = Instantiate(explosionKillSound);
+
+        SoundGeneral(killExlosionSound, newPos, false);
+
+    }
+
+    #endregion
 
     #region Walking
 
@@ -282,31 +320,32 @@ public class AudioManager : MonoBehaviour
 
     #region Enemy
 
-    public void PlayEnemyDeathSound(Vector2 newPos)
+    #region Suicide
+
+    public IEnumerator WarningExplosionSound(Vector2 newPos, GameObject newParent)
     {
 
-        int whatDeathSound = Random.Range(0, enemyDeathSoundList.Count);
+        GameObject pullPinSound = Instantiate(pinPullSound);
 
-        GameObject deathSound = Instantiate(enemyDeathSoundList[whatDeathSound]);
+        // Sätter den till child av player så ljudet följer med
+        pullPinSound.transform.parent = newParent.transform;
+
+        SoundGeneral(pullPinSound, newPos, false);
 
 
-        SoundGeneral(deathSound, newPos, false);
+        yield return new WaitForSeconds(0.2f);
 
+
+        int whatDroppPinSound = Random.Range(0, pinDroppSound.Count);
+
+        GameObject dropPinSound = Instantiate(pinDroppSound[whatDroppPinSound]);
+
+
+        SoundGeneral(dropPinSound, newPos, false);
 
     }
 
-    public void PlayEnemyBulletDeathSound(Vector2 newPos)
-    {
-
-        int whatBulletDeathSound = Random.Range(0, enemyBulletDeathSoundList.Count);
-
-        GameObject bulletDeathSound = Instantiate(enemyBulletDeathSoundList[whatBulletDeathSound]);
-
-
-        SoundGeneral(bulletDeathSound, newPos, false);
-
-
-    }
+    #endregion
 
     #region Shield
 
@@ -336,6 +375,32 @@ public class AudioManager : MonoBehaviour
     }
 
     #endregion
+
+    public void PlayEnemyDeathSound(Vector2 newPos)
+    {
+
+        int whatDeathSound = Random.Range(0, enemyDeathSoundList.Count);
+
+        GameObject deathSound = Instantiate(enemyDeathSoundList[whatDeathSound]);
+
+
+        SoundGeneral(deathSound, newPos, false);
+
+
+    }
+
+    public void PlayEnemyBulletDeathSound(Vector2 newPos)
+    {
+
+        int whatBulletDeathSound = Random.Range(0, enemyBulletDeathSoundList.Count);
+
+        GameObject bulletDeathSound = Instantiate(enemyBulletDeathSoundList[whatBulletDeathSound]);
+
+
+        SoundGeneral(bulletDeathSound, newPos, false);
+
+
+    }
 
     #endregion
 

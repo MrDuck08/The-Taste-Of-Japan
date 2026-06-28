@@ -12,6 +12,8 @@ public class EnemyBase : MonoBehaviour
 
     [HideInInspector] public GameObject playerObject;
 
+    [HideInInspector] public bool lockMovement = false;
+
     #region Player Detection Variables
 
 
@@ -122,7 +124,7 @@ public class EnemyBase : MonoBehaviour
     // Update is called once per frame
     public virtual void Update()
     {
-        if (stunned) { return; }
+        if (stunned || lockMovement) { return; }
 
         PlayerDetection();
 
@@ -437,6 +439,7 @@ public class EnemyBase : MonoBehaviour
 
 
         agent.velocity = Vector3.zero;
+        myRigidbody2D.linearVelocity = Vector3.zero;
 
 
 

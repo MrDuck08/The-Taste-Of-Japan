@@ -77,7 +77,7 @@ public class ShieldEnemy : EnemyBase
             {
                 audioManager.PlayShieldDestroySound(transform.position);
             }
-            health.TakeDamage(1, 1);
+            health.TakeDamage(1, 1, playerObject.transform.position);
 
         }
 

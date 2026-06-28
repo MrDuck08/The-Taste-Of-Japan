@@ -1135,9 +1135,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 132
   decayTimeForHarmony: 7
-  fadeEffectObj: {fileID: 6334758901914313067, guid: 13d684d6cf8bd1f4aa8ac868f255932d, type: 3}
   rushAttackObject: {fileID: 9046596892632325241}
   rushSpeed: 50
+  fadeEffectObj: {fileID: 6334758901914313067, guid: 13d684d6cf8bd1f4aa8ac868f255932d, type: 3}
   stanceAttack: 3
   bulletText: {fileID: 2525116312836534386}
   ChargeText: {fileID: 1442615365378370687}
@@ -1156,6 +1156,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   health: 1
+  obsticleCheck:
+    serializedVersion: 2
+    m_Bits: 72
   objBloodAnimation: {fileID: 6375250694531802770, guid: d7134cc28971a5647ac58a3dee1ce021, type: 3}
   bloodParticles: {fileID: 7878858006430758484, guid: 62d36a989f2c8c64585840ac659c24bc, type: 3}
   bloodSpreadObject:

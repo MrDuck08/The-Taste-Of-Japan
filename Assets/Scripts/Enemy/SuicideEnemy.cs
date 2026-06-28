@@ -15,10 +15,14 @@ public class SuicideEnemy : EnemyBase
     bool litFuse = false;
     bool hasBeenKnockedBack = false;
 
+    EnemyHealth enemyHealth;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void Start()
     {
         base.Start();
+
+        enemyHealth = GetComponent<EnemyHealth>();
 
         timeUntilExplosion = maxTimeUntilExplosion;
 
@@ -32,6 +36,11 @@ public class SuicideEnemy : EnemyBase
         if (inRangeForAttack && !litFuse && playerObject != null)
         {
             litFuse = true;
+            lockMovement = true;
+            agent.isStopped = true;
+
+            StartCoroutine(audioManager.WarningExplosionSound(transform.position, gameObject));
+
         }
 
 
@@ -44,7 +53,7 @@ public class SuicideEnemy : EnemyBase
             if(timeUntilExplosion < 0)
             {
 
-                Explode();
+                StartCoroutine(Explode());
 
             }
 
@@ -52,23 +61,24 @@ public class SuicideEnemy : EnemyBase
 
     }
 
-    IEnumerator ExplodeFuse()
-    {
-        attacking = true;
-
-        warningVisuallObj.SetActive(true);
-
-        yield return new WaitForSeconds(timeUntilExplosion);
-
-        Explode();
-
-    }
-
-    public void Explode()
+    public IEnumerator Explode()
     {
 
 
         explosionObj.SetActive(true);
+
+        // Behöver tid så att collisionen kan registreras
+        yield return new WaitForSeconds(0.1f);
+
+        audioManager.ExplosionSound(transform.position);
+
+        enemyHealth.KillEffects();
+        enemyHealth.BloodEffects(1, transform.position);
+        enemyHealth.BloodEffects(1, transform.position);
+        enemyHealth.BloodEffects(1, transform.position);
+        enemyHealth.BloodEffects(1, transform.position);
+        enemyHealth.BloodEffects(1, transform.position);
+
 
         Destroy(gameObject);
 
@@ -79,13 +89,22 @@ public class SuicideEnemy : EnemyBase
 
         if (hasBeenKnockedBack)
         {
-            Explode();
+            StartCoroutine(Explode());
+
+            return;
         }
-
-        Vector2 toTarget = playerObject.transform.position - transform.position;
-        StartCoroutine(BeStunned(-toTarget.normalized));
-
         hasBeenKnockedBack = true;
+
+        lockMovement = true;
+        agent.isStopped = true;
+
+        Vector2 playerLookDir = playerObject.GetComponent<Player1>().lookDirection;
+        StartCoroutine(BeStunned(playerLookDir.normalized));
+
+        if (!litFuse)
+        {
+            StartCoroutine(audioManager.WarningExplosionSound(transform.position, gameObject));
+        }
 
         timeUntilExplosion = maxTimeUntilExplosion;
         litFuse = true;

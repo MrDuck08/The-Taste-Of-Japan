@@ -274,7 +274,7 @@ public class SwordAndGunCharacter : Player1
                     // Sätter den under reset så att man kan börja bygga harmoni av denna attack
                     if (hit.transform.tag == "Enemy")
                     {
-                        hit.transform.gameObject.GetComponent<EnemyHealth>().TakeDamage(1, 2);
+                        hit.transform.gameObject.GetComponent<EnemyHealth>().TakeDamage(1, 2, transform.position);
                     }
                 }
 
@@ -383,7 +383,7 @@ public class SwordAndGunCharacter : Player1
 
                 if (hit.transform.tag == "Enemy")
                 {
-                    hit.transform.gameObject.GetComponent<EnemyHealth>().TakeDamage(1, 2);
+                    hit.transform.gameObject.GetComponent<EnemyHealth>().TakeDamage(1, 2, transform.position);
                 }
                 else
                 {

@@ -17,6 +17,7 @@ public class EnemyHealth : MonoBehaviour
     float doubleCheckTime;
     float maxDoubleCheckTime = 1f;
 
+
     ScreenShake screenShake;
     SwordAndGunCharacter swordAndGun;
     Player1 player1;
@@ -53,8 +54,8 @@ public class EnemyHealth : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght, obsticleCheck);
 
             if (!hit)
-            {
-                TakeDamage(1, 1);
+            {// VIKTIGT VIKGTIGT!!! Den kollar bara för spelar attacker, inte explosionsattacker
+                TakeDamage(1, 1, player1.transform.position);
             }
 
         }
@@ -69,9 +70,12 @@ public class EnemyHealth : MonoBehaviour
 
             RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght, obsticleCheck);
 
+            // Kollar så att ingenting är ivägen för attacken (t ex en väg)
             if (!hit)
-            {
-                TakeDamage(1, 1);
+            { 
+                
+                TakeDamage(1, 1, player1.transform.position);
+                
             }
             else if(hit.transform.name != "Sheild") // Dubbelkollar så länge spelaren inte träffade en sköld (annars kan man springa igenom och döda)
             {
@@ -79,6 +83,24 @@ public class EnemyHealth : MonoBehaviour
                 startDoubleCheck = true;
             }
 
+
+        }
+
+        if (collision.transform.CompareTag("Explosion"))
+        {
+
+            Vector2 direction = collision.transform.position - transform.position;
+            float lenght = Vector2.Distance(collision.transform.position, transform.position);
+
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght, obsticleCheck);
+
+            // Kollar så att ingenting är ivägen för attacken (t ex en väg)
+            if (!hit)
+            {
+
+                TakeDamage(1, 3, collision.transform.position);
+
+            }
 
         }
 
@@ -94,20 +116,23 @@ public class EnemyHealth : MonoBehaviour
 
             #endregion
 
-            TakeDamage(1, 0);
+            TakeDamage(1, 0, player1.transform.position);
 
         }
     }
 
-    public void TakeDamage(int takeDamage, int whatTypeOfAttack)
+    public void TakeDamage(int takeDamage, int whatTypeOfAttack, Vector3 fromWhere)
     {
 
         // whatTypeOfAttack
         // 0 = Door hit
         // 1 = S&R Basic Hit
         // 2 = S&R Revolver Hit
+        // 3 = Explosion
 
-        if(amISuicideEnemy == true)
+        #region Suicide Enemy
+
+        if (amISuicideEnemy == true)
         {
 
             SuicideEnemy suicideComponent = gameObject.GetComponent<SuicideEnemy>();
@@ -116,7 +141,7 @@ public class EnemyHealth : MonoBehaviour
 
             if(whatTypeOfAttack == 2)
             {
-                suicideComponent.Explode();
+                StartCoroutine(suicideComponent.Explode());
             }
             else
             {
@@ -125,6 +150,8 @@ public class EnemyHealth : MonoBehaviour
 
             return;
         }
+
+        #endregion
 
         #region Normal Health
 
@@ -156,68 +183,105 @@ public class EnemyHealth : MonoBehaviour
 
                     break;
 
+                case 3:
+
+                    BloodEffects(whatTypeOfAttack, fromWhere);
+                    BloodEffects(whatTypeOfAttack, fromWhere);
+                    BloodEffects(whatTypeOfAttack, fromWhere);
+                    BloodEffects(whatTypeOfAttack, fromWhere);
+                    audioManager.ExplosionKillSound(transform.position);
+
+                    break;
+
             }
 
-            GameObject fadeObj = Instantiate(fadeEffectObj);
-            SpriteRenderer playerSpriterenderer = player1.gameObject.GetComponent<SpriteRenderer>();
-            fadeObj.GetComponent<FadeEffect>().InstanciateInfo(playerSpriterenderer, player1.transform, playerSpriterenderer.color);
 
-            // Hur många blood animationer det finns
-            int whatBloodAnimation = Random.Range(0, 3);
+            KillEffects();
+            BloodEffects(whatTypeOfAttack, player1.transform.position);
 
-            GameObject bloodAnimationObj = Instantiate(objBloodAnimation);
-            bloodAnimationObj.transform.position = transform.position;
-            bloodAnimationObj.GetComponent<Animator>().SetInteger("WhatAnimation", whatBloodAnimation);
 
-            ParticleSystem spawnedBloodParticles = Instantiate(bloodParticles);
-            spawnedBloodParticles.transform.position = transform.position;
-            bloodParticles.Play();
-            float totalDuration = bloodParticles.duration + bloodParticles.startLifetime;
-            Destroy(spawnedBloodParticles.gameObject, totalDuration);
-
-            int howManySpawns = Random.Range(6, 8);
-
-            while (howManySpawns > 0) 
-            {
-                int whatBloodSpread = Random.Range(0, bloodSpreadObject.Count);
-
-                GameObject bloodSpreadObj = Instantiate(bloodSpreadObject[whatBloodSpread]);
-                bloodSpreadObj.transform.position = transform.position;
-
-                Vector2 dir = Vector2.zero;
-                float angle = 0;
-                float spd = Random.Range(20, 25);
-
-                if (whatTypeOfAttack == 1)
-                {
-                    dir = Random.onUnitSphere;
-
-                    angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                    bloodSpreadObj.transform.rotation = Quaternion.Euler(0, 0, angle - 90);
-                }
-                else
-                {
-                    dir = transform.position - player1.transform.position;
-                    angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-                    float randomOffset = Random.Range(-30f, 30f);
-                    bloodSpreadObj.transform.rotation = Quaternion.Euler(0, 0, angle - 90 + randomOffset);
-
-                    spd *= 1.5f;
-                    dir = Quaternion.Euler(0, 0, randomOffset) * dir.normalized;
-                }
-
-                bloodSpreadObj.GetComponent<Rigidbody2D>().linearVelocity = dir * spd;
-
-                howManySpawns--; 
-            }
-
-            screenShake.TriggerShakeTime(0.05f, 0.25f, false);
             Destroy(gameObject);
 
         }
 
         #endregion
+
+    }
+
+    public void KillEffects()
+    {
+
+        screenShake.TriggerShakeTime(0.05f, 0.25f, false);
+
+        if (player1 == null) { return; }
+
+        GameObject fadeObj = Instantiate(fadeEffectObj);
+        SpriteRenderer playerSpriterenderer = player1.gameObject.GetComponent<SpriteRenderer>();
+        fadeObj.GetComponent<FadeEffect>().InstanciateInfo(playerSpriterenderer, player1.transform, playerSpriterenderer.color);
+
+
+    }
+
+    public void BloodEffects(int whatTypeOfAttack, Vector3 fromWhere)
+    {
+
+        // Hur många blood animationer det finns
+        int whatBloodAnimation = Random.Range(0, 3);
+
+        GameObject bloodAnimationObj = Instantiate(objBloodAnimation);
+        bloodAnimationObj.transform.position = transform.position;
+        bloodAnimationObj.GetComponent<Animator>().SetInteger("WhatAnimation", whatBloodAnimation);
+
+
+
+
+        ParticleSystem spawnedBloodParticles = Instantiate(bloodParticles);
+        spawnedBloodParticles.transform.position = transform.position;
+        bloodParticles.Play();
+        float totalDuration = bloodParticles.duration + bloodParticles.startLifetime;
+        Destroy(spawnedBloodParticles.gameObject, totalDuration);
+
+
+
+
+        int howManySpawns = Random.Range(6, 8);
+
+        while (howManySpawns > 0)
+        {
+            int whatBloodSpread = Random.Range(0, bloodSpreadObject.Count);
+
+            GameObject bloodSpreadObj = Instantiate(bloodSpreadObject[whatBloodSpread]);
+            bloodSpreadObj.transform.position = transform.position;
+
+            Vector2 dir = Vector2.zero;
+            float angle = 0;
+            float spd = Random.Range(20, 25);
+
+            if (whatTypeOfAttack == 1)
+            {
+                // Åker åt slumpade håll
+                dir = Random.onUnitSphere;
+
+                angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                bloodSpreadObj.transform.rotation = Quaternion.Euler(0, 0, angle - 90);
+            }
+            else
+            {
+                // Åker från ett håll
+                dir = transform.position - fromWhere;
+                angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+                float randomOffset = Random.Range(-30f, 30f);
+                bloodSpreadObj.transform.rotation = Quaternion.Euler(0, 0, angle - 90 + randomOffset);
+
+                spd *= 1.5f;
+                dir = Quaternion.Euler(0, 0, randomOffset) * dir.normalized;
+            }
+
+            bloodSpreadObj.GetComponent<Rigidbody2D>().linearVelocity = dir * spd;
+
+            howManySpawns--;
+        }
 
     }
 
