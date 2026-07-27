@@ -474,7 +474,7 @@ public class SwordAndGunCharacter : Player1
 
         stanceAttackObject.SetActive(false);
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.05f);
 
         speed = maxSpeed;
         lookAroundSpeed = maxLookAroundSpeed;

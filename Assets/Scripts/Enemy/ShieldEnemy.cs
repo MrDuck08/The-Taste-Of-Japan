@@ -8,6 +8,7 @@ public class ShieldEnemy : EnemyBase
 
     [SerializeField] GameObject attackObject;
     [SerializeField] GameObject ShieldObj;
+    [SerializeField] ParticleSystem shieldDestroyParticles;
 
     [SerializeField] float timeForAttack = 0.2f;
     [SerializeField] float timeForAttackToDisaappear = 0.1f;
@@ -58,6 +59,10 @@ public class ShieldEnemy : EnemyBase
     {
         ShieldObj.SetActive(false);
 
+        ParticleSystem spawnedShieldParticles = Instantiate(shieldDestroyParticles);
+        spawnedShieldParticles.transform.position = ShieldObj.transform.position;
+        shieldDestroyParticles.Play();
+
         Vector2 toTarget = playerObject.transform.position - transform.position;
         audioManager.PlayShieldDestroySound(transform.position);
         StartCoroutine(BeStunned(-toTarget.normalized));
@@ -73,9 +78,14 @@ public class ShieldEnemy : EnemyBase
 
             RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght, health.obsticleCheck);
 
+            // Om det itne finns någon sköld så ska den inte köra sköld ljud + effekter
             if (ShieldObj != null && hit)
             {
                 audioManager.PlayShieldDestroySound(transform.position);
+
+                ParticleSystem spawnedShieldParticles = Instantiate(shieldDestroyParticles);
+                spawnedShieldParticles.transform.position = ShieldObj.transform.position;
+                shieldDestroyParticles.Play();
             }
             health.TakeDamage(1, 1, playerObject.transform.position);
 

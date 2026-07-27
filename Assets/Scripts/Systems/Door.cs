@@ -13,6 +13,8 @@ public class Door : MonoBehaviour
 
     public bool playerPushedDoor;
 
+    [SerializeField] ParticleSystem doorHitEffect;
+
     AudioManager audioManager;
 
     void Start()
@@ -52,6 +54,10 @@ public class Door : MonoBehaviour
 
             ArtificialPush(collision.transform.position, 10);
 
+            ParticleSystem spawnedShieldParticlesEnemy = Instantiate(doorHitEffect);
+            spawnedShieldParticlesEnemy.transform.position = collision.ClosestPoint(transform.position);
+            doorHitEffect.Play();
+
             return;
 
         }
@@ -66,6 +72,10 @@ public class Door : MonoBehaviour
         posWhenOpened = transform.position;
 
         audioManager.PlayDoorSlamSound(transform.position, true);
+
+        ParticleSystem spawnedShieldParticles = Instantiate(doorHitEffect);
+        spawnedShieldParticles.transform.position = collision.ClosestPoint(transform.position);
+        doorHitEffect.Play();
 
         myRigidbody2D.AddForce(collisionRB2D.linearVelocity * openSpeed);
 

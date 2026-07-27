@@ -626,6 +626,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShieldEnemy
   agent: {fileID: 0}
   playerObject: {fileID: 0}
+  lockMovement: 0
   inRangeForAttack: 0
   attacking: 0
   detectRadiusInFront: 15
@@ -646,6 +647,7 @@ MonoBehaviour:
   audioManager: {fileID: 0}
   attackObject: {fileID: 3114962772734142546}
   ShieldObj: {fileID: 4336936812702198675}
+  shieldDestroyParticles: {fileID: 7878858006430758484, guid: 8680012c833522c49ba64198eb8fae2a, type: 3}
   timeForAttack: 0.1
   timeForAttackToDisaappear: 0.1
 --- !u!114 &4424384088439388291
@@ -660,6 +662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18530839af804264aae860c813bd9ff7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  amISuicideEnemy: 0
   health: 1
   obsticleCheck:
     serializedVersion: 2

@@ -145,6 +145,7 @@ public class EnemyHealth : MonoBehaviour
             }
             else
             {
+
                 suicideComponent.KnockBack();
             }
 

@@ -11,9 +11,11 @@ public class SuicideEnemy : EnemyBase
     [Header("Variables")]
     [SerializeField] float maxTimeUntilExplosion = 0.5f;
     float timeUntilExplosion = 0.5f;
+    float knockbackInvincivilityTime = 0.1f;
 
     bool litFuse = false;
     bool hasBeenKnockedBack = false;
+    bool knockbackInvincibility = false;
 
     EnemyHealth enemyHealth;
 
@@ -86,6 +88,7 @@ public class SuicideEnemy : EnemyBase
 
     public void KnockBack()
     {
+        if(knockbackInvincibility) { return; }
 
         if (hasBeenKnockedBack)
         {
@@ -106,10 +109,25 @@ public class SuicideEnemy : EnemyBase
             StartCoroutine(audioManager.WarningExplosionSound(transform.position, gameObject));
         }
 
+        StartCoroutine(KnockBackInvincibility());
+
         timeUntilExplosion = maxTimeUntilExplosion;
         litFuse = true;
 
 
+
+    }
+
+    IEnumerator KnockBackInvincibility()
+    {
+
+        knockbackInvincibility = true;
+
+
+        yield return new WaitForSeconds(knockbackInvincivilityTime);
+
+
+        knockbackInvincibility = false;
 
     }
 }
