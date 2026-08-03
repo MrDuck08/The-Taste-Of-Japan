@@ -111,7 +111,7 @@ public class SuicideEnemy : EnemyBase
 
         StartCoroutine(KnockBackInvincibility());
 
-        timeUntilExplosion = maxTimeUntilExplosion;
+        timeUntilExplosion = 0.2f;
         litFuse = true;
 
 

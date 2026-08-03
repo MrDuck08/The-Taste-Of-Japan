@@ -527,7 +527,7 @@ MonoBehaviour:
   audioManager: {fileID: 0}
   warningVisuallObj: {fileID: 2343865197476342040}
   explosionObj: {fileID: 8458623773526078494}
-  maxTimeUntilExplosion: 0.7
+  maxTimeUntilExplosion: 0.3
 --- !u!114 &6994485488005008870
 MonoBehaviour:
   m_ObjectHideFlags: 0

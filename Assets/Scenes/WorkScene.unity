@@ -574,7 +574,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 78.26, y: 78.26, z: 78.26}
+  m_LocalScale: {x: 184.091, y: 184.091, z: 184.091}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1139476552}
@@ -2616,7 +2616,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1839397566988880595, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: positionToCycle.Array.data[1].x
-      value: -16.09
+      value: -24.42
       objectReference: {fileID: 0}
     - target: {fileID: 1839397566988880595, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: positionToCycle.Array.data[1].y
@@ -2632,11 +2632,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5220295993572481151, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -12.19134
+      value: -12.19
       objectReference: {fileID: 0}
     - target: {fileID: 5220295993572481151, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.42493
+      value: -10.09
       objectReference: {fileID: 0}
     - target: {fileID: 5220295993572481151, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2761,8 +2761,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 1945205682}
     m_Modifications:
     - target: {fileID: 3402026093432382808, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3402026093432382808, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.69866
+      value: 45.4
       objectReference: {fileID: 0}
     - target: {fileID: 3402026093432382808, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2811,6 +2815,22 @@ PrefabInstance:
     - target: {fileID: 4432085355494031465, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
       propertyPath: m_Name
       value: Shield Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 4432085355494031465, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6761150139801235623, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
+      propertyPath: positionToCycle.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6761150139801235623, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
+      propertyPath: positionToCycle.Array.data[0].x
+      value: 33.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6761150139801235623, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
+      propertyPath: positionToCycle.Array.data[0].y
+      value: -10.75693
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -23,8 +23,8 @@ public class EnemyBase : MonoBehaviour
     [Header("Player Detection")]
 
 
-    public bool inRangeForAttack = false;
-    public bool attacking = false;
+    [HideInInspector] public bool inRangeForAttack = false;
+    [HideInInspector] public bool attacking = false;
 
 
     [SerializeField] float detectRadiusInFront = 5;
@@ -188,7 +188,7 @@ public class EnemyBase : MonoBehaviour
             }
 
             agent.SetDestination(positionToCycle[atWhatPositionInIdleList]);
-
+            Debug.Log(positionToCycle[atWhatPositionInIdleList] + " New pos");
             float angle = Mathf.Atan2(agent.velocity.y, agent.velocity.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
