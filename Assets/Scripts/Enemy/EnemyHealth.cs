@@ -253,6 +253,7 @@ public class EnemyHealth : MonoBehaviour
 
             GameObject bloodSpreadObj = Instantiate(bloodSpreadObject[whatBloodSpread]);
             bloodSpreadObj.transform.position = transform.position;
+            //bloodSpreadObj.transform.localScale *= Random.Range(0.7f, 1.1f); 
 
             Vector2 dir = Vector2.zero;
             float angle = 0;

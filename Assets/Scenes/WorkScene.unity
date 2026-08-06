@@ -1178,13 +1178,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: BasicEnemy (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2536596613807059317, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5220295993572481151, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 26.79866
+      value: 22.86866
       objectReference: {fileID: 0}
     - target: {fileID: 5220295993572481151, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.61507
+      value: 4.0750704
       objectReference: {fileID: 0}
     - target: {fileID: 5220295993572481151, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2247,7 +2251,7 @@ Transform:
   m_GameObject: {fileID: 1945205681}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.89866, y: -5.53507, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2632,11 +2636,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5220295993572481151, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -12.19
+      value: -16.96
       objectReference: {fileID: 0}
     - target: {fileID: 5220295993572481151, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.09
+      value: -9.74
       objectReference: {fileID: 0}
     - target: {fileID: 5220295993572481151, guid: 99c4c8877fad3ea46874b3516ad417f1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2766,11 +2770,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3402026093432382808, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 45.4
+      value: 13.55
       objectReference: {fileID: 0}
     - target: {fileID: 3402026093432382808, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.756929
+      value: -15.67
       objectReference: {fileID: 0}
     - target: {fileID: 3402026093432382808, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2826,11 +2830,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6761150139801235623, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
       propertyPath: positionToCycle.Array.data[0].x
-      value: 33.7
+      value: 28.01
       objectReference: {fileID: 0}
     - target: {fileID: 6761150139801235623, guid: 6927640c5eb7802488bbcbb447d6afb4, type: 3}
       propertyPath: positionToCycle.Array.data[0].y
-      value: -10.75693
+      value: -15.67
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2849,13 +2853,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: SuicideEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 2536596613807059317, guid: dc352a5803516da4a84629ac55cd853a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5220295993572481151, guid: dc352a5803516da4a84629ac55cd853a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 17.627098
+      value: 13.697097
       objectReference: {fileID: 0}
     - target: {fileID: 5220295993572481151, guid: dc352a5803516da4a84629ac55cd853a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.162507
+      value: 0.6225071
       objectReference: {fileID: 0}
     - target: {fileID: 5220295993572481151, guid: dc352a5803516da4a84629ac55cd853a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2928,11 +2936,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1372834768438976000, guid: f5d2dfb6be3575542a609e749db09565, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -12.201341
+      value: -16.131342
       objectReference: {fileID: 0}
     - target: {fileID: 1372834768438976000, guid: f5d2dfb6be3575542a609e749db09565, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.91507
+      value: -0.6249299
       objectReference: {fileID: 0}
     - target: {fileID: 1372834768438976000, guid: f5d2dfb6be3575542a609e749db09565, type: 3}
       propertyPath: m_LocalPosition.z

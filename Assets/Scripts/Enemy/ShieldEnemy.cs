@@ -31,7 +31,7 @@ public class ShieldEnemy : EnemyBase
     {
         base.Update();
 
-        if (inRangeForAttack && !attacking)
+        if (inRangeForAttack && !attacking && playerObject != null)
         {
             StartCoroutine(BasicAttackRoutine());
         }

@@ -188,7 +188,7 @@ public class EnemyBase : MonoBehaviour
             }
 
             agent.SetDestination(positionToCycle[atWhatPositionInIdleList]);
-            Debug.Log(positionToCycle[atWhatPositionInIdleList] + " New pos");
+ 
             float angle = Mathf.Atan2(agent.velocity.y, agent.velocity.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
