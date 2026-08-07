@@ -67,6 +67,7 @@ public class ShotEnemyBase : EnemyBase
     {
 
         attacking = true;
+        agent.SetDestination(transform.position);
 
 
         yield return new WaitForSeconds(startShotingTime); // Hur lång tid det tar att "sikta in"

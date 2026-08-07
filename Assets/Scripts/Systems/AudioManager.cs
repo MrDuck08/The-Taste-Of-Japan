@@ -65,7 +65,7 @@ public class AudioManager : MonoBehaviour
 
         GameObject doorSound = Instantiate(doorSlamSound[whatDoorSound]);
 
-        if (playerPush)
+        if (playerPush && playerObj != null)
         {
             // Sätter den till child av player så ljudet följer med
             doorSound.transform.parent = playerObj.transform;

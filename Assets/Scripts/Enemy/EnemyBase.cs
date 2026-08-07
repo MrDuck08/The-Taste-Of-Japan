@@ -292,7 +292,8 @@ public class EnemyBase : MonoBehaviour
         #region Attack Range
 
 
-        if (distanceToPlayer < attackRange && currentAngle < DetectionCone && !playerObstructed) // Kollar om spelaren �r tillr�ckligt n�ra f�r att attackera
+        // Kollar om spelaren �r tillr�ckligt n�ra f�r att attackera
+        if (distanceToPlayer < attackRange && currentAngle < DetectionCone && !playerObstructed) 
         {
 
 

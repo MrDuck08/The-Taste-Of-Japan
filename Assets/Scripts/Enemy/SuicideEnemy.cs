@@ -11,6 +11,7 @@ public class SuicideEnemy : EnemyBase
     [Header("Variables")]
     [SerializeField] float maxTimeUntilExplosion = 0.5f;
     float timeUntilExplosion = 0.5f;
+    [SerializeField] float afterKnockbackExplosionTime = 0.2f;
     float knockbackInvincivilityTime = 0.1f;
 
     bool litFuse = false;
@@ -111,7 +112,7 @@ public class SuicideEnemy : EnemyBase
 
         StartCoroutine(KnockBackInvincibility());
 
-        timeUntilExplosion = 0.2f;
+        timeUntilExplosion = afterKnockbackExplosionTime;
         litFuse = true;
 
 
