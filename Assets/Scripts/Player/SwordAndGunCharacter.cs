@@ -69,7 +69,10 @@ public class SwordAndGunCharacter : Player1
 
     #endregion
 
+    [Header("Stance")]
+
     [SerializeField] int stanceAttack = 2;
+    [SerializeField] int stanceSlow = 4;
     int maxStanceAttack;
 
     #region UI Variables
@@ -417,7 +420,7 @@ public class SwordAndGunCharacter : Player1
 
                 audioManager.ChangeWalkingPtch(gameObject, 0.3f);
 
-                speed = maxSpeed/10;
+                speed = maxSpeed/stanceSlow;
 
                 attackStance = true;
                 lookAroundSpeed = 1;
