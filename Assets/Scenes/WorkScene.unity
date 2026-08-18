@@ -2913,7 +2913,7 @@ PrefabInstance:
     - target: {fileID: 538079878204908151, guid: f5d2dfb6be3575542a609e749db09565, type: 3}
       propertyPath: bulletObject
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2677064501833155631, guid: 3df9550ef0af9244fac968b5bd7b5ed5, type: 3}
     - target: {fileID: 538079878204908151, guid: f5d2dfb6be3575542a609e749db09565, type: 3}
       propertyPath: knockbackSpeed
       value: 2000

@@ -274,7 +274,7 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public void PlayShootSound(Vector2 newPos)
+    public void PlayShootSound(Vector2 newPos, GameObject parent)
     {
 
         int whatShootSound = Random.Range(0, ShootSoundList.Count);
@@ -282,14 +282,14 @@ public class AudioManager : MonoBehaviour
         GameObject shootSound = Instantiate(ShootSoundList[whatShootSound]);
 
         // Sätter den till child av player så ljudet följer med
-        shootSound.transform.parent = playerObj.transform;
+        shootSound.transform.parent = parent.transform;
 
         SoundGeneral(shootSound, newPos, false);
 
 
     }
 
-    public void PlayRevolverClickSound(Vector2 newPos)
+    public void PlayRevolverClickSound(Vector2 newPos, GameObject parent)
     {
 
         int whatClickSound = Random.Range(0, ClickSoundList.Count);
@@ -297,7 +297,7 @@ public class AudioManager : MonoBehaviour
         GameObject revolverClickSound = Instantiate(ClickSoundList[whatClickSound]);
 
         // Sätter den till child av player så ljudet följer med
-        revolverClickSound.transform.parent = playerObj.transform;
+        revolverClickSound.transform.parent = parent.transform;
 
 
         SoundGeneral(revolverClickSound, newPos, false);

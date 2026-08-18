@@ -377,8 +377,8 @@ public class SwordAndGunCharacter : Player1
                 bullets--;
 
                 audioManager.PlayShellSound(transform.position);
-                audioManager.PlayShootSound(transform.position);
-                audioManager.PlayRevolverClickSound(transform.position);
+                audioManager.PlayShootSound(transform.position, gameObject);
+                audioManager.PlayRevolverClickSound(transform.position, gameObject);
 
                 screenShake.ScreenRecoil(0.1f, 0.3f);
 
@@ -466,8 +466,6 @@ public class SwordAndGunCharacter : Player1
         ChargeText.text = stanceAttack.ToString();
 
         stanceAttackObject.SetActive(true);
-
-        speed = 0;
 
         audioManager.PlayUnsheatheSound(transform.position);
 

@@ -83,7 +83,6 @@ public class ShotEnemyBase : EnemyBase
 
         if(hit.collider.tag == "Player")
         {
-
             hit.collider.GetComponent<PlayerHealth>().TakeDamage(1, false, transform);
 
         }
@@ -96,6 +95,10 @@ public class ShotEnemyBase : EnemyBase
             cameraFollow.ChangeTargetCam(spawnedBullet, 1);
 
         }
+
+        audioManager.PlayShellSound(transform.position);
+        audioManager.PlayShootSound(transform.position, gameObject);
+        audioManager.PlayRevolverClickSound(transform.position, gameObject);
 
         bullets--;
 

@@ -76,6 +76,8 @@ public class PlayerHealth : MonoBehaviour
 
             BloodEffcts(randomSpreadBlood, fromWhere);
 
+            audioManager.PlayEnemyDeathSound(transform.position);
+
             Destroy(gameObject);
 
         }

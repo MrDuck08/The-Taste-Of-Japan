@@ -1139,6 +1139,7 @@ MonoBehaviour:
   rushSpeed: 50
   fadeEffectObj: {fileID: 6334758901914313067, guid: 13d684d6cf8bd1f4aa8ac868f255932d, type: 3}
   stanceAttack: 3
+  stanceSlow: 3
   bulletText: {fileID: 2525116312836534386}
   ChargeText: {fileID: 1442615365378370687}
   bulletKillImage: {fileID: 2534019938361945143}
