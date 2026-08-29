@@ -58,6 +58,9 @@ public class ShieldEnemy : EnemyBase
     {
         ShieldObj.SetActive(false);
 
+        attacking = false;
+        attackObject.SetActive(false);
+
         ParticleSystem spawnedShieldParticles = Instantiate(shieldDestroyParticles);
         spawnedShieldParticles.transform.position = ShieldObj.transform.position;
         shieldDestroyParticles.Play();

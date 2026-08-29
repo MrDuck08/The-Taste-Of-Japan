@@ -175,7 +175,7 @@ public class SwordAndGunCharacter : Player1
         if (killWithCharge && killWithRevolver)
         {
             // Enter Harmony 
-            if (Input.GetKeyDown(KeyCode.LeftControl) && !dodgeLock)
+            if ((Input.GetKeyDown(KeyCode.E) || (Input.GetKeyDown(KeyCode.LeftControl)) && !dodgeLock))
             {
                 inHarmony = true;
 
