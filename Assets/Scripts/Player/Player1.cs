@@ -45,8 +45,6 @@ public class Player1 : MonoBehaviour
 
     [Header("Basic Attack")]
 
-    public GameObject attackObject;
-
     [HideInInspector] public bool attacking = false;
     [HideInInspector] public bool basicAttacking = false;
 
@@ -56,6 +54,7 @@ public class Player1 : MonoBehaviour
     [HideInInspector] public CircleCollider2D myCollider;
 
     [HideInInspector] public AudioManager audioManager;
+    [HideInInspector] public MeleeWeaponsBase meleeWeapon;
 
     public Camera cam;
 
@@ -64,12 +63,11 @@ public class Player1 : MonoBehaviour
     {
         myRigidbody = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<CircleCollider2D>();
+        meleeWeapon = GetComponentInChildren<MeleeWeaponsBase>();
 
         audioManager = FindAnyObjectByType<AudioManager>();
 
         cam = Camera.main;
-
-        attackObject.SetActive(false);
 
         speed = maxSpeed;
         lookAroundSpeed = maxLookAroundSpeed;
@@ -161,27 +159,6 @@ public class Player1 : MonoBehaviour
     }
 
     #endregion
-
-    public IEnumerator BasicAttack()
-    {
-
-        attackObject.SetActive(true);
-
-        attacking = true;
-        basicAttacking = true;
-
-        audioManager.PlayPlayerSlashSound(transform.position);
-
-        yield return new WaitForSeconds(0.2f);
-
-        attackObject.SetActive(false);
-
-        yield return new WaitForSeconds(0.1f);
-
-        attacking = false;
-        basicAttacking = false;
-
-    }
 
     public virtual void OnCollisionEnter2D(Collision2D collision)
     {

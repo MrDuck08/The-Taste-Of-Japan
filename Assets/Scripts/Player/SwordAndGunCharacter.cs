@@ -2,14 +2,11 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class SwordAndGunCharacter : Player1
 {
 
     [Header("S&G Specifics")]
-
-    [SerializeField] GameObject stanceAttackObject;
 
     bool attackStance = false;
 
@@ -53,15 +50,10 @@ public class SwordAndGunCharacter : Player1
     bool killWithCharge = false;
     bool inHarmony = false;
 
-    bool harmonyDoorHit = false;
-    Vector3 harmonyDoorHitPos = Vector3.zero;
+    [HideInInspector] public bool harmonyDoorHit = false;
+    [HideInInspector] public Vector3 harmonyDoorHitPos = Vector3.zero;
 
-    [SerializeField] GameObject rushAttackObject;
 
-    [SerializeField] float rushSpeed = 40f;
-    bool rushing = false;
-    bool rushAttackHasStarted = false;
-    Vector2 pointToRushTo = Vector2.zero;
 
     [SerializeField] GameObject fadeEffectObj;
     float harmonyFadeEffectTime;
@@ -116,51 +108,17 @@ public class SwordAndGunCharacter : Player1
     {
         base.Update();
 
-        #region Rush
 
-        if (rushing && !rushAttackHasStarted)
-        {
-
-            // BARA VISUELLT
-            // Gör en after image med mellanrum
-
-            //harmonyFadeEffectTime -= 0.1f;
-            harmonyFadeEffectTime -= 20 * Time.deltaTime;
-            if (harmonyFadeEffectTime < 0)
-            {
-
-                harmonyFadeEffectTime = maxHarmonyFadeEffectTime;
-                GameObject fadeObj = Instantiate(fadeEffectObj);
-                fadeObj.GetComponent<FadeEffect>().InstanciateInfo(gameObject.GetComponent<SpriteRenderer>(), transform, new Color32(170, 170, 170, 255));
-            }
-
-            //Åker mot position
-            transform.position = Vector2.MoveTowards(transform.position, pointToRushTo, rushSpeed * Time.deltaTime);
-
-
-            // 1.7 Så den stannar innan den kommer fram
-            if(Vector2.Distance(transform.position, pointToRushTo) < 1.7f)
-            {
-                StartCoroutine(RushAttack());
-
-                harmonyFadeEffectTime = maxHarmonyFadeEffectTime;
-                dodgeLock = false;
-                lockRotationParent = false;
-            }
-
-        }
-
-        #endregion
 
         #region Move Lock
 
-        if (dodgeLock || rushing)
+        if (dodgeLock)
         {
             attackStance = false;
             attacking = false;
             lockRotationParent = false;
 
-            stanceAttackObject.SetActive(false);
+            meleeWeapon.stanceAttackObj.SetActive(false);
 
             speed = maxSpeed;
 
@@ -199,47 +157,16 @@ public class SwordAndGunCharacter : Player1
                 // Sword attack harmony
                 if (Input.GetMouseButtonDown(0) && !dodgeLock)
                 {
-                    float clickDistance = Vector2.Distance(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
-                    // Behöver manuelt kolla om man träffar en dörr eftersom man åker för snabbt.
-                    RaycastHit2D doorCheckHit = Physics2D.Raycast(transform.position, lookDirection, clickDistance, ~bulletIgnoreLayerMask);
+                    // Aktiverar attacken i ens "meleeWeapon"
+                    meleeWeapon.HarmonyAttack();
 
-                    // Tar bort och lägger till door layer så man kan åka igenom den. 
-                    // Lägger till
-                    bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Door"));
-                    RaycastHit2D hit = Physics2D.Raycast(transform.position, lookDirection, clickDistance, ~bulletIgnoreLayerMask);
-                    // tar bort
-                    bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Door"));
 
-                    // Objekt var för långt bort
-                    if (hit.point == Vector2.zero)
-                    {
-                        pointToRushTo = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    }
-                    else
-                    {
-                        pointToRushTo = hit.point;
-                    }
-
-                    if (hit)
-                    {
-                        // Dörr layer
-                        if (doorCheckHit.transform.gameObject.layer == 6)
-                        {
-
-                            harmonyDoorHit = true;
-
-                            harmonyDoorHitPos = transform.position;
-
-                        }
-                    }
-
-                    rushing = true;
+                    // Resetar variabler
+           
 
                     dodgeLock = true;
                     lockRotationParent = true;
-
-                    transform.LookAt(pointToRushTo);
 
                     playerHealth.invincible = true;
 
@@ -340,13 +267,19 @@ public class SwordAndGunCharacter : Player1
             {
                 if(attackStance == false)
                 {
-                    StartCoroutine(BasicAttack());
+                    meleeWeapon.BasicAttack();
 
                 }
 
                 if (attackStance == true)
                 {
-                    StartCoroutine(StanceAttack());
+                    meleeWeapon.StanceAttack();
+                    attackStance = false;
+
+
+                    stanceAttack--;
+
+                    ChargeText.text = stanceAttack.ToString();
                 }
 
 
@@ -453,49 +386,13 @@ public class SwordAndGunCharacter : Player1
 
     }
 
-    #region Stance Attack
-
-    IEnumerator StanceAttack()
-    {
-        //cameraScript.ZoomOutAgain(0.1f);
-
-        attacking = true;
-
-        stanceAttack--;
-
-        ChargeText.text = stanceAttack.ToString();
-
-        stanceAttackObject.SetActive(true);
-
-        audioManager.PlayUnsheatheSound(transform.position);
-
-        yield return new WaitForSeconds(0.05f);
-        audioManager.PlayPlayerChargeSlashSound(transform.position); // Mini paus för att spela ljud
-        yield return new WaitForSeconds(0.35f);
-
-        stanceAttackObject.SetActive(false);
-
-        yield return new WaitForSeconds(0.05f);
-
-        speed = maxSpeed;
-        lookAroundSpeed = maxLookAroundSpeed;
-
-        attackStance = false;
-        attacking = false;
-        lockRotationParent = false;
-        audioManager.RevertWalkingPitch(gameObject);
-
-
-    }
-
-    #endregion
 
     #region basic Dodge
 
     IEnumerator basicDodge()
     {
         dodgeLock = true;
-        attackObject.SetActive(false);
+        meleeWeapon.basicAttackObj.SetActive(false);
 
         audioManager.StopWalkingSound(gameObject);
         audioManager.PlayDashSound();
@@ -562,27 +459,6 @@ public class SwordAndGunCharacter : Player1
     }
 
     #endregion
-
-    IEnumerator RushAttack()
-    {
-
-        rushAttackObject.SetActive(true);
-
-        attacking = true;
-        rushAttackHasStarted = true;
-
-        yield return new WaitForSeconds(0.5f);
-
-        rushAttackObject.SetActive(false);
-
-        yield return new WaitForSeconds(0.1f);
-
-        playerHealth.invincible = false;
-        rushing = false;
-        rushAttackHasStarted = false;
-        attacking = false;
-
-    }
 
     public void RechargeBullets()
     {
@@ -651,20 +527,20 @@ public class SwordAndGunCharacter : Player1
 
     #region Reset
 
-    void ThingsToFalse()
+    public void ThingsToFalse()
     {
 
         attacking = false;
 
         attackStance = false;
         lockRotationParent = false;
-        stanceAttackObject.SetActive(false);
+        meleeWeapon.stanceAttackObj.SetActive(false);
 
         speed = maxSpeed;
         lookAroundSpeed = maxLookAroundSpeed;
 
         basicAttacking = false;
-        attackObject.SetActive(false);
+        meleeWeapon.basicAttackObj.SetActive(false);
 
         audioManager.RevertWalkingPitch(gameObject);
 

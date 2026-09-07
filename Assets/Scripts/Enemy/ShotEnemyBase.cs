@@ -69,9 +69,13 @@ public class ShotEnemyBase : EnemyBase
         attacking = true;
         agent.SetDestination(transform.position);
 
+        //audioManager.PlayRevolverClickSound(transform.position, gameObject);
 
-        yield return new WaitForSeconds(startShotingTime); // Hur lång tid det tar att "sikta in"
+        yield return new WaitForSeconds(startShotingTime - 0.4f); // Hur lång tid det tar att "sikta in"
 
+        audioManager.PlayRevolverClickSound(transform.position, gameObject);
+
+        yield return new WaitForSeconds(0.4f);
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, 1337, ~bulletIgnoreLayerMask);
 

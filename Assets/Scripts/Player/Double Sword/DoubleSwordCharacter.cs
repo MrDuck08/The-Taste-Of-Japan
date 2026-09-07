@@ -661,8 +661,8 @@ public class DoubleSwordCharacter : Player1
     IEnumerator basicDodge()
     {
         dodgeLock = true;
-        attackObject.SetActive(false);
-
+        meleeWeapon.basicAttackObj.SetActive(false);
+   
         bool standingStillDodge = false;
 
         // Om man står stilla så ska man dodga dit man kollar
