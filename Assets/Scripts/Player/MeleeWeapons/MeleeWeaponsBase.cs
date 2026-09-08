@@ -18,6 +18,7 @@ public class MeleeWeaponsBase : MonoBehaviour
     [HideInInspector] public Player1 player;
     [HideInInspector] public SwordAndGunCharacter playerSpesifics;
     [HideInInspector] public PlayerHealth playerHealth;
+    [HideInInspector] public CameraFollow cam;
     [HideInInspector] public AudioManager audioManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -29,6 +30,7 @@ public class MeleeWeaponsBase : MonoBehaviour
         playerHealth = GetComponentInParent<PlayerHealth>();
 
         audioManager = FindAnyObjectByType<AudioManager>();
+        cam = FindAnyObjectByType<CameraFollow>();
 
     }
 

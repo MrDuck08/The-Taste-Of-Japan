@@ -15,6 +15,8 @@ public class CameraFollow : MonoBehaviour
 
     bool nonPlayerZoom = false;
 
+    bool timeStopChange = false;
+
     #region Deflect Zoom Variables
 
     [Header("Deflect Zoom")]
@@ -194,6 +196,13 @@ public class CameraFollow : MonoBehaviour
 
         #endregion
 
+        if (timeStopChange)
+        {
+
+            transform.position = Vector2.Lerp(transform.position, targetThatIsFollowed.transform.position, 1337 * Time.unscaledDeltaTime);
+            cinemachine.Lens.OrthographicSize = Mathf.Lerp(cinemachine.Lens.OrthographicSize, 2, speedToZoom * Time.unscaledDeltaTime);
+        }
+
     }
 
     #region New Target
@@ -203,6 +212,7 @@ public class CameraFollow : MonoBehaviour
         // forWhat 
         // 1 = Deflect Bullet
         // 2 = R&S Charge Zoom
+        // 3 = New Target 0 time
 
         nonPlayerZoom = true;
 
@@ -239,6 +249,13 @@ public class CameraFollow : MonoBehaviour
 
                 break;
 
+            case 3:
+
+           
+                timeStopChange = true;
+
+                break;
+
         }
 
     }
@@ -268,6 +285,17 @@ public class CameraFollow : MonoBehaviour
 
         startZoomingOutB = true;
 
+    }
+
+    public void GoBackToPlayer()
+    {
+        nonPlayerZoom = false;
+        timeStopChange = false;
+
+        targetThatIsFollowed = playerTarget;
+        cinemachine.Follow = playerTarget.transform;
+        brain.UpdateMethod = CinemachineBrain.UpdateMethods.FixedUpdate;
+        cinemachine.Lens.OrthographicSize = 10;
     }
 
     #endregion

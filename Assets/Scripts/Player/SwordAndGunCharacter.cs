@@ -8,7 +8,7 @@ public class SwordAndGunCharacter : Player1
 
     [Header("S&G Specifics")]
 
-    bool attackStance = false;
+    [HideInInspector] public bool attackStance = false;
 
     #region Basic Dodge Variables
 
@@ -65,6 +65,7 @@ public class SwordAndGunCharacter : Player1
 
     [SerializeField] int stanceAttack = 2;
     [SerializeField] int stanceSlow = 4;
+    [SerializeField] float stanceLookSpeed = 1;
     int maxStanceAttack;
 
     #region UI Variables
@@ -118,7 +119,7 @@ public class SwordAndGunCharacter : Player1
             attacking = false;
             lockRotationParent = false;
 
-            meleeWeapon.stanceAttackObj.SetActive(false);
+            //meleeWeapon.stanceAttackObj.SetActive(false);
 
             speed = maxSpeed;
 
@@ -274,7 +275,6 @@ public class SwordAndGunCharacter : Player1
                 if (attackStance == true)
                 {
                     meleeWeapon.StanceAttack();
-                    attackStance = false;
 
 
                     stanceAttack--;
@@ -356,7 +356,7 @@ public class SwordAndGunCharacter : Player1
                 speed = maxSpeed/stanceSlow;
 
                 attackStance = true;
-                lookAroundSpeed = 1;
+                lookAroundSpeed = stanceLookSpeed;
 
             }
 

@@ -138,6 +138,37 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &1887149475498605860
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 736659225649255189}
+  m_Layer: 0
+  m_Name: CameraFollowObj
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &736659225649255189
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1887149475498605860}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1426429855709443364}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4529099087736880885
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,8 +196,8 @@ Transform:
   m_GameObject: {fileID: 4529099087736880885}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0184, y: 0.886, z: 0}
-  m_LocalScale: {x: 1.578336, y: 0.9508032, z: 1}
+  m_LocalPosition: {x: -0.0184, y: 0.7896, z: 0}
+  m_LocalScale: {x: 1.3218564, y: 0.75798035, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1426429855709443364}
@@ -303,8 +334,8 @@ Transform:
   m_GameObject: {fileID: 6196384956514521115}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0721, y: 1.7548, z: 0}
-  m_LocalScale: {x: 5.3428397, y: 2.6506999, z: 1}
+  m_LocalPosition: {x: -0.0354, y: 0.8251, z: 0}
+  m_LocalScale: {x: 1.3548852, y: 1.1093521, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1426429855709443364}
@@ -423,9 +454,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1426429855709443364}
-  - component: {fileID: 4383838920095062905}
+  - component: {fileID: 8804580044008470461}
   m_Layer: 0
-  m_Name: BasicMeleeWeapon
+  m_Name: QuickDrawWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -447,9 +478,10 @@ Transform:
   - {fileID: 5617797147953197545}
   - {fileID: 4872569029559074784}
   - {fileID: 199663705233481115}
+  - {fileID: 736659225649255189}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4383838920095062905
+--- !u!114 &8804580044008470461
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -458,9 +490,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6995902333820587194}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cad67a7e3e6c484094f6ca52e05177a, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b0d1a9b75d68064696e383d3d99b9d6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BasicSword
+  m_EditorClassIdentifier: Assembly-CSharp::QuiickDrawWeapon
   basicAttackNow: 0
   stanceAttackNow: 0
   harmonyAttackNow: 0
@@ -470,7 +502,9 @@ MonoBehaviour:
   player: {fileID: 0}
   playerSpesifics: {fileID: 0}
   playerHealth: {fileID: 0}
+  cam: {fileID: 0}
   audioManager: {fileID: 0}
+  tempCameraFollowObj: {fileID: 1887149475498605860}
   bulletIgnoreLayerMask:
     serializedVersion: 2
     m_Bits: 132

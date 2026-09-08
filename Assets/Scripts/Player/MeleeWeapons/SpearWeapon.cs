@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class BasicSword : MeleeWeaponsBase
+public class SpearWeapon : MeleeWeaponsBase
 {
     #region Harmony Variables
 
@@ -21,6 +21,7 @@ public class BasicSword : MeleeWeaponsBase
 
     #endregion
 
+
     public override void Start()
     {
         base.Start();
@@ -28,7 +29,7 @@ public class BasicSword : MeleeWeaponsBase
 
     }
 
-    // Update is called once per frame
+
     public override void Update()
     {
         base.Update();
@@ -51,7 +52,7 @@ public class BasicSword : MeleeWeaponsBase
         {
             harmonyAttackNow = false;
 
-            HarmonyFindWhereToGo();
+            StartCoroutine(HarmonyFindWhereToGo());
         }
 
         #region Harmony
@@ -75,7 +76,7 @@ public class BasicSword : MeleeWeaponsBase
 
             //Åker mot position
             player.transform.position = Vector2.MoveTowards(player.transform.position, pointToRushTo, rushSpeed * Time.deltaTime);
-            
+
 
             // 1.7 Så den stannar innan den kommer fram
             if (Vector2.Distance(player.transform.position, pointToRushTo) < 1.7f)
@@ -102,11 +103,17 @@ public class BasicSword : MeleeWeaponsBase
         player.attacking = true;
         player.basicAttacking = true;
 
+        player.lookAroundSpeed = 15f;
+
         audioManager.PlayPlayerSlashSound(transform.position);
+
 
         yield return new WaitForSeconds(0.2f);
 
+
         basicAttackObj.SetActive(false);
+        player.lookAroundSpeed = player.maxLookAroundSpeed;
+
 
         yield return new WaitForSeconds(0.1f);
 
@@ -154,8 +161,20 @@ public class BasicSword : MeleeWeaponsBase
 
     #region Harmony
 
-    void HarmonyFindWhereToGo()
+
+
+    IEnumerator HarmonyFindWhereToGo()
     {
+
+        harmonyAttackObj.SetActive(true);
+
+
+        yield return new WaitForSeconds(0.2f);
+
+        harmonyAttackObj.SetActive(false);
+
+        yield return new WaitForSeconds(0.1f);
+
 
         float clickDistance = Vector2.Distance(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
@@ -197,6 +216,8 @@ public class BasicSword : MeleeWeaponsBase
 
     IEnumerator RushAttack()
     {
+
+        yield return new WaitForSeconds(0.1f);
 
         harmonyAttackObj.SetActive(true);
 

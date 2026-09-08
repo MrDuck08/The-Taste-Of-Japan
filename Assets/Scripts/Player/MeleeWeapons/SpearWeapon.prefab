@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &384076156097621553
+--- !u!1 &2891943831379609869
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 199663705233481115}
-  - component: {fileID: 2420337275260613896}
-  - component: {fileID: 49078889094209398}
-  m_Layer: 7
+  - component: {fileID: 8536501363031777983}
+  - component: {fileID: 5855496091515913839}
+  - component: {fileID: 3257428322178685583}
+  m_Layer: 0
   m_Name: HarmonyAttack
-  m_TagString: StanceAttack
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!4 &199663705233481115
+--- !u!4 &8536501363031777983
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 384076156097621553}
+  m_GameObject: {fileID: 2891943831379609869}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0166, y: 1.1179, z: 0}
-  m_LocalScale: {x: 2.99558, y: 1.41449, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 5.2891464, y: 5.2891464, z: 5.2891464}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1426429855709443364}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2420337275260613896
+--- !u!212 &5855496091515913839
 SpriteRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 384076156097621553}
+  m_GameObject: {fileID: 2891943831379609869}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -82,8 +82,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0.12787381, b: 0, a: 0.50980395}
+  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Color: {r: 1, g: 0.12941177, b: 0, a: 0.52156866}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -92,13 +92,13 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &49078889094209398
-BoxCollider2D:
+--- !u!58 &3257428322178685583
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 384076156097621553}
+  m_GameObject: {fileID: 2891943831379609869}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -122,22 +122,12 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Radius: 0.5
 --- !u!1 &4529099087736880885
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,8 +155,8 @@ Transform:
   m_GameObject: {fileID: 4529099087736880885}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0184, y: 0.886, z: 0}
-  m_LocalScale: {x: 1.578336, y: 0.9508032, z: 1}
+  m_LocalPosition: {x: 0.0006, y: 1.8344, z: 0}
+  m_LocalScale: {x: 0.22247168, y: 2.8475082, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1426429855709443364}
@@ -303,8 +293,8 @@ Transform:
   m_GameObject: {fileID: 6196384956514521115}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0721, y: 1.7548, z: 0}
-  m_LocalScale: {x: 5.3428397, y: 2.6506999, z: 1}
+  m_LocalPosition: {x: -0.0541, y: 2.9372, z: 0}
+  m_LocalScale: {x: 1.7328285, y: 5.0153112, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1426429855709443364}
@@ -423,9 +413,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1426429855709443364}
-  - component: {fileID: 4383838920095062905}
+  - component: {fileID: 7844649177764191969}
   m_Layer: 0
-  m_Name: BasicMeleeWeapon
+  m_Name: SpearWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -446,10 +436,10 @@ Transform:
   m_Children:
   - {fileID: 5617797147953197545}
   - {fileID: 4872569029559074784}
-  - {fileID: 199663705233481115}
+  - {fileID: 8536501363031777983}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4383838920095062905
+--- !u!114 &7844649177764191969
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -458,15 +448,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6995902333820587194}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cad67a7e3e6c484094f6ca52e05177a, type: 3}
+  m_Script: {fileID: 11500000, guid: 4ede52af13977cc43b095b28c9db1b29, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BasicSword
+  m_EditorClassIdentifier: Assembly-CSharp::SpearWeapon
   basicAttackNow: 0
   stanceAttackNow: 0
   harmonyAttackNow: 0
   basicAttackObj: {fileID: 4529099087736880885}
   stanceAttackObj: {fileID: 6196384956514521115}
-  harmonyAttackObj: {fileID: 384076156097621553}
+  harmonyAttackObj: {fileID: 2891943831379609869}
   player: {fileID: 0}
   playerSpesifics: {fileID: 0}
   playerHealth: {fileID: 0}
