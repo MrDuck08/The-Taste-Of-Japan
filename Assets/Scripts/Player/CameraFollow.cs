@@ -15,8 +15,6 @@ public class CameraFollow : MonoBehaviour
 
     bool nonPlayerZoom = false;
 
-    bool timeStopChange = false;
-
     #region Deflect Zoom Variables
 
     [Header("Deflect Zoom")]
@@ -196,13 +194,6 @@ public class CameraFollow : MonoBehaviour
 
         #endregion
 
-        if (timeStopChange)
-        {
-
-            transform.position = Vector2.Lerp(transform.position, targetThatIsFollowed.transform.position, 1337 * Time.unscaledDeltaTime);
-            cinemachine.Lens.OrthographicSize = Mathf.Lerp(cinemachine.Lens.OrthographicSize, 2, speedToZoom * Time.unscaledDeltaTime);
-        }
-
     }
 
     #region New Target
@@ -250,9 +241,9 @@ public class CameraFollow : MonoBehaviour
                 break;
 
             case 3:
+                brain.UpdateMethod = CinemachineBrain.UpdateMethods.LateUpdate;
 
-           
-                timeStopChange = true;
+                Time.timeScale = 0;
 
                 break;
 
@@ -290,7 +281,6 @@ public class CameraFollow : MonoBehaviour
     public void GoBackToPlayer()
     {
         nonPlayerZoom = false;
-        timeStopChange = false;
 
         targetThatIsFollowed = playerTarget;
         cinemachine.Follow = playerTarget.transform;

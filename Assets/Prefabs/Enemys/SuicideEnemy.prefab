@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3349742453462168274}
   - component: {fileID: 3327626676648104686}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Triangle (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4259994782939821783}
   - component: {fileID: 5553304378817160562}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Visualls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,7 +195,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3125279087183016092}
   - component: {fileID: 8050424380389968916}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WarningObj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -286,7 +286,7 @@ GameObject:
   m_Component:
   - component: {fileID: 778396839927505107}
   - component: {fileID: 6954856763658142174}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Triangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -381,7 +381,7 @@ GameObject:
   - component: {fileID: 8979335425593011430}
   - component: {fileID: 3927963570240502226}
   - component: {fileID: 6994485488005008870}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SuicideEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -562,7 +562,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2998593525030836113}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: NonAggroPositions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -594,7 +594,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4667960016743711179}
   - component: {fileID: 2258457892696524043}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Triangle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -686,7 +686,7 @@ GameObject:
   - component: {fileID: 5106338046640337418}
   - component: {fileID: 8110357527911407608}
   - component: {fileID: 6368243906242988329}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ExplodeObj
   m_TagString: Explosion
   m_Icon: {fileID: 0}

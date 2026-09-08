@@ -507,7 +507,7 @@ MonoBehaviour:
   tempCameraFollowObj: {fileID: 1887149475498605860}
   bulletIgnoreLayerMask:
     serializedVersion: 2
-    m_Bits: 132
+    m_Bits: 900
   doorLayerMask:
     serializedVersion: 2
     m_Bits: 64

@@ -42,6 +42,8 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
     {
         base.Update();
 
+        #region Harmony
+
         if (lookingForDestination && Input.GetMouseButtonDown(0))
         {
 
@@ -51,7 +53,7 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
 
 
             float clickDistance = Vector2.Distance(tempObj.transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            Vector2 dir = tempObj.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - tempObj.transform.position;
 
             // Behöver manuelt kolla om man träffar en dörr eftersom man åker för snabbt.
             RaycastHit2D doorCheckHit = Physics2D.Raycast(tempObj.transform.position, dir, clickDistance, doorLayerMask);
@@ -88,6 +90,8 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
 
             harmonyChargingToPos = true;
 
+            cam.GoBackToPlayer();
+
             Time.timeScale = 1.0f;
         }
 
@@ -106,7 +110,12 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
 
             //Åker mot position
             player.transform.position = Vector2.MoveTowards(player.transform.position, posToGoToList[0], rushSpeed * Time.deltaTime);
-            player.transform.LookAt(posToGoToList[0]);
+
+
+            Vector2 lookDirection = posToGoToList[0] - new Vector2(player.transform.position.x, player.transform.position.y);
+            float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
+
+            player.transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
 
 
             // 1.7 Så den stannar innan den kommer fram
@@ -114,29 +123,28 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
             {
 
 
-                Debug.Log(posToGoToList.Count + " Before");
                 posToGoToList.RemoveAt(0);
-                Debug.Log(posToGoToList.Count + " After");
 
                 if (posToGoToList.Count <= 0)
                 {
-                    Debug.Log(posToGoToList.Count);
+
                     rushing = false;
                     harmonyFadeEffectTime = maxHarmonyFadeEffectTime;
                     player.dodgeLock = false;
                     player.lockMoveinputParent = false;
                     player.lockRotationParent = false;
+                    playerHealth.invincible = false;
                     harmonyChargingToPos = false;
                     harmonyAttackObj.SetActive(false);
                     Destroy(tempObj);
-                    Debug.Log("Done");
-                    cam.GoBackToPlayer();
+
+  
                 }
             }
 
         }
 
-
+        #endregion
 
         if (lookingForDestination || harmonyChargingToPos) { return; }
 
@@ -175,7 +183,7 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
 
         audioManager.PlayPlayerSlashSound(transform.position);
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.15f);
 
         basicAttackObj.SetActive(false);
 
@@ -207,7 +215,10 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
         player.movementInput = mousePos - player.myRigidbody.position;
 
 
-        //player.transform.LookAt(mousePos);
+        Vector2 lookDirection = mousePos - new Vector2(player.transform.position.x, player.transform.position.y);
+        float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
+
+        player.transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
 
 
         player.myRigidbody.linearDamping = 0;
@@ -247,6 +258,8 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
 
     #endregion
 
+
+    #region Harmony
 
     void HarmonyFindWhereToGo()
     {
@@ -297,4 +310,6 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
         lookingForDestination = true;
 
     }
+
+    #endregion
 }

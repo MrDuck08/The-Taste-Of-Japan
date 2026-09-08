@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 8536501363031777983}
   - component: {fileID: 5855496091515913839}
   - component: {fileID: 3257428322178685583}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HarmonyAttack
-  m_TagString: Untagged
+  m_TagString: StanceAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -460,6 +460,7 @@ MonoBehaviour:
   player: {fileID: 0}
   playerSpesifics: {fileID: 0}
   playerHealth: {fileID: 0}
+  cam: {fileID: 0}
   audioManager: {fileID: 0}
   bulletIgnoreLayerMask:
     serializedVersion: 2

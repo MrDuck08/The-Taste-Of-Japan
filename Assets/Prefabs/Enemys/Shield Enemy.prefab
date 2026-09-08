@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1977829261557223217}
   - component: {fileID: 3433912964051702190}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Visualls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6390536494169760207}
   - component: {fileID: 9009320532894073848}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Triangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -194,7 +194,7 @@ GameObject:
   - component: {fileID: 1472385079907000347}
   - component: {fileID: 2532459212165072626}
   - component: {fileID: 503710093684572309}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AttackObject
   m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
@@ -501,7 +501,7 @@ GameObject:
   - component: {fileID: 8693784086886652349}
   - component: {fileID: 6761150139801235623}
   - component: {fileID: 4424384088439388291}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Shield Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -683,7 +683,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5292671316723578006}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: NonAggroPositions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
