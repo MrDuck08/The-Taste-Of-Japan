@@ -18,6 +18,9 @@ public class SceneLoader : MonoBehaviour
 
     public void ChangeScene(int buildIndex)
     {
+        Time.timeScale = 1;
+        Time.fixedDeltaTime = 0.02F;
+        PauseScript.pause = false;
         SceneManager.LoadScene(buildIndex);
     }
 
@@ -25,6 +28,7 @@ public class SceneLoader : MonoBehaviour
     {
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02F;
+        PauseScript.pause = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -36,6 +40,9 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadNextScene()
     {
+        Time.timeScale = 1;
+        Time.fixedDeltaTime = 0.02F;
+        PauseScript.pause = false;
         int nextSceneIndex = LoopBuildIndex(SceneManager.GetActiveScene().buildIndex + 1);
         SceneManager.LoadScene(nextSceneIndex);
     }

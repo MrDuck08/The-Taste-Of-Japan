@@ -400,7 +400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466a36eb9f27c454780234c2e271746e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioFade
-  fadeInTargetVolume: 0.7
+  fadeInTargetVolume: 0.6
   fadeOutTargetVolume: 0
   fadeInSpeed: 3.5
   fadeOutSpeed: 0.1
@@ -1487,7 +1487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466a36eb9f27c454780234c2e271746e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioFade
-  fadeInTargetVolume: 0.2
+  fadeInTargetVolume: 0.15
   fadeOutTargetVolume: 0
   fadeInSpeed: 3.5
   fadeOutSpeed: 0.1

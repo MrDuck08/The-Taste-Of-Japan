@@ -113,6 +113,11 @@ public class SwordAndGunCharacter : Player1
 
         #region Move Lock
 
+        if (PauseScript.pause)
+        {
+            return;
+        }
+
         if (dodgeLock)
         {
             attackStance = false;

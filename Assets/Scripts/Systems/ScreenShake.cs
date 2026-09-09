@@ -34,11 +34,6 @@ public class ScreenShake : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Time.timeScale = 0;
-            TriggerShakeTime(5, 0.01f, false);
-        }
 
 
         if (shakeDuration > 0)
