@@ -73,6 +73,7 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
             else
             {
                 pointToRushTo = hit.point;
+
             }
 
             // Dörr layer
@@ -119,7 +120,7 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
 
 
             // 1.7 Så den stannar innan den kommer fram
-            if (Vector2.Distance(player.transform.position, posToGoToList[0]) < 1.7f)
+            if (Vector2.Distance(player.transform.position, posToGoToList[0]) < 0.5f)
             {
 
 
@@ -285,7 +286,10 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
         }
         else
         {
-            pointToRushTo = hit.point;
+            //pointToRushTo = hit.point;
+
+            // Måste kalkulera om det med mindre distance så den inte fastnar i en väg
+            pointToRushTo = transform.position + (Vector3)player.lookDirection.normalized * (hit.distance - 0.3f);
         }
 
         // Dörr layer
@@ -302,6 +306,8 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
         tempObj = Instantiate(tempCameraFollowObj);
 
         tempObj.transform.position = pointToRushTo;
+
+        tempObj.SetActive(true);
 
         posToGoToList.Add(tempObj.transform.position);
 

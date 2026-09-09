@@ -656,7 +656,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5120730371122288280}
-  - {fileID: 2496923302408370353}
+  - {fileID: 3381851476795305775}
   - {fileID: 6888786970679287554}
   - {fileID: 6836353145412159692}
   m_Father: {fileID: 0}
@@ -1213,7 +1213,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1001 &3561618220758633877
+--- !u!1001 &4406053590633880075
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1270,8 +1270,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfd1dc92d3154a6448624b1397274733, type: 3}
---- !u!4 &2496923302408370353 stripped
+--- !u!4 &3381851476795305775 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1426429855709443364, guid: cfd1dc92d3154a6448624b1397274733, type: 3}
-  m_PrefabInstance: {fileID: 3561618220758633877}
+  m_PrefabInstance: {fileID: 4406053590633880075}
   m_PrefabAsset: {fileID: 0}
