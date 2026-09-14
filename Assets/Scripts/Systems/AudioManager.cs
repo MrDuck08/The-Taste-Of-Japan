@@ -5,9 +5,10 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
 
-    List<AudioSource> allAudioSource = new List<AudioSource>();
+    List<AudioSource> allAudioSourceList = new List<AudioSource>();
     List<GameObject> objThatHaveInfSoundOnList = new List<GameObject>();
     List<GameObject> infSoundList = new List<GameObject>();
+    List<float> originalPitchList = new List<float>();
     GameObject playerObj;
 
     [Header("General")]
@@ -36,6 +37,17 @@ public class AudioManager : MonoBehaviour
     [SerializeField] List<GameObject> ShootSoundList = new List<GameObject>();
     [SerializeField] List<GameObject> ClickSoundList = new List<GameObject>();
     [SerializeField] List<GameObject> shellSoundList = new List<GameObject>();
+
+    [Header("Basic")]
+    [SerializeField] GameObject harmonyDashSound;
+
+
+    [Header("Spear")]
+    [SerializeField] List<GameObject> spearStabSoundList = new List<GameObject>();
+    [SerializeField] List<GameObject> spearBigSlashSoundList = new List<GameObject>();
+
+    [Header("Quick Draw")]
+    [SerializeField] List<GameObject> QDSlashSoundList = new List<GameObject>();
 
 
     [Header("Enemy")]
@@ -217,12 +229,14 @@ public class AudioManager : MonoBehaviour
     public void PlayHarmonySounds()
     {
 
-        allAudioSource.Clear();
-        allAudioSource.AddRange(FindObjectsByType<AudioSource>(FindObjectsSortMode.None));
+        allAudioSourceList.Clear();
+        originalPitchList.Clear();
+        allAudioSourceList.AddRange(FindObjectsByType<AudioSource>(FindObjectsSortMode.None));
 
-        for(int i = 0; i < allAudioSource.Count; i++ )
+        for(int i = 0; i < allAudioSourceList.Count; i++ )
         {
-            allAudioSource[i].pitch = 0.3f;
+            originalPitchList.Add(allAudioSourceList[i].pitch);
+            allAudioSourceList[i].pitch = 0.3f;
         }
 
         currentHarmonyWindSound = Instantiate(harmonyWindSound);
@@ -245,12 +259,13 @@ public class AudioManager : MonoBehaviour
     public void StopHarmonySounds()
     {
 
-        allAudioSource.Clear();
-        allAudioSource.AddRange(FindObjectsByType<AudioSource>(FindObjectsSortMode.None));
 
-        for (int i = 0; i < allAudioSource.Count; i++)
+        for (int i = 0; i < allAudioSourceList.Count; i++)
         {
-            allAudioSource[i].pitch = 1f;
+            if(allAudioSourceList[i] != null)
+            {
+                allAudioSourceList[i].pitch = originalPitchList[i];
+            }
         }
 
         currentHarmonyWindSound.GetComponent<AudioFade>().StartFadeOut();
@@ -270,6 +285,70 @@ public class AudioManager : MonoBehaviour
 
 
     }
+
+    #endregion
+
+    #region Weapons
+
+    #region Basic
+
+    public void HarmonyDashSound()
+    {
+
+        GameObject dashSound = Instantiate(harmonyDashSound);
+
+        SoundGeneral(dashSound, Vector2.zero, false);
+
+    }
+
+    #endregion
+
+    #region Spear
+
+    public void PlaySpearStabSound()
+    {
+
+        int whatSpearSound = Random.Range(0, spearStabSoundList.Count);
+
+        GameObject spearSound = Instantiate(spearStabSoundList[whatSpearSound]);
+
+
+        SoundGeneral(spearSound, Vector3.zero, false);
+
+
+    }
+
+    public void PlaySpearBigSlashSound()
+    {
+
+        int whatSpearSound = Random.Range(0, spearBigSlashSoundList.Count);
+
+        GameObject spearSound = Instantiate(spearBigSlashSoundList[whatSpearSound]);
+
+
+        SoundGeneral(spearSound, Vector3.zero, false);
+
+
+    }
+
+    #endregion
+
+    #region Quick Draw
+
+    public void PlayQuickDrawSlashSound()
+    {
+
+        int whatQDSound = Random.Range(0, QDSlashSoundList.Count);
+
+        GameObject QDSound = Instantiate(QDSlashSoundList[whatQDSound]);
+
+
+        SoundGeneral(QDSound, Vector3.zero, false);
+
+
+    }
+
+    #endregion
 
     #endregion
 

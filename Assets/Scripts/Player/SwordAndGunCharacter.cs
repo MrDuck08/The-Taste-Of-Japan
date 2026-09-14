@@ -49,7 +49,7 @@ public class SwordAndGunCharacter : Player1
 
     bool killWithRevolver = false;
     bool killWithCharge = false;
-    bool inHarmony = false;
+    [HideInInspector] public bool inHarmony = false;
     bool harmonyAvalibleEffect = true;
 
     [HideInInspector] public bool harmonyDoorHit = false;
@@ -179,7 +179,8 @@ public class SwordAndGunCharacter : Player1
                     playerHealth.invincible = true;
 
                     audioManager.StopHarmonySounds();
-                    ResetHarmony();
+                    Time.timeScale = 1;
+                    Time.fixedDeltaTime = 0.016F;
                 }
 
                 #endregion
@@ -207,7 +208,8 @@ public class SwordAndGunCharacter : Player1
                     screenShake.ScreenRecoil(0.1f, 0.3f);
 
                     audioManager.StopHarmonySounds();
-                    ResetHarmony();
+                    Time.timeScale = 1;
+                    Time.fixedDeltaTime = 0.016F;
 
                     // Sätter den under reset så att man kan börja bygga harmoni av denna attack
                     if (hit.transform.tag == "Enemy")
@@ -254,6 +256,7 @@ public class SwordAndGunCharacter : Player1
 
                     spawnedEffect.transform.parent = transform.Find("PlayerUI (Canvas)");
                     spawnedEffect.transform.position = new Vector3(960, 540, 0);
+                    spawnedEffect.transform.rotation = Quaternion.Euler(0 ,0 ,0);
 
                     audioManager.HarmonyDingSound();
                 }
@@ -266,7 +269,7 @@ public class SwordAndGunCharacter : Player1
 
         }
 
-        if (inHarmony) { return; }
+        if (inHarmony || meleeWeapon.rushing) { return; }
 
         #endregion
 
@@ -507,7 +510,7 @@ public class SwordAndGunCharacter : Player1
 
     }
 
-    void ResetHarmony()
+    public void ResetHarmony()
     {
         
 

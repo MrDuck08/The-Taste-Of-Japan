@@ -3,23 +3,6 @@ using UnityEngine;
 
 public class SpearWeapon : MeleeWeaponsBase
 {
-    #region Harmony Variables
-
-    [Header("Harmony")]
-
-    [SerializeField] LayerMask bulletIgnoreLayerMask;
-    [SerializeField] LayerMask doorLayerMask;
-
-    [SerializeField] float rushSpeed = 40f;
-    bool rushing = false;
-    bool rushAttackHasStarted = false;
-    Vector2 pointToRushTo = Vector2.zero;
-
-    [SerializeField] GameObject fadeEffectObj;
-    float harmonyFadeEffectTime;
-    float maxHarmonyFadeEffectTime = 0.3f;
-
-    #endregion
 
 
     public override void Start()
@@ -82,6 +65,7 @@ public class SpearWeapon : MeleeWeaponsBase
             if (Vector2.Distance(player.transform.position, pointToRushTo) < 1.7f)
             {
                 StartCoroutine(RushAttack());
+                playerSpesifics.ResetHarmony();
                 rushing = false;
                 harmonyFadeEffectTime = maxHarmonyFadeEffectTime;
                 player.dodgeLock = false;
@@ -105,7 +89,7 @@ public class SpearWeapon : MeleeWeaponsBase
 
         player.lookAroundSpeed = 15f;
 
-        audioManager.PlayPlayerSlashSound(transform.position);
+        audioManager.PlaySpearStabSound();
 
 
         yield return new WaitForSeconds(0.2f);
@@ -167,6 +151,8 @@ public class SpearWeapon : MeleeWeaponsBase
     {
 
         harmonyAttackObj.SetActive(true);
+        audioManager.PlaySpearBigSlashSound();
+        audioManager.PlaySpearStabSound();
 
 
         yield return new WaitForSeconds(0.2f);
@@ -220,6 +206,8 @@ public class SpearWeapon : MeleeWeaponsBase
         yield return new WaitForSeconds(0.1f);
 
         harmonyAttackObj.SetActive(true);
+        audioManager.PlaySpearBigSlashSound();
+        audioManager.PlaySpearStabSound();
 
         player.attacking = true;
         rushAttackHasStarted = true;
@@ -231,7 +219,6 @@ public class SpearWeapon : MeleeWeaponsBase
         yield return new WaitForSeconds(0.1f);
 
         playerHealth.invincible = false;
-        rushing = false;
         rushAttackHasStarted = false;
         player.attacking = false;
 

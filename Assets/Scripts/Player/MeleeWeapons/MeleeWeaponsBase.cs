@@ -15,6 +15,25 @@ public class MeleeWeaponsBase : MonoBehaviour
 
 
 
+    #region Harmony Variables
+
+    [Header("Harmony")]
+
+    public LayerMask bulletIgnoreLayerMask;
+    public LayerMask doorLayerMask;
+
+    public float rushSpeed = 40f;
+    [HideInInspector] public bool rushing = false;
+    [HideInInspector] public bool rushAttackHasStarted = false;
+    [HideInInspector] public Vector2 pointToRushTo = Vector2.zero;
+
+    public GameObject fadeEffectObj;
+    [HideInInspector] public float harmonyFadeEffectTime;
+    [HideInInspector] public float maxHarmonyFadeEffectTime = 0.3f;
+
+    #endregion
+
+
     [HideInInspector] public Player1 player;
     [HideInInspector] public SwordAndGunCharacter playerSpesifics;
     [HideInInspector] public PlayerHealth playerHealth;

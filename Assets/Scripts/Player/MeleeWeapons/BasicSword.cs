@@ -3,23 +3,7 @@ using UnityEngine;
 
 public class BasicSword : MeleeWeaponsBase
 {
-    #region Harmony Variables
 
-    [Header("Harmony")]
-
-    [SerializeField] LayerMask bulletIgnoreLayerMask;
-    [SerializeField] LayerMask doorLayerMask;
-
-    [SerializeField] float rushSpeed = 40f;
-    bool rushing = false;
-    bool rushAttackHasStarted = false;
-    Vector2 pointToRushTo = Vector2.zero;
-
-    [SerializeField] GameObject fadeEffectObj;
-    float harmonyFadeEffectTime;
-    float maxHarmonyFadeEffectTime = 0.3f;
-
-    #endregion
 
     public override void Start()
     {
@@ -81,6 +65,7 @@ public class BasicSword : MeleeWeaponsBase
             if (Vector2.Distance(player.transform.position, pointToRushTo) < 1.7f)
             {
                 StartCoroutine(RushAttack());
+                playerSpesifics.ResetHarmony();
                 rushing = false;
                 harmonyFadeEffectTime = maxHarmonyFadeEffectTime;
                 player.dodgeLock = false;
@@ -193,6 +178,7 @@ public class BasicSword : MeleeWeaponsBase
 
         rushing = true;
         harmonyAttackObj.SetActive(true);
+        audioManager.HarmonyDashSound();
     }
 
     IEnumerator RushAttack()

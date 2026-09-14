@@ -12,23 +12,7 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
     [SerializeField] GameObject tempCameraFollowObj;
     GameObject tempObj;
 
-    #region Harmony Variables
 
-    [Header("Harmony")]
-
-    [SerializeField] LayerMask bulletIgnoreLayerMask;
-    [SerializeField] LayerMask doorLayerMask;
-
-    [SerializeField] float rushSpeed = 40f;
-    bool rushing = false;
-    bool rushAttackHasStarted = false;
-    Vector2 pointToRushTo = Vector2.zero;
-
-    [SerializeField] GameObject fadeEffectObj;
-    float harmonyFadeEffectTime;
-    float maxHarmonyFadeEffectTime = 0.3f;
-
-    #endregion
 
     public override void Start()
     {
@@ -92,6 +76,7 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
             harmonyChargingToPos = true;
 
             cam.GoBackToPlayer();
+            audioManager.HarmonyDashSound();
 
             Time.timeScale = 1.0f;
         }
@@ -123,7 +108,6 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
             if (Vector2.Distance(player.transform.position, posToGoToList[0]) < 0.5f)
             {
 
-
                 posToGoToList.RemoveAt(0);
 
                 if (posToGoToList.Count <= 0)
@@ -136,11 +120,19 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
                     player.lockRotationParent = false;
                     playerHealth.invincible = false;
                     harmonyChargingToPos = false;
+                    posToGoToList.Clear();
+
+                    playerSpesifics.ResetHarmony();
                     harmonyAttackObj.SetActive(false);
                     Destroy(tempObj);
 
   
                 }
+                else
+                {
+                    audioManager.HarmonyDashSound();
+                }
+
             }
 
         }
@@ -182,7 +174,7 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
         player.attacking = true;
         player.basicAttacking = true;
 
-        audioManager.PlayPlayerSlashSound(transform.position);
+        audioManager.PlayQuickDrawSlashSound();
 
         yield return new WaitForSeconds(0.15f);
 
