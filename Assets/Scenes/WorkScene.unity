@@ -1705,17 +1705,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 543360907562410433, guid: 7fa7ef09fb9e5304f9965302ae143d93, type: 3}
-      propertyPath: fadeInSpeed
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 916545866876170941, guid: 7fa7ef09fb9e5304f9965302ae143d93, type: 3}
       propertyPath: m_Name
       value: AudioManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 5273111741210774028, guid: 7fa7ef09fb9e5304f9965302ae143d93, type: 3}
-      propertyPath: fadeInSpeed
-      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

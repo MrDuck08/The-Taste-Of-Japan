@@ -42,6 +42,7 @@ public class SwordAndGunCharacter : Player1
     [Header("Harmony")]
 
     [SerializeField] float decayTimeForHarmony = 7f;
+    [SerializeField] GameObject harmonyAvalibleEffectObj;
     float decayTimeForHarmonyBase;
     float maxTimeInHarmony = 10f;
     float maxTimeInHarmonyBase;
@@ -49,6 +50,7 @@ public class SwordAndGunCharacter : Player1
     bool killWithRevolver = false;
     bool killWithCharge = false;
     bool inHarmony = false;
+    bool harmonyAvalibleEffect = true;
 
     [HideInInspector] public bool harmonyDoorHit = false;
     [HideInInspector] public Vector3 harmonyDoorHitPos = Vector3.zero;
@@ -139,7 +141,7 @@ public class SwordAndGunCharacter : Player1
         if (killWithCharge && killWithRevolver)
         {
             // Enter Harmony 
-            if ((Input.GetKeyDown(KeyCode.E) || (Input.GetKeyDown(KeyCode.LeftControl)) && !dodgeLock))
+            if (Input.GetKeyDown(KeyCode.Space) && !dodgeLock)
             {
                 inHarmony = true;
 
@@ -244,6 +246,18 @@ public class SwordAndGunCharacter : Player1
                 bulletKillImage.fillAmount = decayTimeForHarmony / decayTimeForHarmonyBase;
                 ChargeKillImage.fillAmount = decayTimeForHarmony / decayTimeForHarmonyBase;
 
+                if (harmonyAvalibleEffect)
+                {
+                    harmonyAvalibleEffect = false;
+
+                    GameObject spawnedEffect = Instantiate(harmonyAvalibleEffectObj);
+
+                    spawnedEffect.transform.parent = transform.Find("PlayerUI (Canvas)");
+                    spawnedEffect.transform.position = new Vector3(960, 540, 0);
+
+                    audioManager.HarmonyDingSound();
+                }
+
                 if (decayTimeForHarmony < 0)
                 {
                     ResetHarmony();
@@ -256,13 +270,13 @@ public class SwordAndGunCharacter : Player1
 
         #endregion
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
 
-            StartCoroutine(basicDodge());
+        //    StartCoroutine(basicDodge());
 
 
-        }
+        //}
 
         #region Left Click Attacks
 
@@ -504,6 +518,7 @@ public class SwordAndGunCharacter : Player1
         killWithCharge = false;
         killWithRevolver = false;
         inHarmony = false;
+        harmonyAvalibleEffect = true;
 
         bulletKillImage.fillAmount = 1;
         ChargeKillImage.fillAmount = 1;

@@ -16,6 +16,8 @@ public class PauseScript : MonoBehaviour
     bool inforActive = false;
     public static bool pause = false;
 
+    float timeScaleBeforePause = 1;
+
     SceneLoader sceneLoader;
     Player1 player;
     Singleton singleton;
@@ -76,6 +78,7 @@ public class PauseScript : MonoBehaviour
                 //Cursor.lockState = CursorLockMode.None;
                 //Cursor.visible = true;
 
+                timeScaleBeforePause = Time.timeScale;
                 Time.timeScale = 0;
                 pauseMenu.SetActive(true);
                 pause = true;
@@ -88,7 +91,7 @@ public class PauseScript : MonoBehaviour
                 //    Cursor.visible = false;
                 //}
 
-                Time.timeScale = 1;
+                Time.timeScale = timeScaleBeforePause;
                 pauseMenu.SetActive(false);
                 pause = false;
 
@@ -110,7 +113,7 @@ public class PauseScript : MonoBehaviour
         //    Cursor.visible = false;
         //}
 
-        Time.timeScale = 1;
+        Time.timeScale = timeScaleBeforePause;
         pauseMenu.SetActive(false);
         pause = false;
 

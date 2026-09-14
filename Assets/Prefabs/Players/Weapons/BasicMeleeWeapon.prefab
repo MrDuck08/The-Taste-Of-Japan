@@ -470,10 +470,11 @@ MonoBehaviour:
   player: {fileID: 0}
   playerSpesifics: {fileID: 0}
   playerHealth: {fileID: 0}
+  cam: {fileID: 0}
   audioManager: {fileID: 0}
   bulletIgnoreLayerMask:
     serializedVersion: 2
-    m_Bits: 132
+    m_Bits: 900
   doorLayerMask:
     serializedVersion: 2
     m_Bits: 64

@@ -192,13 +192,12 @@ public class BasicSword : MeleeWeaponsBase
         player.transform.LookAt(pointToRushTo);
 
         rushing = true;
-
+        harmonyAttackObj.SetActive(true);
     }
 
     IEnumerator RushAttack()
     {
 
-        harmonyAttackObj.SetActive(true);
 
         player.attacking = true;
         rushAttackHasStarted = true;

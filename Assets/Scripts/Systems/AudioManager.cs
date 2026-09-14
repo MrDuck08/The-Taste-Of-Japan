@@ -31,6 +31,7 @@ public class AudioManager : MonoBehaviour
     GameObject currentHarmonyWindSound;
     [SerializeField] GameObject harmonyChoirSound;
     GameObject currentharmonyChoirSound;
+    [SerializeField] List<GameObject> harmonyDingSoundList = new List<GameObject>();
 
     [SerializeField] List<GameObject> ShootSoundList = new List<GameObject>();
     [SerializeField] List<GameObject> ClickSoundList = new List<GameObject>();
@@ -254,6 +255,19 @@ public class AudioManager : MonoBehaviour
 
         currentHarmonyWindSound.GetComponent<AudioFade>().StartFadeOut();
         currentharmonyChoirSound.GetComponent<AudioFade>().StartFadeOut();
+
+    }
+
+    public void HarmonyDingSound()
+    {
+
+        int whatDingSound = Random.Range(0, harmonyDingSoundList.Count);
+
+        GameObject dingSound = Instantiate(harmonyDingSoundList[whatDingSound]);
+
+
+        SoundGeneral(dingSound, Vector3.zero, false);
+
 
     }
 

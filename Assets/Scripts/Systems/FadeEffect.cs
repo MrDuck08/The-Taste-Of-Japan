@@ -1,28 +1,59 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FadeEffect : MonoBehaviour
 {
+    [SerializeField] float fadeSpeed = 0.5f;
+
     SpriteRenderer spriteRenderer;
+    Image image;
+    TextMeshProUGUI text;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        image = GetComponent<Image>();
+        text = GetComponent<TextMeshProUGUI>();
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a - 0.5f * Time.deltaTime);
-        if(spriteRenderer.color.a < 0.01f)
+        if(spriteRenderer != null)
         {
-            Destroy(gameObject);
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a - fadeSpeed * Time.deltaTime);
+            if (spriteRenderer.color.a < 0.01f)
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        if(image != null)
+        {
+            image.color = new Color(image.color.r, image.color.g, image.color.b, image.color.a - fadeSpeed * Time.deltaTime);
+            if (image.color.a < 0.01f)
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        if (text != null)
+        {
+            text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a - fadeSpeed * Time.deltaTime);
+            if (text.color.a < 0.01f)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
     public void InstanciateInfo(SpriteRenderer newSprite, Transform newTransform, Color32 newColor)
     {
+        // Om man behöver ändra på den på något sätt
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         spriteRenderer.sprite = newSprite.sprite;
