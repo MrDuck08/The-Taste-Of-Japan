@@ -19,11 +19,13 @@ public class AudioManager : MonoBehaviour
     [SerializeField] GameObject explosionSound;
     [SerializeField] GameObject explosionKillSound;
     [SerializeField] List<GameObject> explosionImpactSoundList = new List<GameObject>();
+    [SerializeField] GameObject anticipationSound;
 
 
     [Header("S & G Player")]
 
     [SerializeField] GameObject playerDashSound;
+    [SerializeField] List<GameObject> dashBoomSoundList = new List<GameObject>();
     [SerializeField] GameObject playerShlashSound;
     [SerializeField] GameObject playerChargeShlashSound;
     [SerializeField] GameObject playerUnsheatheSound;
@@ -44,7 +46,8 @@ public class AudioManager : MonoBehaviour
 
     [Header("Spear")]
     [SerializeField] List<GameObject> spearStabSoundList = new List<GameObject>();
-    [SerializeField] List<GameObject> spearBigSlashSoundList = new List<GameObject>();
+    [SerializeField] List<GameObject> spearHarmonySlashSoundList = new List<GameObject>();
+    [SerializeField] GameObject spearBigSlashSound;
 
     [Header("Quick Draw")]
     [SerializeField] List<GameObject> QDSlashSoundList = new List<GameObject>();
@@ -181,16 +184,6 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public void PlayDashSound()
-    {
-
-        GameObject dashSound = Instantiate(playerDashSound);
-
-
-        SoundGeneral(dashSound, Vector2.zero, false);
-
-    }
-
     #endregion
 
     #region S & G Charge Slash
@@ -318,12 +311,21 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public void PlaySpearBigSlashSound()
+    public void PlaySpearStanceAttackSound()
     {
 
-        int whatSpearSound = Random.Range(0, spearBigSlashSoundList.Count);
+        GameObject spearAttackSound = Instantiate(spearBigSlashSound);
 
-        GameObject spearSound = Instantiate(spearBigSlashSoundList[whatSpearSound]);
+        SoundGeneral(spearAttackSound, Vector2.zero, false);
+
+    }
+
+    public void PlaySpearHarmonySlashSound()
+    {
+
+        int whatSpearSound = Random.Range(0, spearHarmonySlashSoundList.Count);
+
+        GameObject spearSound = Instantiate(spearHarmonySlashSoundList[whatSpearSound]);
 
 
         SoundGeneral(spearSound, Vector3.zero, false);
@@ -344,6 +346,20 @@ public class AudioManager : MonoBehaviour
 
 
         SoundGeneral(QDSound, Vector3.zero, false);
+
+
+    }
+
+    public void PlayDashSound()
+    {
+
+        int whatDashSound = Random.Range(0, dashBoomSoundList.Count);
+
+        GameObject dashBoomSound = Instantiate(dashBoomSoundList[whatDashSound]);
+        GameObject dashSound = Instantiate(playerDashSound);
+
+        SoundGeneral(dashSound, Vector3.zero, false);
+        SoundGeneral(dashBoomSound, Vector3.zero, false);
 
 
     }
@@ -496,6 +512,15 @@ public class AudioManager : MonoBehaviour
     }
 
     #endregion
+
+    public void playAnticipationSound()
+    {
+
+        GameObject anticipation = Instantiate(anticipationSound);
+
+        SoundGeneral(anticipation, Vector2.zero, false);
+
+    }
 
     void SoundGeneral(GameObject sound, Vector2 newPos, bool infinite)
     {

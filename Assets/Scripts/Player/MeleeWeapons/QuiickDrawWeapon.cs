@@ -222,6 +222,9 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
 
 
         audioManager.PlayUnsheatheSound(transform.position);
+        audioManager.PlayDashSound();
+        //audioManager.PlaySpearAnticipationSound();
+        //audioManager.PlaySpearStanceAttackSound();
 
         yield return new WaitForSeconds(0.05f);
         audioManager.PlayPlayerChargeSlashSound(transform.position); // Mini paus för att spela ljud

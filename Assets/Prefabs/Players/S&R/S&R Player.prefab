@@ -825,7 +825,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 132
   decayTimeForHarmony: 7
-  harmonyAvalibleEffectObj: {fileID: 4175471601776963475, guid: a8720c2928bf743419b342857501673d, type: 3}
+  harmonyAvalibleEffectObj: {fileID: 5146743954175057033, guid: 4f982f602833514429198eb2ce27a097, type: 3}
   inHarmony: 0
   harmonyDoorHit: 0
   harmonyDoorHitPos: {x: 0, y: 0, z: 0}

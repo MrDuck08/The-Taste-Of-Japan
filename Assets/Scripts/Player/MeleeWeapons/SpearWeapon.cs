@@ -119,11 +119,9 @@ public class SpearWeapon : MeleeWeaponsBase
 
         stanceAttackObj.SetActive(true);
 
-        audioManager.PlayUnsheatheSound(transform.position);
+        audioManager.PlaySpearStanceAttackSound();
 
-        yield return new WaitForSeconds(0.05f);
-        audioManager.PlayPlayerChargeSlashSound(transform.position); // Mini paus för att spela ljud
-        yield return new WaitForSeconds(0.35f);
+        yield return new WaitForSeconds(0.4f);
 
         stanceAttackObj.SetActive(false);
 
@@ -151,7 +149,7 @@ public class SpearWeapon : MeleeWeaponsBase
     {
 
         harmonyAttackObj.SetActive(true);
-        audioManager.PlaySpearBigSlashSound();
+        audioManager.PlaySpearHarmonySlashSound();
         audioManager.PlaySpearStabSound();
 
 
@@ -206,7 +204,7 @@ public class SpearWeapon : MeleeWeaponsBase
         yield return new WaitForSeconds(0.1f);
 
         harmonyAttackObj.SetActive(true);
-        audioManager.PlaySpearBigSlashSound();
+        audioManager.PlaySpearHarmonySlashSound();
         audioManager.PlaySpearStabSound();
 
         player.attacking = true;

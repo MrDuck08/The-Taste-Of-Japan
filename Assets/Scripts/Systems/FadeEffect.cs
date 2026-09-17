@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class FadeEffect : MonoBehaviour
 {
     [SerializeField] float fadeSpeed = 0.5f;
+    [SerializeField] bool destroyParent = false;
 
     SpriteRenderer spriteRenderer;
     Image image;
@@ -28,7 +29,14 @@ public class FadeEffect : MonoBehaviour
             spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a - fadeSpeed * Time.deltaTime);
             if (spriteRenderer.color.a < 0.01f)
             {
-                Destroy(gameObject);
+                if (destroyParent)
+                {
+                    Destroy(transform.parent.gameObject);
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
         }
 
@@ -37,7 +45,15 @@ public class FadeEffect : MonoBehaviour
             image.color = new Color(image.color.r, image.color.g, image.color.b, image.color.a - fadeSpeed * Time.deltaTime);
             if (image.color.a < 0.01f)
             {
-                Destroy(gameObject);
+                // Vissa Objekt sitter på en canvas som behövs förstöras istället
+                if (destroyParent)
+                {
+                    Destroy(transform.parent.gameObject);
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
         }
 
@@ -46,7 +62,14 @@ public class FadeEffect : MonoBehaviour
             text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a - fadeSpeed * Time.deltaTime);
             if (text.color.a < 0.01f)
             {
-                Destroy(gameObject);
+                if (destroyParent)
+                {
+                    Destroy(transform.parent.gameObject);
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }

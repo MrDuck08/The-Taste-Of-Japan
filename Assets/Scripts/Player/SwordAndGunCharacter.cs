@@ -141,7 +141,7 @@ public class SwordAndGunCharacter : Player1
         if (killWithCharge && killWithRevolver)
         {
             // Enter Harmony 
-            if (Input.GetKeyDown(KeyCode.Space) && !dodgeLock)
+            if (Input.GetKeyDown(KeyCode.Space) && !dodgeLock && !inHarmony)
             {
                 inHarmony = true;
 
@@ -253,10 +253,6 @@ public class SwordAndGunCharacter : Player1
                     harmonyAvalibleEffect = false;
 
                     GameObject spawnedEffect = Instantiate(harmonyAvalibleEffectObj);
-
-                    spawnedEffect.transform.parent = transform.Find("PlayerUI (Canvas)");
-                    spawnedEffect.transform.position = new Vector3(960, 540, 0);
-                    spawnedEffect.transform.rotation = Quaternion.Euler(0 ,0 ,0);
 
                     audioManager.HarmonyDingSound();
                 }
