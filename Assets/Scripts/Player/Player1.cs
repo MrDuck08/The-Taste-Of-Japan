@@ -54,6 +54,7 @@ public class Player1 : MonoBehaviour
     [HideInInspector] public CircleCollider2D myCollider;
 
     [HideInInspector] public AudioManager audioManager;
+    [HideInInspector] public InLevelSystems inLevelSystems;
     [HideInInspector] public MeleeWeaponsBase meleeWeapon;
 
     public Camera cam;
@@ -66,6 +67,7 @@ public class Player1 : MonoBehaviour
         meleeWeapon = GetComponentInChildren<MeleeWeaponsBase>();
 
         audioManager = FindAnyObjectByType<AudioManager>();
+        inLevelSystems = FindAnyObjectByType<InLevelSystems>();
 
         cam = Camera.main;
 

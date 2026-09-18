@@ -79,6 +79,7 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
             audioManager.HarmonyDashSound();
 
             Time.timeScale = 1.0f;
+
         }
 
         if (harmonyChargingToPos)

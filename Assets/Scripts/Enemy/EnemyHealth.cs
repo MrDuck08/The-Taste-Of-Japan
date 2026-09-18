@@ -21,6 +21,7 @@ public class EnemyHealth : MonoBehaviour
     ScreenShake screenShake;
     SwordAndGunCharacter swordAndGun;
     Player1 player1;
+    InLevelSystems inLevelSystems;
 
     AudioManager audioManager;
 
@@ -30,6 +31,7 @@ public class EnemyHealth : MonoBehaviour
         swordAndGun = FindAnyObjectByType<SwordAndGunCharacter>();
         player1 = FindAnyObjectByType<Player1>();
         audioManager = FindAnyObjectByType<AudioManager>();
+        inLevelSystems = FindAnyObjectByType<InLevelSystems>();
 
         doubleCheckTime = maxDoubleCheckTime;
     }
@@ -162,6 +164,8 @@ public class EnemyHealth : MonoBehaviour
 
         if (health <= 0)
         {
+            // Så att den inte kör samma kod igen
+            health = 1337;
 
             audioManager.PlayEnemyDeathSound(transform.position);
 
@@ -196,10 +200,10 @@ public class EnemyHealth : MonoBehaviour
 
             }
 
-
+            
             KillEffects();
             BloodEffects(whatTypeOfAttack, player1.transform.position);
-
+            inLevelSystems.EnemyKilled(transform);
 
             Destroy(gameObject);
 

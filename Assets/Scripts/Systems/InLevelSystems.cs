@@ -5,9 +5,61 @@ public class InLevelSystems : MonoBehaviour
 {
 
     List<GameObject> enemiesList = new List<GameObject>();
+    GameObject tempObj;
+    [SerializeField] GameObject tempCameraFollowObj;
+    float enemyCount = 0;
+    float timeForSlowDown = 1.5f;
+    public bool levelDone = false;
+    bool finalEnemyKill = false;
 
     [SerializeField] LayerMask whatLayerToIgnore;
     [SerializeField] TrailRenderer bulletTrail;
+
+    CameraFollow cam;
+    AudioManager audioManager;
+
+    private void Start()
+    {
+        cam = FindAnyObjectByType<CameraFollow>();
+        audioManager = FindAnyObjectByType<AudioManager>();
+
+        enemiesList.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
+
+        for (int i = 0; i < enemiesList.Count; i++)
+        {
+            enemyCount++;
+        }
+
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            FindAnyObjectByType<SceneLoader>().ReloadScene();
+        }
+
+        if (finalEnemyKill)
+        {
+
+            timeForSlowDown -= Time.unscaledDeltaTime;
+
+            if(timeForSlowDown <= 0)
+            {
+                finalEnemyKill = false;
+
+                Time.timeScale = 1f;
+                Time.fixedDeltaTime = 0.02f;
+                cam.GoBackToPlayer();
+                cam.ZoomOutAgain(0.3f);
+                audioManager.RevertPitch();
+                FindAnyObjectByType<SwordAndGunCharacter>().ResetHarmony();
+            }
+
+        }
+    }
+
+    #region Bullet Deflect
 
     public void ShootBackDeflectedBullet(Vector2 fromWhere)
     {
@@ -55,10 +107,37 @@ public class InLevelSystems : MonoBehaviour
 
             trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(fromWhere, hit.point);
 
+            audioManager.PlayDeflectSound();
+
             enemiesList[whatI].GetComponent<EnemyHealth>().TakeDamage(1, 2, fromWhere);
 
         }
 
     }
 
+    #endregion
+
+    public void EnemyKilled(Transform pos)
+    {
+
+        enemyCount--;
+
+        if (enemyCount <= 0)
+        {
+            levelDone = true;
+            finalEnemyKill = true;
+
+            Time.timeScale = 0.1f;
+            Time.fixedDeltaTime = 0.016F * Time.timeScale;
+
+            tempObj = Instantiate(tempCameraFollowObj);
+
+            tempObj.transform.position = pos.position;
+
+            audioManager.ChangePitchAll(0.3f);
+            cam.ChangeTargetCam(tempObj, 1337);
+            cam.StartZoomIn(4, 0.5f);
+        }
+
+    }
 }

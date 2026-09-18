@@ -1,6 +1,5 @@
 using Unity.Cinemachine;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class CameraFollow : MonoBehaviour
 {
@@ -88,12 +87,11 @@ public class CameraFollow : MonoBehaviour
         {
             timeToZoomInB -= Time.unscaledDeltaTime;
 
-            transform.position = Vector2.Lerp(transform.position, targetThatIsFollowed.transform.position, 1337 * Time.unscaledDeltaTime);
-            cam.orthographicSize -= speedToZoomInB * Time.unscaledDeltaTime;
+
+            cinemachine.Lens.OrthographicSize = Mathf.Lerp(cinemachine.Lens.OrthographicSize, 4, speedToZoomInB * Time.unscaledDeltaTime);
 
             if (timeToZoomInB <= 0)
             {
-
                 startZommingInB = false;
 
             }
@@ -103,8 +101,8 @@ public class CameraFollow : MonoBehaviour
         {
             timeToZoomOutB -= Time.unscaledDeltaTime;
 
-            transform.position = Vector2.Lerp(transform.position, targetThatIsFollowed.transform.position, 1337 * Time.unscaledDeltaTime);
-            cam.orthographicSize += speedToZoomOutB * Time.unscaledDeltaTime;
+
+            cinemachine.Lens.OrthographicSize = Mathf.Lerp(cinemachine.Lens.OrthographicSize, 10, speedToZoomOutB * Time.unscaledDeltaTime);
 
             if (timeToZoomOutB <= 0)
             {
@@ -185,7 +183,12 @@ public class CameraFollow : MonoBehaviour
                     
                     Destroy(tempCamTarget);
 
-                    Time.timeScale = 1;
+                    // Annars buggar final kill
+                    if (inLevelSystems.levelDone == false)
+                    {
+                        Time.timeScale = 1;
+                    }
+
 
                 }
 
@@ -251,7 +254,7 @@ public class CameraFollow : MonoBehaviour
 
     }
 
-    void StartZoomIn(float howMuchZoom, float whatTimeToZoom)
+    public void StartZoomIn(float howMuchZoom, float whatTimeToZoom)
     {
 
         timeToZoomInB = whatTimeToZoom;

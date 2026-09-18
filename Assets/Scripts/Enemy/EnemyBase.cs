@@ -104,6 +104,8 @@ public class EnemyBase : MonoBehaviour
         agent.updateUpAxis = false;
 
         myRigidbody2D = GetComponent<Rigidbody2D>();
+
+
     }
 
 

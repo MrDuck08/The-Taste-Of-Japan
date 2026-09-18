@@ -120,7 +120,7 @@ public class SwordAndGunCharacter : Player1
             return;
         }
 
-        if (dodgeLock)
+        if (dodgeLock || inLevelSystems.levelDone)
         {
             attackStance = false;
             attacking = false;
@@ -209,6 +209,7 @@ public class SwordAndGunCharacter : Player1
 
                     audioManager.StopHarmonySounds();
                     Time.timeScale = 1;
+                    Debug.Log("Here 3");
                     Time.fixedDeltaTime = 0.016F;
 
                     // Sätter den under reset så att man kan börja bygga harmoni av denna attack
@@ -523,7 +524,6 @@ public class SwordAndGunCharacter : Player1
         ChargeKillImage.fillAmount = 1;
         bulletKillImage.gameObject.SetActive(false);
         ChargeKillImage.gameObject.SetActive(false);
-
 
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.016F;

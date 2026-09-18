@@ -36,9 +36,12 @@ public class AudioManager : MonoBehaviour
     GameObject currentharmonyChoirSound;
     [SerializeField] List<GameObject> harmonyDingSoundList = new List<GameObject>();
 
+    [Header("Gun")]
+
     [SerializeField] List<GameObject> ShootSoundList = new List<GameObject>();
     [SerializeField] List<GameObject> ClickSoundList = new List<GameObject>();
     [SerializeField] List<GameObject> shellSoundList = new List<GameObject>();
+    [SerializeField] List<GameObject> deflectSoundList = new List<GameObject>();
 
     [Header("Basic")]
     [SerializeField] GameObject harmonyDashSound;
@@ -222,15 +225,7 @@ public class AudioManager : MonoBehaviour
     public void PlayHarmonySounds()
     {
 
-        allAudioSourceList.Clear();
-        originalPitchList.Clear();
-        allAudioSourceList.AddRange(FindObjectsByType<AudioSource>(FindObjectsSortMode.None));
-
-        for(int i = 0; i < allAudioSourceList.Count; i++ )
-        {
-            originalPitchList.Add(allAudioSourceList[i].pitch);
-            allAudioSourceList[i].pitch = 0.3f;
-        }
+        ChangePitchAll(0.3f);
 
         currentHarmonyWindSound = Instantiate(harmonyWindSound);
         currentharmonyChoirSound = Instantiate(harmonyChoirSound);
@@ -251,15 +246,7 @@ public class AudioManager : MonoBehaviour
 
     public void StopHarmonySounds()
     {
-
-
-        for (int i = 0; i < allAudioSourceList.Count; i++)
-        {
-            if(allAudioSourceList[i] != null)
-            {
-                allAudioSourceList[i].pitch = originalPitchList[i];
-            }
-        }
+        RevertPitch();
 
         currentHarmonyWindSound.GetComponent<AudioFade>().StartFadeOut();
         currentharmonyChoirSound.GetComponent<AudioFade>().StartFadeOut();
@@ -421,6 +408,19 @@ public class AudioManager : MonoBehaviour
 
 
         SoundGeneral(wallHitSound, newPos, false);
+
+
+    }
+
+    public void PlayDeflectSound()
+    {
+
+        int whatShootSound = Random.Range(0, deflectSoundList.Count);
+
+        GameObject shootSound = Instantiate(deflectSoundList[whatShootSound]);
+
+
+        SoundGeneral(shootSound, Vector2.zero, false);
 
 
     }
@@ -592,5 +592,33 @@ public class AudioManager : MonoBehaviour
 
     }
 
+
+    public void ChangePitchAll(float whatPitch)
+    {
+        // 0.3 = slo mo pitch
+
+        allAudioSourceList.Clear();
+        originalPitchList.Clear();
+        allAudioSourceList.AddRange(FindObjectsByType<AudioSource>(FindObjectsSortMode.None));
+
+        for (int i = 0; i < allAudioSourceList.Count; i++)
+        {
+            originalPitchList.Add(allAudioSourceList[i].pitch);
+            allAudioSourceList[i].pitch = whatPitch;
+        }
+    }
+
+    public void RevertPitch()
+    {
+
+        for (int i = 0; i < allAudioSourceList.Count; i++)
+        {
+            if (allAudioSourceList[i] != null)
+            {
+                allAudioSourceList[i].pitch = originalPitchList[i];
+            }
+        }
+
+    }
 
 }

@@ -67,7 +67,7 @@ public class ScreenShake : MonoBehaviour
         else if (!shakeStop)
         {
             // Shake Done
-            Time.timeScale = 1;
+            //Time.timeScale = 1;
             StopShake();
         }
     }

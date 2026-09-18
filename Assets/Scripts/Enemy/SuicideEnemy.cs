@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SuicideEnemy : EnemyBase
@@ -17,6 +18,7 @@ public class SuicideEnemy : EnemyBase
     bool litFuse = false;
     bool hasBeenKnockedBack = false;
     bool knockbackInvincibility = false;
+    bool exploding = false;
 
     EnemyHealth enemyHealth;
 
@@ -66,7 +68,8 @@ public class SuicideEnemy : EnemyBase
 
     public IEnumerator Explode()
     {
-
+        if (exploding) { yield break; }
+        exploding = true;
 
         explosionObj.SetActive(true);
 
@@ -82,6 +85,7 @@ public class SuicideEnemy : EnemyBase
         enemyHealth.BloodEffects(1, transform.position);
         enemyHealth.BloodEffects(1, transform.position);
 
+        FindAnyObjectByType<InLevelSystems>().EnemyKilled(transform);
 
         Destroy(gameObject);
 
