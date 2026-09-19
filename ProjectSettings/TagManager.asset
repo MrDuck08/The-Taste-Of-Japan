@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - StanceAttack
   - Explosion
+  - HarmonyAttack
   layers:
   - Default
   - TransparentFX

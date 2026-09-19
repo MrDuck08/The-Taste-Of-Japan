@@ -56,6 +56,7 @@ public class ShieldEnemy : EnemyBase
 
     public void ShieldRemove()
     {
+        scoreSystem.PointsForShieldDestroy(ShieldObj.transform.position);
         ShieldObj.SetActive(false);
 
         attacking = false;
@@ -73,7 +74,7 @@ public class ShieldEnemy : EnemyBase
     private void OnTriggerEnter2D(Collider2D collision)
     {
 
-        if (collision.transform.CompareTag("StanceAttack"))
+        if (collision.transform.CompareTag("StanceAttack") || collision.transform.CompareTag("HarmonyAttack"))
         {
             Vector2 direction = playerObject.transform.position - transform.position;
             float lenght = Vector2.Distance(playerObject.transform.position, transform.position);
@@ -87,9 +88,20 @@ public class ShieldEnemy : EnemyBase
 
                 ParticleSystem spawnedShieldParticles = Instantiate(shieldDestroyParticles);
                 spawnedShieldParticles.transform.position = ShieldObj.transform.position;
+                scoreSystem.PointsForShieldDestroy(ShieldObj.transform.position);
+
                 shieldDestroyParticles.Play();
             }
-            health.TakeDamage(1, 1, playerObject.transform.position);
+
+
+            if (collision.transform.CompareTag("StanceAttack"))
+            {
+                health.TakeDamage(1, 2, playerObject.transform.position);
+            }
+            if (collision.transform.CompareTag("HarmonyAttack"))
+            {
+                health.TakeDamage(1, 4, playerObject.transform.position);
+            }
 
         }
 

@@ -22,6 +22,7 @@ public class EnemyHealth : MonoBehaviour
     SwordAndGunCharacter swordAndGun;
     Player1 player1;
     InLevelSystems inLevelSystems;
+    ScoreSystem scoreSystem;
 
     AudioManager audioManager;
 
@@ -32,6 +33,7 @@ public class EnemyHealth : MonoBehaviour
         player1 = FindAnyObjectByType<Player1>();
         audioManager = FindAnyObjectByType<AudioManager>();
         inLevelSystems = FindAnyObjectByType<InLevelSystems>();
+        scoreSystem = FindAnyObjectByType<ScoreSystem>();
 
         doubleCheckTime = maxDoubleCheckTime;
     }
@@ -65,7 +67,7 @@ public class EnemyHealth : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.CompareTag("PlayerAttack") || collision.transform.CompareTag("StanceAttack"))
+        if (collision.transform.CompareTag("PlayerAttack") || collision.transform.CompareTag("StanceAttack") || collision.transform.CompareTag("HarmonyAttack"))
         {
             Vector2 direction = player1.transform.position - transform.position;
             float lenght = Vector2.Distance(player1.transform.position, transform.position);
@@ -74,10 +76,20 @@ public class EnemyHealth : MonoBehaviour
 
             // Kollar så att ingenting är ivägen för attacken (t ex en väg)
             if (!hit)
-            { 
-                
-                TakeDamage(1, 1, player1.transform.position);
-                
+            {
+                if (collision.transform.CompareTag("PlayerAttack"))
+                {
+                    TakeDamage(1, 1, player1.transform.position);
+                }
+                if (collision.transform.CompareTag("StanceAttack"))
+                {
+                    TakeDamage(1, 2, player1.transform.position);
+                }
+                if (collision.transform.CompareTag("HarmonyAttack"))
+                {
+                    TakeDamage(1, 4, player1.transform.position);
+                }
+
             }
             else if(hit.transform.name != "Sheild") // Dubbelkollar så länge spelaren inte träffade en sköld (annars kan man springa igenom och döda)
             {
@@ -100,7 +112,7 @@ public class EnemyHealth : MonoBehaviour
             if (!hit)
             {
 
-                TakeDamage(1, 3, collision.transform.position);
+                TakeDamage(1, 5, collision.transform.position);
 
             }
 
@@ -128,9 +140,11 @@ public class EnemyHealth : MonoBehaviour
 
         // whatTypeOfAttack
         // 0 = Door hit
-        // 1 = S&R Basic Hit
-        // 2 = S&R Revolver Hit
-        // 3 = Explosion
+        // 1 = Basic Hit
+        // 2 = StanceAttack Hit
+        // 3 = Ranged Hit
+        // 4 = harmony Hit
+        // 5 = Explosion
 
         #region Suicide Enemy
 
@@ -141,7 +155,7 @@ public class EnemyHealth : MonoBehaviour
 
             if (suicideComponent == null) { return; }
 
-            if(whatTypeOfAttack == 2)
+            if(whatTypeOfAttack == 3)
             {
                 StartCoroutine(suicideComponent.Explode());
             }
@@ -172,29 +186,50 @@ public class EnemyHealth : MonoBehaviour
             switch (whatTypeOfAttack)
             {
 
+                case 0:
+
+                    scoreSystem.DoorKill(transform.position);
+
+                    break;
+
                 case 1:
 
-                    if(swordAndGun != null)
-                    {
-                        swordAndGun.RechargeBullets();
-                    }
+                    swordAndGun.RechargeBullets();
+                    scoreSystem.NomralKill(transform.position);
 
                     break;
 
                 case 2:
 
-                    swordAndGun.RechargeStance();
-                    audioManager.PlayEnemyBulletDeathSound(transform.position);
+                    swordAndGun.RechargeBullets();
+                    scoreSystem.SpecialKill(transform.position, false);
 
                     break;
 
                 case 3:
+
+                    swordAndGun.RechargeStance();
+                    audioManager.PlayEnemyBulletDeathSound(transform.position);
+                    scoreSystem.SpecialKill(transform.position, true);
+
+                    break;
+
+
+                case 4:
+
+                    swordAndGun.RechargeBullets();
+                    scoreSystem.HarmonyKill(transform.position);
+
+                    break;
+
+                case 5:
 
                     BloodEffects(whatTypeOfAttack, fromWhere);
                     BloodEffects(whatTypeOfAttack, fromWhere);
                     BloodEffects(whatTypeOfAttack, fromWhere);
                     BloodEffects(whatTypeOfAttack, fromWhere);
                     audioManager.ExplosionKillSound(transform.position);
+                    scoreSystem.ExplosionKill(transform.position);
 
                     break;
 

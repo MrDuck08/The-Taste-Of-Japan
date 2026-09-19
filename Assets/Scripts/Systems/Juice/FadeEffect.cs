@@ -6,25 +6,30 @@ public class FadeEffect : MonoBehaviour
 {
     [SerializeField] float fadeSpeed = 0.5f;
     [SerializeField] bool destroyParent = false;
+    [SerializeField] bool goUpp = false;
+    [SerializeField] float goUppSpeed = 1.0f;
 
     SpriteRenderer spriteRenderer;
     Image image;
-    TextMeshProUGUI text;
+    TextMeshProUGUI textCanvas;
+    TextMeshPro text;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         image = GetComponent<Image>();
-        text = GetComponent<TextMeshProUGUI>();
-
+        textCanvas = GetComponent<TextMeshProUGUI>();
+        text = GetComponent<TextMeshPro>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(spriteRenderer != null)
+        #region Different Types of Fade
+
+        if (spriteRenderer != null)
         {
             spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a - fadeSpeed * Time.deltaTime);
             if (spriteRenderer.color.a < 0.01f)
@@ -57,6 +62,22 @@ public class FadeEffect : MonoBehaviour
             }
         }
 
+        if (textCanvas != null)
+        {
+            textCanvas.color = new Color(textCanvas.color.r, textCanvas.color.g, textCanvas.color.b, textCanvas.color.a - fadeSpeed * Time.deltaTime);
+            if (textCanvas.color.a < 0.01f)
+            {
+                if (destroyParent)
+                {
+                    Destroy(transform.parent.gameObject);
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
+            }
+        }
+
         if (text != null)
         {
             text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a - fadeSpeed * Time.deltaTime);
@@ -71,6 +92,13 @@ public class FadeEffect : MonoBehaviour
                     Destroy(gameObject);
                 }
             }
+        }
+
+        #endregion
+
+        if (goUpp)
+        {
+            transform.position += new Vector3(0, goUppSpeed * Time.deltaTime);
         }
     }
 

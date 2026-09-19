@@ -10,14 +10,16 @@ public class RainbowEffect : MonoBehaviour
 
     SpriteRenderer spriteRenderer;
     Image image;
-    TextMeshProUGUI text;
+    TextMeshProUGUI textCanvas;
+    TextMeshPro text;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         image = GetComponent<Image>();
-        text = GetComponent<TextMeshProUGUI>();
+        textCanvas = GetComponent<TextMeshProUGUI>();
+        text = GetComponent<TextMeshPro>();
     }
 
     // Update is called once per frame
@@ -38,6 +40,14 @@ public class RainbowEffect : MonoBehaviour
 
             //image.color = gradient.Evaluate(t);
             image.color = new Color(gradient.Evaluate(t).r, gradient.Evaluate(t).g, gradient.Evaluate(t).b, image.color.a);
+        }
+
+        if (textCanvas != null)
+        {
+            float t = Mathf.Repeat(Time.time * speed, 1f);
+
+            //textCanvas.color = gradient.Evaluate(t);
+            textCanvas.color = new Color(gradient.Evaluate(t).r, gradient.Evaluate(t).g, gradient.Evaluate(t).b, textCanvas.color.a);
         }
 
         if (text != null)

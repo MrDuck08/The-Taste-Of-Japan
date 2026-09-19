@@ -17,11 +17,13 @@ public class InLevelSystems : MonoBehaviour
 
     CameraFollow cam;
     AudioManager audioManager;
+    ScoreSystem scoreSystem;
 
     private void Start()
     {
         cam = FindAnyObjectByType<CameraFollow>();
         audioManager = FindAnyObjectByType<AudioManager>();
+        scoreSystem = FindAnyObjectByType<ScoreSystem>();
 
         enemiesList.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
 
@@ -53,7 +55,6 @@ public class InLevelSystems : MonoBehaviour
                 cam.GoBackToPlayer();
                 cam.ZoomOutAgain(0.3f);
                 audioManager.RevertPitch();
-                FindAnyObjectByType<SwordAndGunCharacter>().ResetHarmony();
             }
 
         }
@@ -109,7 +110,7 @@ public class InLevelSystems : MonoBehaviour
 
             audioManager.PlayDeflectSound();
 
-            enemiesList[whatI].GetComponent<EnemyHealth>().TakeDamage(1, 2, fromWhere);
+            enemiesList[whatI].GetComponent<EnemyHealth>().TakeDamage(1, 3, fromWhere);
 
         }
 

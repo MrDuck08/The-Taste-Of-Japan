@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SuicideEnemy : EnemyBase
@@ -86,6 +85,7 @@ public class SuicideEnemy : EnemyBase
         enemyHealth.BloodEffects(1, transform.position);
 
         FindAnyObjectByType<InLevelSystems>().EnemyKilled(transform);
+        scoreSystem.ExplosionKill(transform.position);
 
         Destroy(gameObject);
 

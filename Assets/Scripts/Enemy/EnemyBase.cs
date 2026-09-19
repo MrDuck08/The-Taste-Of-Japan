@@ -95,6 +95,7 @@ public class EnemyBase : MonoBehaviour
     #endregion
 
     [HideInInspector] public AudioManager audioManager;
+    [HideInInspector] public ScoreSystem scoreSystem;
 
 
     public virtual void Awake()
@@ -105,7 +106,7 @@ public class EnemyBase : MonoBehaviour
 
         myRigidbody2D = GetComponent<Rigidbody2D>();
 
-
+        scoreSystem = FindFirstObjectByType<ScoreSystem>();
     }
 
 

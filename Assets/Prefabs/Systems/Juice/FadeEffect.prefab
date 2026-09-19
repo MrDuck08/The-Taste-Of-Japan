@@ -106,3 +106,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FadeEffect
   fadeSpeed: 0.5
   destroyParent: 0
+  goUpp: 0
+  goUppSpeed: 1

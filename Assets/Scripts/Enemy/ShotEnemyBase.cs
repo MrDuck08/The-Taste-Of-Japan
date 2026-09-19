@@ -95,7 +95,9 @@ public class ShotEnemyBase : EnemyBase
 
             GameObject spawnedBullet = Instantiate(bulletObject);
             spawnedBullet.transform.position = hit.point;
+            scoreSystem.PointsForDeflect(hit.point);
 
+            // Startar Bullet Deflect
             cameraFollow.ChangeTargetCam(spawnedBullet, 1);
 
         }
