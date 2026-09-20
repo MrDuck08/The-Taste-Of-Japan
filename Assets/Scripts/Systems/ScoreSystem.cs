@@ -1,9 +1,11 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ScoreSystem : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI comboText;
+    [SerializeField] Image comboImage;
     [SerializeField] GameObject pointScoreEffect;
 
     float currentScore = 0;
@@ -25,7 +27,16 @@ public class ScoreSystem : MonoBehaviour
     [SerializeField] float maxTimeUntilComboDrop = 3;
     [SerializeField] float varietyBonus = 50;
 
-    int lastKill = 1337; 
+    [Header("Final Score")]
+    [SerializeField] GameObject finalScoreFolder;
+    [SerializeField] TextMeshProUGUI finalScoreText;
+    float finalScoreCounter = 0;
+    [SerializeField] float countSpeed = 5;
+    float timeUntilScoreSound = 0.3f;
+    float maxTimeUntilScoreSound = 0.15f;
+    float fasterSound = 2;
+
+    int lastKill = 1337;
     // 1 = Basic
     // 2 = Stance
     // 3 = Ranged
@@ -33,16 +44,66 @@ public class ScoreSystem : MonoBehaviour
     // 5 = Door
     // 6 Explosion
 
+    Animator animator;
+
+    AudioManager audioManager;
+    InLevelSystems inLevelSystems;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        timeUntilComboDrop = maxTimeUntilComboDrop;
+        audioManager = FindAnyObjectByType<AudioManager>();
+        inLevelSystems = FindAnyObjectByType<InLevelSystems>();
+
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (timeUntilComboDrop > 0)
+        {
+
+            timeUntilComboDrop -= Time.deltaTime;
+
+            comboImage.fillAmount = timeUntilComboDrop / maxTimeUntilComboDrop;
+
+            if (timeUntilComboDrop <= 0)
+            {
+                currentCombo = 0;
+                currentComboMultiplier = 1;
+
+                comboText.text = "";
+            }
+
+        }
+
+        if (inLevelSystems.levelDone && finalScoreCounter < currentScore)
+        {
+            finalScoreFolder.SetActive(true);
+
+            finalScoreCounter += countSpeed * Time.deltaTime;
+            countSpeed += (countSpeed/2) * Time.deltaTime;
+
+            timeUntilScoreSound -= (fasterSound + 1) * Time.deltaTime;
+            fasterSound = 2 * (finalScoreCounter / currentScore);
+
+            finalScoreText.text = Mathf.Round(finalScoreCounter).ToString();
+
+
+            if(timeUntilScoreSound < 0)
+            {
+                timeUntilScoreSound = maxTimeUntilScoreSound;
+
+                audioManager.playFinalScoreSound();
+
+            }
+
+            if(finalScoreCounter >= currentScore)
+            {
+                audioManager.PlayLastPointSound();
+            }
+        }
     }
 
     #region Kills
@@ -273,6 +334,8 @@ public class ScoreSystem : MonoBehaviour
 
     void ComboIncrease()
     {
+
+        animator.SetTrigger("ComboUp");
 
         currentCombo++;
         currentComboMultiplier += comboIncrease;

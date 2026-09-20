@@ -8,11 +8,13 @@ public class FadeEffect : MonoBehaviour
     [SerializeField] bool destroyParent = false;
     [SerializeField] bool goUpp = false;
     [SerializeField] float goUppSpeed = 1.0f;
+    [SerializeField] int whatLayer = 0;
 
     SpriteRenderer spriteRenderer;
     Image image;
     TextMeshProUGUI textCanvas;
     TextMeshPro text;
+    MeshRenderer renderer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,7 +23,12 @@ public class FadeEffect : MonoBehaviour
         image = GetComponent<Image>();
         textCanvas = GetComponent<TextMeshProUGUI>();
         text = GetComponent<TextMeshPro>();
+        renderer = GetComponent<MeshRenderer>();
 
+        if(renderer != null)
+        {
+            renderer.sortingOrder = whatLayer;
+        }
     }
 
     // Update is called once per frame

@@ -209,7 +209,7 @@ public class SwordAndGunCharacter : Player1
 
                     audioManager.StopHarmonySounds();
                     Time.timeScale = 1;
-                    Debug.Log("Here 3");
+
                     Time.fixedDeltaTime = 0.016F;
 
                     // Sätter den under reset så att man kan börja bygga harmoni av denna attack

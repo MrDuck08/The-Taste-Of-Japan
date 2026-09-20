@@ -242,3 +242,4 @@ MonoBehaviour:
   destroyParent: 0
   goUpp: 1
   goUppSpeed: 2
+  whatLayer: 1337

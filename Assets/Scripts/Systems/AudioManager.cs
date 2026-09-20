@@ -10,6 +10,7 @@ public class AudioManager : MonoBehaviour
     List<GameObject> infSoundList = new List<GameObject>();
     List<float> originalPitchList = new List<float>();
     GameObject playerObj;
+    float increaseFinalPointPitch = 1;
 
     [Header("General")]
 
@@ -20,6 +21,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] GameObject explosionKillSound;
     [SerializeField] List<GameObject> explosionImpactSoundList = new List<GameObject>();
     [SerializeField] GameObject anticipationSound;
+    [SerializeField] GameObject finalScoreSound;
+    [SerializeField] GameObject lastPointSound;
 
 
     [Header("S & G Player")]
@@ -513,6 +516,8 @@ public class AudioManager : MonoBehaviour
 
     #endregion
 
+    #region System
+
     public void playAnticipationSound()
     {
 
@@ -521,6 +526,29 @@ public class AudioManager : MonoBehaviour
         SoundGeneral(anticipation, Vector2.zero, false);
 
     }
+
+    public void playFinalScoreSound()
+    {
+
+        GameObject finalScore = Instantiate(finalScoreSound);
+
+        increaseFinalPointPitch = increaseFinalPointPitch * 1.01f;
+        finalScore.GetComponent<AudioSource>().pitch = increaseFinalPointPitch;
+
+        SoundGeneral(finalScore, Vector2.zero, false);
+
+    }
+
+    public void PlayLastPointSound()
+    {
+
+        GameObject lastPoint = Instantiate(lastPointSound);
+
+        SoundGeneral(lastPoint, Vector2.zero, false);
+
+    }
+
+    #endregion
 
     void SoundGeneral(GameObject sound, Vector2 newPos, bool infinite)
     {
