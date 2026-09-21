@@ -10,7 +10,6 @@ public class AudioManager : MonoBehaviour
     List<GameObject> infSoundList = new List<GameObject>();
     List<float> originalPitchList = new List<float>();
     GameObject playerObj;
-    float increaseFinalPointPitch = 1;
 
     [Header("General")]
 
@@ -21,8 +20,12 @@ public class AudioManager : MonoBehaviour
     [SerializeField] GameObject explosionKillSound;
     [SerializeField] List<GameObject> explosionImpactSoundList = new List<GameObject>();
     [SerializeField] GameObject anticipationSound;
+
+    [Header("Score")]
     [SerializeField] GameObject finalScoreSound;
     [SerializeField] GameObject lastPointSound;
+    [SerializeField] GameObject additionalScoreSound;
+    float additionalScorePitch = 1;
 
 
     [Header("S & G Player")]
@@ -527,13 +530,12 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public void playFinalScoreSound()
+    public void playFinalScoreSound(float pitch)
     {
 
         GameObject finalScore = Instantiate(finalScoreSound);
 
-        increaseFinalPointPitch = increaseFinalPointPitch * 1.01f;
-        finalScore.GetComponent<AudioSource>().pitch = increaseFinalPointPitch;
+        finalScore.GetComponent<AudioSource>().pitch = pitch;
 
         SoundGeneral(finalScore, Vector2.zero, false);
 
@@ -545,6 +547,18 @@ public class AudioManager : MonoBehaviour
         GameObject lastPoint = Instantiate(lastPointSound);
 
         SoundGeneral(lastPoint, Vector2.zero, false);
+
+    }
+
+    public void PlayAdditionalScoreSound()
+    {
+
+        GameObject additionalScore = Instantiate(additionalScoreSound);
+
+        additionalScorePitch = additionalScorePitch * 1.1f;
+        additionalScore.GetComponent<AudioSource>().pitch = additionalScorePitch;
+
+        SoundGeneral(additionalScore, Vector2.zero, false);
 
     }
 

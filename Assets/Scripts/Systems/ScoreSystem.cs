@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,12 +13,20 @@ public class ScoreSystem : MonoBehaviour
 
     [Header("Values")]
     [SerializeField] float pointForNormalKill = 100;
+    int numberOfNormalKills = 0;
     [SerializeField] float pointForSpecialKill = 125;
+    int numberOfStancedKills = 0;
+    int numberOfRangedKills = 0;
     [SerializeField] float pointForHarmonyKill = 200;
+    int numberOfHarmonyKills = 0;
     [SerializeField] float pointForDoorKill = 150;
+    int numberOfDoorKills = 0;
     [SerializeField] float pointForExplosionKill = 200;
+    int numberOfExplosionKills = 0;
     [SerializeField] float pointForDestroyShield = 25;
+    int numberOfShieldsDestroyed = 0;
     [SerializeField] float pointsForDeflect = 200;
+    int numberOfDeflects = 0;
 
     [Header("Combo")]
     float currentCombo = 0;
@@ -26,16 +35,31 @@ public class ScoreSystem : MonoBehaviour
     float timeUntilComboDrop;
     [SerializeField] float maxTimeUntilComboDrop = 3;
     [SerializeField] float varietyBonus = 50;
+    float highestCombo = 0;
 
     [Header("Final Score")]
     [SerializeField] GameObject finalScoreFolder;
     [SerializeField] TextMeshProUGUI finalScoreText;
+
+    [SerializeField] GameObject additionalScoreObj;
+    [SerializeField] float additionalScoreMoveSpeed = 2;
+    List<GameObject> allCurrentAdditionalScoreObjList = new List<GameObject>();
+    List<Vector3> additionalScoreObjTargetPosList = new List<Vector3>();
+    List<bool> whatAdditionalScoreIsDoneList = new List<bool>();
+    int howManyAdditionalScoreDone = 0;
+    bool additionalScoresAdded = false;
+
+    [SerializeField] GameObject nextLevelButtons;
+    float finalScoreSoundPitch = 1;
+
     float finalScoreCounter = 0;
     [SerializeField] float countSpeed = 5;
     float timeUntilScoreSound = 0.3f;
     float maxTimeUntilScoreSound = 0.15f;
     float fasterSound = 2;
+    bool startFinalCountdown = false;
 
+    int numberOfVariety = 0;
     int lastKill = 1337;
     // 1 = Basic
     // 2 = Stance
@@ -70,6 +94,11 @@ public class ScoreSystem : MonoBehaviour
 
             if (timeUntilComboDrop <= 0)
             {
+                if(currentCombo > highestCombo && !startFinalCountdown)
+                {
+                    highestCombo = currentCombo;
+                }
+
                 currentCombo = 0;
                 currentComboMultiplier = 1;
 
@@ -78,14 +107,32 @@ public class ScoreSystem : MonoBehaviour
 
         }
 
-        if (inLevelSystems.levelDone && finalScoreCounter < currentScore)
+
+        // Sätter up det så den inte behöver kolla i ett annat script hela tiden
+        if(!startFinalCountdown)
         {
-            finalScoreFolder.SetActive(true);
+            if (inLevelSystems.levelDone)
+            {
+                startFinalCountdown = true;
+
+                finalScoreFolder.SetActive(true);
+
+
+                if (currentCombo > highestCombo)
+                {
+                    highestCombo = currentCombo;
+                }
+            }
+        }
+
+        if (startFinalCountdown && finalScoreCounter < currentScore)
+        {
 
             finalScoreCounter += countSpeed * Time.deltaTime;
             countSpeed += (countSpeed/2) * Time.deltaTime;
 
             timeUntilScoreSound -= (fasterSound + 1) * Time.deltaTime;
+            // fasterSound är samma som 2
             fasterSound = 2 * (finalScoreCounter / currentScore);
 
             finalScoreText.text = Mathf.Round(finalScoreCounter).ToString();
@@ -95,13 +142,137 @@ public class ScoreSystem : MonoBehaviour
             {
                 timeUntilScoreSound = maxTimeUntilScoreSound;
 
-                audioManager.playFinalScoreSound();
+                // Tillslut så blir pitchen 2
+                finalScoreSoundPitch = 1 + (finalScoreCounter / currentScore);
+                audioManager.playFinalScoreSound(finalScoreSoundPitch);
 
             }
 
-            if(finalScoreCounter >= currentScore)
+
+            if (finalScoreCounter >= currentScore)
             {
                 audioManager.PlayLastPointSound();
+                nextLevelButtons.SetActive(true);
+            }
+        }
+
+        if (startFinalCountdown && !additionalScoresAdded)
+        {
+            // Använder return så måste vara under
+
+            for (int i = 0; i < allCurrentAdditionalScoreObjList.Count; i++)
+            {
+
+                allCurrentAdditionalScoreObjList[i].transform.position = Vector3.MoveTowards(allCurrentAdditionalScoreObjList[i].transform.position, additionalScoreObjTargetPosList[i], additionalScoreMoveSpeed * Time.deltaTime);
+
+                if (Vector3.Distance(allCurrentAdditionalScoreObjList[i].transform.position, additionalScoreObjTargetPosList[i]) < 0.5f && !whatAdditionalScoreIsDoneList[i])
+                {
+                    whatAdditionalScoreIsDoneList[i] = true;
+                    howManyAdditionalScoreDone++;
+                }
+            }
+
+            if (howManyAdditionalScoreDone == allCurrentAdditionalScoreObjList.Count)
+            {
+                howManyAdditionalScoreDone = 0;
+
+                // highestCombo är den sista som läggs till
+                if (highestCombo == 0)
+                {
+                    additionalScoresAdded = true;
+                    return;
+                }
+
+
+                for (int i = 0; i < additionalScoreObjTargetPosList.Count; i++)
+                {
+                    additionalScoreObjTargetPosList[i] -= new Vector3(0, 80, 0);
+                    whatAdditionalScoreIsDoneList[i] = false;
+                }
+
+                GameObject scoreObj = Instantiate(additionalScoreObj);
+                scoreObj.transform.parent = gameObject.transform;
+                RectTransform rect = scoreObj.GetComponent<RectTransform>();
+                rect.anchoredPosition = new Vector2(-582, 243);
+
+                allCurrentAdditionalScoreObjList.Add(scoreObj);
+                additionalScoreObjTargetPosList.Add(rect.position);
+                whatAdditionalScoreIsDoneList.Add(false);
+
+                audioManager.PlayAdditionalScoreSound();
+
+                #region Check What New Text
+
+                if (numberOfNormalKills != 0)
+                {
+                    scoreObj.GetComponent<TextMeshProUGUI>().text = "x" + numberOfNormalKills + " Basic Kills";
+                    numberOfNormalKills = 0;
+                    return;
+                }
+
+                if (numberOfStancedKills != 0)
+                {
+                    scoreObj.GetComponent<TextMeshProUGUI>().text = "x" + numberOfStancedKills + " Stance Kills";
+                    numberOfStancedKills = 0;
+                    return;
+                }
+
+                if (numberOfRangedKills != 0)
+                {
+                    scoreObj.GetComponent<TextMeshProUGUI>().text = "x" + numberOfRangedKills + " Range Kills";
+                    numberOfRangedKills = 0;
+                    return;
+                }
+
+                if (numberOfHarmonyKills != 0)
+                {
+                    scoreObj.GetComponent<TextMeshProUGUI>().text = "x" + numberOfHarmonyKills + " Harmony Kills";
+                    numberOfHarmonyKills = 0;
+                    return;
+                }
+
+                if (numberOfDoorKills != 0)
+                {
+                    scoreObj.GetComponent<TextMeshProUGUI>().text = "x" + numberOfDoorKills + " Door Kills";
+                    numberOfDoorKills = 0;
+                    return;
+                }
+
+                if (numberOfExplosionKills != 0)
+                {
+                    scoreObj.GetComponent<TextMeshProUGUI>().text = "x" + numberOfExplosionKills + " Explosion Kills";
+                    numberOfExplosionKills = 0;
+                    return;
+                }
+
+                if (numberOfShieldsDestroyed != 0)
+                {
+                    scoreObj.GetComponent<TextMeshProUGUI>().text = "x" + numberOfShieldsDestroyed + " Shields Destroyed";
+                    numberOfShieldsDestroyed = 0;
+                    return;
+                }
+
+                if (numberOfDeflects != 0)
+                {
+                    scoreObj.GetComponent<TextMeshProUGUI>().text = "x" + numberOfDeflects + " Parries";
+                    numberOfDeflects = 0;
+                    return;
+                }
+
+                if (numberOfVariety != 0)
+                {
+                    scoreObj.GetComponent<TextMeshProUGUI>().text = "x" + numberOfVariety + " Variety";
+                    numberOfVariety = 0;
+                    return;
+                }
+
+                if (highestCombo != 0)
+                {
+                    scoreObj.GetComponent<TextMeshProUGUI>().text = highestCombo + " Highest Combo";
+                    highestCombo = 0;
+                }
+
+                #endregion
             }
         }
     }
@@ -120,9 +291,11 @@ public class ScoreSystem : MonoBehaviour
         if (lastKill != 1 && lastKill != 1337)
         {
             howMuchPoints += varietyBonus;
+            numberOfVariety++;
             variety = true;
         }
         lastKill = 1;
+        numberOfNormalKills++;
 
 
         howMuchPoints *= currentComboMultiplier;
@@ -156,18 +329,22 @@ public class ScoreSystem : MonoBehaviour
             if (lastKill != 2 && lastKill != 1337)
             {
                 howMuchPoints += varietyBonus;
+                numberOfVariety++;
                 variety = true;
             }
             lastKill = 2;
+            numberOfStancedKills++;
         }
         else
         {
             if (lastKill != 3 && lastKill != 1337)
             {
                 howMuchPoints += varietyBonus;
+                numberOfVariety++;
                 variety = true;
             }
             lastKill = 3;
+            numberOfRangedKills++;
         }
 
 
@@ -201,9 +378,11 @@ public class ScoreSystem : MonoBehaviour
         if (lastKill != 4 && lastKill != 1337)
         {
             howMuchPoints += varietyBonus;
+            numberOfVariety++;
             variety = true;
         }
         lastKill = 4;
+        numberOfHarmonyKills++;
 
 
         howMuchPoints *= currentComboMultiplier;
@@ -236,9 +415,11 @@ public class ScoreSystem : MonoBehaviour
         if (lastKill != 5 && lastKill != 1337)
         {
             howMuchPoints += varietyBonus;
+            numberOfVariety++;
             variety = true;
         }
         lastKill = 5;
+        numberOfDoorKills++;
 
 
         howMuchPoints *= currentComboMultiplier;
@@ -271,9 +452,11 @@ public class ScoreSystem : MonoBehaviour
         if (lastKill != 6 && lastKill != 1337)
         {
             howMuchPoints += varietyBonus;
+            numberOfVariety++;
             variety = true;
         }
         lastKill = 6;
+        numberOfExplosionKills++;
 
 
         howMuchPoints *= currentComboMultiplier;
@@ -298,6 +481,7 @@ public class ScoreSystem : MonoBehaviour
 
     public void PointsForDeflect(Vector3 pos)
     {
+        numberOfDeflects++;
 
         GameObject scoreJuiceText = Instantiate(pointScoreEffect);
         scoreJuiceText.transform.position = pos;
@@ -316,6 +500,8 @@ public class ScoreSystem : MonoBehaviour
 
     public void PointsForShieldDestroy(Vector3 pos)
     {
+
+        numberOfShieldsDestroyed++;
 
         GameObject scoreJuiceText = Instantiate(pointScoreEffect);
         scoreJuiceText.transform.position = pos;
