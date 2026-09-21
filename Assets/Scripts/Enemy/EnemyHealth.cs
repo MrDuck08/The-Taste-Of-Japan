@@ -298,7 +298,8 @@ public class EnemyHealth : MonoBehaviour
             float angle = 0;
             float spd = Random.Range(20, 25);
 
-            if (whatTypeOfAttack == 1)
+            // Om det är Basic, Stance eller Harmony så åker det åt slumpat håll, annars bort från en riktning
+            if (whatTypeOfAttack == 1 || whatTypeOfAttack == 2 || whatTypeOfAttack == 4)
             {
                 // Åker åt slumpade håll
                 dir = Random.onUnitSphere;

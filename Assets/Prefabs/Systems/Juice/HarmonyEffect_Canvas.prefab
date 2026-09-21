@@ -152,6 +152,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FadeEffect
   fadeSpeed: 0.5
   destroyParent: 0
+  goUpp: 0
+  goUppSpeed: 1
+  whatLayer: 0
 --- !u!1 &5146743954175057033
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,6 +349,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FadeEffect
   fadeSpeed: 0.1
   destroyParent: 1
+  goUpp: 0
+  goUppSpeed: 1
+  whatLayer: 0
 --- !u!114 &8360342723161949423
 MonoBehaviour:
   m_ObjectHideFlags: 0

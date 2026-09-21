@@ -268,7 +268,7 @@ public class ScoreSystem : MonoBehaviour
 
                 if (highestCombo != 0)
                 {
-                    scoreObj.GetComponent<TextMeshProUGUI>().text = highestCombo + " Highest Combo";
+                    scoreObj.GetComponent<TextMeshProUGUI>().text = highestCombo + " Highest Kill Combo";
                     highestCombo = 0;
                 }
 
@@ -526,7 +526,7 @@ public class ScoreSystem : MonoBehaviour
         currentCombo++;
         currentComboMultiplier += comboIncrease;
         timeUntilComboDrop = maxTimeUntilComboDrop;
-        comboText.text = currentCombo.ToString();
+        comboText.text = currentComboMultiplier.ToString() + "x";
 
     }
 }

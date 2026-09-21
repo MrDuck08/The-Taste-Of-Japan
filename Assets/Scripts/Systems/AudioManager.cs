@@ -66,6 +66,7 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] List<GameObject> enemyDeathSoundList = new List<GameObject>();
     [SerializeField] List<GameObject> enemyBulletDeathSoundList = new List<GameObject>();
+    [SerializeField] List<GameObject> enemyRangedInhaleSoundList = new List<GameObject>();
 
     [Header("Shield")]
 
@@ -259,12 +260,14 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public void HarmonyDingSound()
+    public void HarmonyDingSound(float newPitch, float newVolume)
     {
 
         int whatDingSound = Random.Range(0, harmonyDingSoundList.Count);
 
         GameObject dingSound = Instantiate(harmonyDingSoundList[whatDingSound]);
+        dingSound.GetComponent<AudioSource>().pitch = newPitch;
+        dingSound.GetComponent<AudioSource>().volume = newVolume;
 
 
         SoundGeneral(dingSound, Vector3.zero, false);
@@ -513,6 +516,19 @@ public class AudioManager : MonoBehaviour
 
 
         SoundGeneral(bulletDeathSound, newPos, false);
+
+
+    }
+
+    public void PlayRangedEnemyInhaleSound(Vector2 newPos, GameObject parent)
+    {
+
+        int whatInhaleSound = Random.Range(0, enemyRangedInhaleSoundList.Count);
+
+        GameObject inhaleSound = Instantiate(enemyRangedInhaleSoundList[whatInhaleSound]);
+        inhaleSound.transform.parent = parent.transform;
+
+        SoundGeneral(inhaleSound, newPos, false);
 
 
     }

@@ -48,7 +48,7 @@ public class SwordAndGunCharacter : Player1
     float maxTimeInHarmonyBase;
 
     bool killWithRevolver = false;
-    bool killWithCharge = false;
+    bool killWithMelee = false;
     [HideInInspector] public bool inHarmony = false;
     bool harmonyAvalibleEffect = true;
 
@@ -138,7 +138,7 @@ public class SwordAndGunCharacter : Player1
 
         #region Harmony
 
-        if (killWithCharge && killWithRevolver)
+        if (killWithMelee && killWithRevolver)
         {
             // Enter Harmony 
             if (Input.GetKeyDown(KeyCode.Space) && !dodgeLock && !inHarmony)
@@ -223,7 +223,7 @@ public class SwordAndGunCharacter : Player1
 
                 // Gör en after image med mellanrum
                 harmonyFadeEffectTime -= Time.unscaledDeltaTime;
-                if(harmonyFadeEffectTime < 0 )
+                if(harmonyFadeEffectTime < 0)
                 {
                     harmonyFadeEffectTime = maxHarmonyFadeEffectTime;
                     GameObject fadeObj = Instantiate(fadeEffectObj);
@@ -255,7 +255,8 @@ public class SwordAndGunCharacter : Player1
 
                     GameObject spawnedEffect = Instantiate(harmonyAvalibleEffectObj);
 
-                    audioManager.HarmonyDingSound();
+                    // 1 är pitch och 0.4 är volume (0.4 är normal)
+                    audioManager.HarmonyDingSound(1, 0.4f);
                 }
 
                 if (decayTimeForHarmony < 0)
@@ -481,7 +482,7 @@ public class SwordAndGunCharacter : Player1
 
     public void RechargeBullets()
     {
-        killWithCharge = true;
+        killWithMelee = true;
         ChargeKillImage.gameObject.SetActive(true);
 
         if (bullets != maxBullets)
@@ -515,7 +516,7 @@ public class SwordAndGunCharacter : Player1
         maxTimeInHarmony = maxTimeInHarmonyBase;
         harmonyFadeEffectTime = maxHarmonyFadeEffectTime;
 
-        killWithCharge = false;
+        killWithMelee = false;
         killWithRevolver = false;
         inHarmony = false;
         harmonyAvalibleEffect = true;
