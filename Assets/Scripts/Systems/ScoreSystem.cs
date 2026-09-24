@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ScoreSystem : MonoBehaviour
@@ -10,6 +11,8 @@ public class ScoreSystem : MonoBehaviour
     [SerializeField] GameObject pointScoreEffect;
 
     float currentScore = 0;
+
+    #region Values
 
     [Header("Values")]
     [SerializeField] float pointForNormalKill = 100;
@@ -27,15 +30,28 @@ public class ScoreSystem : MonoBehaviour
     int numberOfShieldsDestroyed = 0;
     [SerializeField] float pointsForDeflect = 200;
     int numberOfDeflects = 0;
+    [SerializeField] float varietyBonus = 50;
+
+    [Header("Time")]
+    [SerializeField] float mission1MaxTime = 45;
+    [SerializeField] float mission1MaxPoints = 2000;
+    [SerializeField] float mission2MaxTime = 45;
+    [SerializeField] float mission2MaxPoints = 4000;
+    [SerializeField] float mission3MaxTime = 90;
+    [SerializeField] float mission3MaxPoints = 20000;
+    float pointsForTime;
+
+    #endregion
 
     [Header("Combo")]
-    float currentCombo = 0;
-    float currentComboMultiplier = 1;
     [SerializeField] float comboIncrease = 0.5f;
     float timeUntilComboDrop;
     [SerializeField] float maxTimeUntilComboDrop = 3;
-    [SerializeField] float varietyBonus = 50;
+    float currentCombo = 0;
+    float currentComboMultiplier = 1;
     float highestCombo = 0;
+
+    #region Final Score counting
 
     [Header("Final Score")]
     [SerializeField] GameObject finalScoreFolder;
@@ -59,6 +75,8 @@ public class ScoreSystem : MonoBehaviour
     float fasterSound = 2;
     bool startFinalCountdown = false;
 
+    #endregion
+
     int numberOfVariety = 0;
     int lastKill = 1337;
     // 1 = Basic
@@ -67,6 +85,19 @@ public class ScoreSystem : MonoBehaviour
     // 4 = Harmony
     // 5 = Door
     // 6 Explosion
+
+    #region Ranks
+
+    [Header("Ranks")]
+    [SerializeField] TextMeshProUGUI rankText;
+    [SerializeField] List<float> mission1RanksList = new List<float>();
+    [SerializeField] List<float> mission2RanksList = new List<float>();
+    [SerializeField] List<float> mission3RanksList = new List<float>();
+
+    int whatMission = 1;
+    int whatRank = 0;
+
+    #endregion
 
     Animator animator;
 
@@ -80,6 +111,31 @@ public class ScoreSystem : MonoBehaviour
         inLevelSystems = FindAnyObjectByType<InLevelSystems>();
 
         animator = GetComponent<Animator>();
+
+        Scene currentScene = SceneManager.GetActiveScene();
+
+        switch (currentScene.name)
+        {
+
+            case "Mission 1":
+
+                whatMission = 1;
+
+                break;
+
+            case "Mission 2":
+
+                whatMission = 2;
+
+                break;
+
+            case "Mission 3":
+
+                whatMission = 3;
+
+                break;
+
+        }
     }
 
     // Update is called once per frame
@@ -117,7 +173,43 @@ public class ScoreSystem : MonoBehaviour
 
                 finalScoreFolder.SetActive(true);
 
+                #region Time Calculation
 
+                float howMuchPointsTime = 1337;
+
+                switch (whatMission)
+                {
+
+                    case 1:
+
+                        howMuchPointsTime = (inLevelSystems.currentActualTime / mission1MaxTime) - 1;
+                        mission1MaxPoints *= Mathf.Abs(howMuchPointsTime);
+                        pointsForTime = mission1MaxPoints;
+
+                        break;
+
+                    case 2:
+
+                        howMuchPointsTime = (inLevelSystems.currentActualTime / mission2MaxTime) - 1;
+                        mission2MaxPoints *= Mathf.Abs(howMuchPointsTime);
+                        pointsForTime = mission2MaxPoints;
+
+                        break;
+
+                    case 3:
+
+                        howMuchPointsTime = (inLevelSystems.currentActualTime / mission3MaxTime) - 1;
+                        mission3MaxPoints *= Mathf.Abs(howMuchPointsTime);
+                        pointsForTime = mission3MaxPoints;
+
+                        break;
+                }
+
+                currentScore += pointsForTime;
+
+                #endregion
+
+                // Om man slutar på en högre kombo
                 if (currentCombo > highestCombo)
                 {
                     highestCombo = currentCombo;
@@ -153,8 +245,11 @@ public class ScoreSystem : MonoBehaviour
             {
                 audioManager.PlayLastPointSound();
                 nextLevelButtons.SetActive(true);
+                DetermineRank();
             }
         }
+
+        #region Additional Score
 
         if (startFinalCountdown && !additionalScoresAdded)
         {
@@ -193,7 +288,7 @@ public class ScoreSystem : MonoBehaviour
                 GameObject scoreObj = Instantiate(additionalScoreObj);
                 scoreObj.transform.parent = gameObject.transform;
                 RectTransform rect = scoreObj.GetComponent<RectTransform>();
-                rect.anchoredPosition = new Vector2(-582, 243);
+                rect.anchoredPosition = new Vector2(-582, 333);
 
                 allCurrentAdditionalScoreObjList.Add(scoreObj);
                 additionalScoreObjTargetPosList.Add(rect.position);
@@ -266,6 +361,13 @@ public class ScoreSystem : MonoBehaviour
                     return;
                 }
 
+                if (inLevelSystems.currentShownTime != 0)
+                {
+                    scoreObj.GetComponent<TextMeshProUGUI>().text = inLevelSystems.currentShownTime.ToString("00:00") + " (" + pointsForTime.ToString("0") + "p)";
+                    inLevelSystems.currentShownTime = 0;
+                    return;
+                }
+
                 if (highestCombo != 0)
                 {
                     scoreObj.GetComponent<TextMeshProUGUI>().text = highestCombo + " Highest Kill Combo";
@@ -275,6 +377,8 @@ public class ScoreSystem : MonoBehaviour
                 #endregion
             }
         }
+
+        #endregion
     }
 
     #region Kills
@@ -526,7 +630,112 @@ public class ScoreSystem : MonoBehaviour
         currentCombo++;
         currentComboMultiplier += comboIncrease;
         timeUntilComboDrop = maxTimeUntilComboDrop;
-        comboText.text = currentComboMultiplier.ToString() + "x";
+        // F1 gör så att den vissar 1 decimal
+        comboText.text = currentComboMultiplier.ToString("F1") + "x";
+
+    }
+
+    void DetermineRank()
+    {
+
+        switch (whatMission)
+        {
+
+            case 1:
+
+                // I listan står alla poäng, om den går över en av den får den +1, sedan kollar jag bara vad den ligger på och ger en rank
+                for (int i = 0; i < mission1RanksList.Count; i++)
+                {
+
+                    if(currentScore > mission1RanksList[i])
+                    {
+
+                        whatRank++;
+
+                    }
+                }
+
+                break;
+
+            case 2:
+
+                for (int i = 0; i < mission2RanksList.Count; i++)
+                {
+
+                    if (currentScore > mission2RanksList[i])
+                    {
+
+                        whatRank++;
+
+                    }
+                }
+
+                break;
+
+            case 3:
+
+                for (int i = 0; i < mission3RanksList.Count; i++)
+                {
+
+                    if (currentScore > mission3RanksList[i])
+                    {
+
+                        whatRank++;
+
+                    }
+                }
+
+                break;
+
+        }
+
+        rankText.gameObject.SetActive(true);
+        switch (whatRank)
+        {
+            // D rank
+            case 1:
+
+                rankText.text = "D";
+
+                break;
+
+            // C Rank
+            case 2:
+
+                rankText.text = "C";
+
+                break;
+
+            // B Rank
+            case 3:
+
+                rankText.text = "B";
+
+                break;
+
+            // A Rank
+            case 4:
+
+                rankText.text = "A";
+
+                break;
+
+            // S Rank
+            case 5:
+
+                rankText.text = "S";
+
+                break;
+
+            // SSushi Rank
+            case 6:
+
+                rankText.text = "SSushi";
+                rankText.fontSize = 68;
+                rankText.gameObject.transform.position -= new Vector3(0, 115, 0);
+
+                break;
+        }
 
     }
 }

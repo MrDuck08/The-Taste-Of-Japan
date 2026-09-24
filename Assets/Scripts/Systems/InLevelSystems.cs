@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class InLevelSystems : MonoBehaviour
@@ -14,6 +15,11 @@ public class InLevelSystems : MonoBehaviour
 
     [SerializeField] LayerMask whatLayerToIgnore;
     [SerializeField] TrailRenderer bulletTrail;
+
+    [SerializeField] TextMeshProUGUI timerText;
+    [HideInInspector] public float currentShownTime = 0;
+    float minuteCounter = 0;
+    [HideInInspector] public float currentActualTime = 0;
 
     CameraFollow cam;
     AudioManager audioManager;
@@ -57,6 +63,22 @@ public class InLevelSystems : MonoBehaviour
                 audioManager.RevertPitch();
             }
 
+        }
+
+        if (!levelDone)
+        {
+            currentActualTime += Time.deltaTime;
+
+            currentShownTime += Time.deltaTime;
+            timerText.text = currentShownTime.ToString("00:00.00");
+
+            // Man måste "manuelt ändra så att det ser ut som att minuter går
+            minuteCounter += Time.deltaTime;
+            if (minuteCounter > 60)
+            {
+                currentShownTime += 40;
+                minuteCounter = 0f;
+            }
         }
     }
 
@@ -127,6 +149,7 @@ public class InLevelSystems : MonoBehaviour
         {
             levelDone = true;
             finalEnemyKill = true;
+            timerText.gameObject.SetActive(false);
 
             Time.timeScale = 0.1f;
             Time.fixedDeltaTime = 0.016F * Time.timeScale;

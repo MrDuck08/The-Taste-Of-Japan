@@ -122,8 +122,8 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
                     playerHealth.invincible = false;
                     harmonyChargingToPos = false;
                     posToGoToList.Clear();
-
                     playerSpesifics.ResetHarmony();
+
                     harmonyAttackObj.SetActive(false);
                     Destroy(tempObj);
 

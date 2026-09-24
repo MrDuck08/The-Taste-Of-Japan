@@ -65,7 +65,6 @@ public class BasicSword : MeleeWeaponsBase
             if (Vector2.Distance(player.transform.position, pointToRushTo) < 1.7f)
             {
                 StartCoroutine(RushAttack());
-                playerSpesifics.ResetHarmony();
                 rushing = false;
                 harmonyFadeEffectTime = maxHarmonyFadeEffectTime;
                 player.dodgeLock = false;
@@ -191,6 +190,7 @@ public class BasicSword : MeleeWeaponsBase
         yield return new WaitForSeconds(0.5f);
 
         harmonyAttackObj.SetActive(false);
+        playerSpesifics.ResetHarmony();
 
         yield return new WaitForSeconds(0.1f);
 

@@ -150,7 +150,9 @@ public class SwordAndGunCharacter : Player1
                 Time.fixedDeltaTime = 0.016F * Time.timeScale;
 
                 bulletKillImage.fillAmount = 1;
+                bulletKillImage.transform.GetChild(0).GetComponent<Image>().fillAmount = 1;
                 ChargeKillImage.fillAmount = 1;
+                ChargeKillImage.transform.GetChild(0).GetComponent<Image>().fillAmount = 1;
 
                 audioManager.PlayHarmonySounds();
 
@@ -233,7 +235,9 @@ public class SwordAndGunCharacter : Player1
                 maxTimeInHarmony -= Time.unscaledDeltaTime;
 
                 bulletKillImage.fillAmount = maxTimeInHarmony / maxTimeInHarmonyBase;
+                bulletKillImage.transform.GetChild(0).GetComponent<Image>().fillAmount = maxTimeInHarmony / maxTimeInHarmonyBase;
                 ChargeKillImage.fillAmount = maxTimeInHarmony / maxTimeInHarmonyBase;
+                ChargeKillImage.transform.GetChild(0).GetComponent<Image>().fillAmount = maxTimeInHarmony / maxTimeInHarmonyBase;
 
                 if (maxTimeInHarmony < 0)
                 {
@@ -247,7 +251,9 @@ public class SwordAndGunCharacter : Player1
                 decayTimeForHarmony -= Time.deltaTime;
 
                 bulletKillImage.fillAmount = decayTimeForHarmony / decayTimeForHarmonyBase;
+                bulletKillImage.transform.GetChild(0).GetComponent<Image>().fillAmount = decayTimeForHarmony / decayTimeForHarmonyBase;
                 ChargeKillImage.fillAmount = decayTimeForHarmony / decayTimeForHarmonyBase;
+                ChargeKillImage.transform.GetChild(0).GetComponent<Image>().fillAmount = decayTimeForHarmony / decayTimeForHarmonyBase;
 
                 if (harmonyAvalibleEffect)
                 {
@@ -522,7 +528,9 @@ public class SwordAndGunCharacter : Player1
         harmonyAvalibleEffect = true;
 
         bulletKillImage.fillAmount = 1;
+        bulletKillImage.transform.GetChild(0).GetComponent<Image>().fillAmount = 1;
         ChargeKillImage.fillAmount = 1;
+        ChargeKillImage.transform.GetChild(0).GetComponent<Image>().fillAmount = 1;
         bulletKillImage.gameObject.SetActive(false);
         ChargeKillImage.gameObject.SetActive(false);
 
