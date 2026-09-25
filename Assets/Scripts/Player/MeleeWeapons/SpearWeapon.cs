@@ -199,6 +199,9 @@ public class SpearWeapon : MeleeWeaponsBase
 
     IEnumerator RushAttack()
     {
+        player.attacking = true;
+        rushAttackHasStarted = true;
+
 
         yield return new WaitForSeconds(0.1f);
 
@@ -206,16 +209,15 @@ public class SpearWeapon : MeleeWeaponsBase
         audioManager.PlaySpearHarmonySlashSound();
         audioManager.PlaySpearStabSound();
 
-        player.attacking = true;
-        rushAttackHasStarted = true;
 
         yield return new WaitForSeconds(0.5f);
 
         harmonyAttackObj.SetActive(false);
-        playerSpesifics.ResetHarmony();
 
         yield return new WaitForSeconds(0.1f);
 
+
+        playerSpesifics.ResetHarmony();
         playerHealth.invincible = false;
         rushAttackHasStarted = false;
         player.attacking = false;

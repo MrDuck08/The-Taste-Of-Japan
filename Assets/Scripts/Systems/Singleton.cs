@@ -19,6 +19,9 @@ public class Singleton : MonoBehaviour
     {
         if (instance == null)
         {
+            //Time.fixedDeltaTime = 0.02f;
+            //QualitySettings.vSyncCount = 0;
+            //Application.targetFrameRate = 170;
             instance = this;
             DontDestroyOnLoad(gameObject);
         }

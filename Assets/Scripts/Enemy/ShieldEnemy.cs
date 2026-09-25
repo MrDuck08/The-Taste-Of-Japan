@@ -74,33 +74,45 @@ public class ShieldEnemy : EnemyBase
     private void OnTriggerEnter2D(Collider2D collision)
     {
 
-        if (collision.transform.CompareTag("StanceAttack") || collision.transform.CompareTag("HarmonyAttack"))
+        if (collision.transform.CompareTag("StanceAttack") || collision.transform.CompareTag("HarmonyAttack") || collision.transform.CompareTag("Explosion"))
         {
             Vector2 direction = playerObject.transform.position - transform.position;
             float lenght = Vector2.Distance(playerObject.transform.position, transform.position);
 
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght, health.obsticleCheck);
+            // Dessa attacker ska gå igenom skölden
+            // tar bort layer
+            health.obsticleCheck &= ~(1 << LayerMask.NameToLayer("Shield"));
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght - 0.3f, health.obsticleCheck);
+            // Lägger tillbaks
+            health.obsticleCheck |= (1 << LayerMask.NameToLayer("Shield"));
 
-            // Om det itne finns någon sköld så ska den inte köra sköld ljud + effekter
-            if (ShieldObj != null && hit)
+
+            if (!hit)
             {
-                audioManager.PlayShieldDestroySound(transform.position);
+                // Om det itne finns någon sköld så ska den inte köra sköld ljud + effekter
+                if (ShieldObj != null)
+                {
+                    audioManager.PlayShieldDestroySound(transform.position);
 
-                ParticleSystem spawnedShieldParticles = Instantiate(shieldDestroyParticles);
-                spawnedShieldParticles.transform.position = ShieldObj.transform.position;
-                scoreSystem.PointsForShieldDestroy(ShieldObj.transform.position);
+                    ParticleSystem spawnedShieldParticles = Instantiate(shieldDestroyParticles);
+                    spawnedShieldParticles.transform.position = ShieldObj.transform.position;
+                    scoreSystem.PointsForShieldDestroy(ShieldObj.transform.position);
 
-                shieldDestroyParticles.Play();
-            }
+                    shieldDestroyParticles.Play();
+                }
 
-
-            if (collision.transform.CompareTag("StanceAttack"))
-            {
-                health.TakeDamage(1, 2, playerObject.transform.position);
-            }
-            if (collision.transform.CompareTag("HarmonyAttack"))
-            {
-                health.TakeDamage(1, 4, playerObject.transform.position);
+                if (collision.transform.CompareTag("StanceAttack"))
+                {
+                    health.TakeDamage(1, 2, playerObject.transform.position);
+                }
+                if (collision.transform.CompareTag("HarmonyAttack"))
+                {
+                    health.TakeDamage(1, 4, playerObject.transform.position);
+                }
+                if (collision.transform.CompareTag("Explosion"))
+                {
+                    health.TakeDamage(1, 5, collision.transform.position);
+                }
             }
 
         }

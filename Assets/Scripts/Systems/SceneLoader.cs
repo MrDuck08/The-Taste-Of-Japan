@@ -16,7 +16,15 @@ public class SceneLoader : MonoBehaviour
 
     }
 
-    public void ChangeScene(int buildIndex)
+    public void ChangeSceneInt(int buildIndex)
+    {
+        Time.timeScale = 1;
+        Time.fixedDeltaTime = 0.02F;
+        PauseScript.pause = false;
+        SceneManager.LoadScene(buildIndex);
+    }
+
+    public void ChangeSceneString(string buildIndex)
     {
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02F;

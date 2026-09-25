@@ -453,10 +453,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -806,7 +806,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5120730371122288280}
-  - {fileID: 8793509553344906861}
+  - {fileID: 4715518697154875082}
   - {fileID: 6888786970679287554}
   - {fileID: 6836353145412159692}
   m_Father: {fileID: 0}
@@ -929,7 +929,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
@@ -950,8 +950,8 @@ MonoBehaviour:
   movementInput: {x: 0, y: 0}
   inactiveMovementInput: {x: 0, y: 0}
   playerVelocity: {x: 0, y: 0}
-  maxSpeed: 950
-  speed: 950
+  maxSpeed: 40
+  speed: 40
   lookDirection: {x: 0, y: 0}
   dodgeLock: 0
   lookOffset: 0
@@ -977,12 +977,14 @@ MonoBehaviour:
     m_Bits: 132
   decayTimeForHarmony: 7
   harmonyAvalibleEffectObj: {fileID: 5146743954175057033, guid: 4f982f602833514429198eb2ce27a097, type: 3}
+  harmonySlow: 1.7
   inHarmony: 0
+  harmonyAvalibleEffect: 1
   harmonyDoorHit: 0
   harmonyDoorHitPos: {x: 0, y: 0, z: 0}
   fadeEffectObj: {fileID: 6334758901914313067, guid: 13d684d6cf8bd1f4aa8ac868f255932d, type: 3}
   stanceAttack: 3
-  stanceSlow: 3
+  stanceSlow: 3.3
   stanceLookSpeed: 1
   bulletText: {fileID: 2525116312836534386}
   ChargeText: {fileID: 1442615365378370687}
@@ -1368,7 +1370,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1001 &7621040805904528201
+--- !u!1001 &5961447729723063278
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1376,57 +1378,57 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9217468368014027979}
     m_Modifications:
-    - target: {fileID: 1426429855709443364, guid: 1351b221c7a3fb249afd901ab198129e, type: 3}
+    - target: {fileID: 1426429855709443364, guid: db95fc5196f09a24db3b479cd5de2217, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1426429855709443364, guid: 1351b221c7a3fb249afd901ab198129e, type: 3}
+    - target: {fileID: 1426429855709443364, guid: db95fc5196f09a24db3b479cd5de2217, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1426429855709443364, guid: 1351b221c7a3fb249afd901ab198129e, type: 3}
+    - target: {fileID: 1426429855709443364, guid: db95fc5196f09a24db3b479cd5de2217, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1426429855709443364, guid: 1351b221c7a3fb249afd901ab198129e, type: 3}
+    - target: {fileID: 1426429855709443364, guid: db95fc5196f09a24db3b479cd5de2217, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1426429855709443364, guid: 1351b221c7a3fb249afd901ab198129e, type: 3}
+    - target: {fileID: 1426429855709443364, guid: db95fc5196f09a24db3b479cd5de2217, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1426429855709443364, guid: 1351b221c7a3fb249afd901ab198129e, type: 3}
+    - target: {fileID: 1426429855709443364, guid: db95fc5196f09a24db3b479cd5de2217, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1426429855709443364, guid: 1351b221c7a3fb249afd901ab198129e, type: 3}
+    - target: {fileID: 1426429855709443364, guid: db95fc5196f09a24db3b479cd5de2217, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1426429855709443364, guid: 1351b221c7a3fb249afd901ab198129e, type: 3}
+    - target: {fileID: 1426429855709443364, guid: db95fc5196f09a24db3b479cd5de2217, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1426429855709443364, guid: 1351b221c7a3fb249afd901ab198129e, type: 3}
+    - target: {fileID: 1426429855709443364, guid: db95fc5196f09a24db3b479cd5de2217, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1426429855709443364, guid: 1351b221c7a3fb249afd901ab198129e, type: 3}
+    - target: {fileID: 1426429855709443364, guid: db95fc5196f09a24db3b479cd5de2217, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6995902333820587194, guid: 1351b221c7a3fb249afd901ab198129e, type: 3}
+    - target: {fileID: 6995902333820587194, guid: db95fc5196f09a24db3b479cd5de2217, type: 3}
       propertyPath: m_Name
-      value: SpearWeapon
+      value: BasicMeleeWeapon
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1351b221c7a3fb249afd901ab198129e, type: 3}
---- !u!4 &8793509553344906861 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: db95fc5196f09a24db3b479cd5de2217, type: 3}
+--- !u!4 &4715518697154875082 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 1426429855709443364, guid: 1351b221c7a3fb249afd901ab198129e, type: 3}
-  m_PrefabInstance: {fileID: 7621040805904528201}
+  m_CorrespondingSourceObject: {fileID: 1426429855709443364, guid: db95fc5196f09a24db3b479cd5de2217, type: 3}
+  m_PrefabInstance: {fileID: 5961447729723063278}
   m_PrefabAsset: {fileID: 0}

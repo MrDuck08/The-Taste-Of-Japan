@@ -144,6 +144,13 @@ MonoBehaviour:
   nextLevelButtons: {fileID: 1062777232487998089}
   countSpeed: 10
   rankText: {fileID: 7269385937006137628}
+  tutorialMissionRankList:
+  - 0
+  - 1000
+  - 2000
+  - 3000
+  - 4000
+  - 5000
   mission1RanksList:
   - 1
   - 4000

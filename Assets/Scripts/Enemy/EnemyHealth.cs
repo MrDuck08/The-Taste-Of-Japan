@@ -106,7 +106,8 @@ public class EnemyHealth : MonoBehaviour
             Vector2 direction = collision.transform.position - transform.position;
             float lenght = Vector2.Distance(collision.transform.position, transform.position);
 
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght, obsticleCheck);
+            // - 0.3 fär annars går rayen in i en väg och explosionen kommer ej räknas
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght - 0.3f, obsticleCheck);
 
             // Kollar så att ingenting är ivägen för attacken (t ex en väg)
             if (!hit)

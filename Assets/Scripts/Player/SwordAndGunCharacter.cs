@@ -46,11 +46,12 @@ public class SwordAndGunCharacter : Player1
     float decayTimeForHarmonyBase;
     float maxTimeInHarmony = 10f;
     float maxTimeInHarmonyBase;
+    [SerializeField] float harmonySlow = 2;
 
     bool killWithRevolver = false;
     bool killWithMelee = false;
     [HideInInspector] public bool inHarmony = false;
-    bool harmonyAvalibleEffect = true;
+    [HideInInspector] public bool harmonyAvalibleEffect = true;
 
     [HideInInspector] public bool harmonyDoorHit = false;
     [HideInInspector] public Vector3 harmonyDoorHitPos = Vector3.zero;
@@ -66,7 +67,7 @@ public class SwordAndGunCharacter : Player1
     [Header("Stance")]
 
     [SerializeField] int stanceAttack = 2;
-    [SerializeField] int stanceSlow = 4;
+    [SerializeField] float stanceSlow = 4;
     [SerializeField] float stanceLookSpeed = 1;
     int maxStanceAttack;
 
@@ -160,7 +161,8 @@ public class SwordAndGunCharacter : Player1
             }
 
             // In harmony now
-            if (inHarmony)
+            // Kollar så att man inte kan aktivera den flera gånger om man spamklickar
+            if (inHarmony && meleeWeapon.rushAttackHasStarted == false)
             {
                 #region Rush
 
@@ -173,8 +175,8 @@ public class SwordAndGunCharacter : Player1
 
 
                     // Resetar variabler
-           
 
+                    speed = maxSpeed;
                     dodgeLock = true;
                     lockRotationParent = true;
 
@@ -182,7 +184,7 @@ public class SwordAndGunCharacter : Player1
 
                     audioManager.StopHarmonySounds();
                     Time.timeScale = 1;
-                    Time.fixedDeltaTime = 0.016F;
+                    Time.fixedDeltaTime = 0.02F;
                 }
 
                 #endregion
@@ -192,6 +194,7 @@ public class SwordAndGunCharacter : Player1
                 // Revolver attack harmony
                 if (Input.GetMouseButtonDown(1) && !dodgeLock)
                 {
+                    speed = maxSpeed;
 
                     bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Door"));
                     bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Wall"));
@@ -212,7 +215,7 @@ public class SwordAndGunCharacter : Player1
                     audioManager.StopHarmonySounds();
                     Time.timeScale = 1;
 
-                    Time.fixedDeltaTime = 0.016F;
+                    Time.fixedDeltaTime = 0.02F;
 
                     // Sätter den under reset så att man kan börja bygga harmoni av denna attack
                     if (hit.transform.tag == "Enemy")
@@ -231,6 +234,8 @@ public class SwordAndGunCharacter : Player1
                     GameObject fadeObj = Instantiate(fadeEffectObj);
                     fadeObj.GetComponent<FadeEffect>().InstanciateInfo(gameObject.GetComponent<SpriteRenderer>(), transform, new Color32(170, 170, 170,255));
                 }
+
+                speed = maxSpeed / harmonySlow;
 
                 maxTimeInHarmony -= Time.unscaledDeltaTime;
 
@@ -516,11 +521,11 @@ public class SwordAndGunCharacter : Player1
 
     public void ResetHarmony()
     {
-        
 
         decayTimeForHarmony = decayTimeForHarmonyBase;
         maxTimeInHarmony = maxTimeInHarmonyBase;
         harmonyFadeEffectTime = maxHarmonyFadeEffectTime;
+        speed = maxSpeed;
 
         killWithMelee = false;
         killWithRevolver = false;
@@ -535,7 +540,7 @@ public class SwordAndGunCharacter : Player1
         ChargeKillImage.gameObject.SetActive(false);
 
         Time.timeScale = 1;
-        Time.fixedDeltaTime = 0.016F;
+        Time.fixedDeltaTime = 0.02F;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

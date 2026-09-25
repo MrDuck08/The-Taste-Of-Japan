@@ -21,6 +21,8 @@ public class InLevelSystems : MonoBehaviour
     float minuteCounter = 0;
     [HideInInspector] public float currentActualTime = 0;
 
+    float fps;
+
     CameraFollow cam;
     AudioManager audioManager;
     ScoreSystem scoreSystem;
@@ -40,8 +42,16 @@ public class InLevelSystems : MonoBehaviour
 
     }
 
+    //void OnGUI()
+    //{
+    //    GUI.Label(new Rect(10, 10, 500, 100), $"FPS: {fps:F1}");
+    //    GUI.Label(new Rect(150, 10, 500, 100), Time.fixedDeltaTime.ToString());
+    //}
+
     private void Update()
     {
+        //fps = 1f / Time.unscaledDeltaTime;
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             FindAnyObjectByType<SceneLoader>().ReloadScene();

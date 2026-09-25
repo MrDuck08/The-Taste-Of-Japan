@@ -105,7 +105,7 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
             player.transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
 
 
-            // 1.7 Så den stannar innan den kommer fram
+            // 0.5 Så den stannar innan den kommer fram
             if (Vector2.Distance(player.transform.position, posToGoToList[0]) < 0.5f)
             {
 

@@ -90,6 +90,7 @@ public class ScoreSystem : MonoBehaviour
 
     [Header("Ranks")]
     [SerializeField] TextMeshProUGUI rankText;
+    [SerializeField] List<float> tutorialMissionRankList = new List<float>();
     [SerializeField] List<float> mission1RanksList = new List<float>();
     [SerializeField] List<float> mission2RanksList = new List<float>();
     [SerializeField] List<float> mission3RanksList = new List<float>();
@@ -116,6 +117,12 @@ public class ScoreSystem : MonoBehaviour
 
         switch (currentScene.name)
         {
+
+            case "TutorialScene":
+
+                whatMission = 0;
+
+                break;
 
             case "Mission 1":
 
@@ -640,6 +647,22 @@ public class ScoreSystem : MonoBehaviour
 
         switch (whatMission)
         {
+
+            case 0:
+
+                // I listan står alla poäng, om den går över en av den får den +1, sedan kollar jag bara vad den ligger på och ger en rank
+                for (int i = 0; i < tutorialMissionRankList.Count; i++)
+                {
+
+                    if (currentScore > tutorialMissionRankList[i])
+                    {
+
+                        whatRank++;
+
+                    }
+                }
+
+                break;
 
             case 1:
 

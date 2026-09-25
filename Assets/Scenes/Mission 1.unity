@@ -4756,7 +4756,7 @@ MonoBehaviour:
   m_BuildHeightMesh: 0
   m_MinRegionArea: 0
   m_HideEditorLogs: 0
-  m_NavMeshData: {fileID: 23800000, guid: 105cdea897decf1478f6936233ea22c3, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 09f0a9bb36a132a44bf6f97b8a000a40, type: 2}
 --- !u!4 &887300187
 Transform:
   m_ObjectHideFlags: 0
@@ -5228,67 +5228,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96f6da732e9cadb4c9dd16634976c2c6, type: 3}
---- !u!1001 &1059078058
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5502448033236901996, guid: 8d177933e8582284a9cda963c3a62b6c, type: 3}
-      propertyPath: m_Name
-      value: DoubleSword Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5502448033236901996, guid: 8d177933e8582284a9cda963c3a62b6c, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9217468368014027979, guid: 8d177933e8582284a9cda963c3a62b6c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -1.34
-      objectReference: {fileID: 0}
-    - target: {fileID: 9217468368014027979, guid: 8d177933e8582284a9cda963c3a62b6c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.82
-      objectReference: {fileID: 0}
-    - target: {fileID: 9217468368014027979, guid: 8d177933e8582284a9cda963c3a62b6c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9217468368014027979, guid: 8d177933e8582284a9cda963c3a62b6c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9217468368014027979, guid: 8d177933e8582284a9cda963c3a62b6c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9217468368014027979, guid: 8d177933e8582284a9cda963c3a62b6c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9217468368014027979, guid: 8d177933e8582284a9cda963c3a62b6c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9217468368014027979, guid: 8d177933e8582284a9cda963c3a62b6c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9217468368014027979, guid: 8d177933e8582284a9cda963c3a62b6c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9217468368014027979, guid: 8d177933e8582284a9cda963c3a62b6c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 8d177933e8582284a9cda963c3a62b6c, type: 3}
 --- !u!4 &1069606387 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1372834768438976000, guid: f5d2dfb6be3575542a609e749db09565, type: 3}
@@ -9531,4 +9470,3 @@ SceneRoots:
   - {fileID: 1222413411}
   - {fileID: 3829477567885760140}
   - {fileID: 1459183068}
-  - {fileID: 1059078058}

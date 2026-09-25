@@ -194,8 +194,8 @@ public class BasicSword : MeleeWeaponsBase
 
         yield return new WaitForSeconds(0.1f);
 
+
         playerHealth.invincible = false;
-        rushing = false;
         rushAttackHasStarted = false;
         player.attacking = false;
 

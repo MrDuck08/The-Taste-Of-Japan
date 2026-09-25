@@ -103,7 +103,7 @@ public class PauseScript : MonoBehaviour
 
     public void Home()
     {
-        sceneLoader.ChangeScene(0);
+        sceneLoader.ChangeSceneInt(0);
     }
 
     public void Resume()

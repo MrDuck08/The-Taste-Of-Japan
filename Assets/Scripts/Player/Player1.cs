@@ -119,8 +119,13 @@ public class Player1 : MonoBehaviour
 
     void Moving()
     {
+        // Speed = 950
+        //playerVelocity = new Vector2(movementInput.x * speed, movementInput.y * speed);
+        //myRigidbody.linearVelocity += playerVelocity * Time.fixedDeltaTime;
+
+        // Speed = 40
         playerVelocity = new Vector2(movementInput.x * speed, movementInput.y * speed);
-        myRigidbody.linearVelocity += playerVelocity * Time.fixedDeltaTime;
+        myRigidbody.linearVelocity = playerVelocity;
 
 
     }
