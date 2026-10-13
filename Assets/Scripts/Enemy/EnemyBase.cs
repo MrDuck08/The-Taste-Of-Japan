@@ -253,8 +253,11 @@ public class EnemyBase : MonoBehaviour
             {
                 timeUntilNewRotation = maxTimeUntilNewRotation;
 
-
-                transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
+                // Det var en bug där den vände sig om när den skulle sikta in, det här fixar det
+                if (!attacking)
+                {
+                    transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
+                }
 
 
             }

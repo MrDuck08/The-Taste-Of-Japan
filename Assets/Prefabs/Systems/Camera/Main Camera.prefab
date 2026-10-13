@@ -268,7 +268,7 @@ MonoBehaviour:
   startZoomValue: 10
   maxHowMuchZoom: 3
   maxZoomInTime: 0.3
-  maxTimeToBeZommedIn: 1.5
+  maxTimeToBeZommedIn: 1
   maxZoomOutTime: 0.3
 --- !u!114 &1726741371478631397
 MonoBehaviour:

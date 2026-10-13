@@ -44,7 +44,7 @@ public class SwordAndGunCharacter : Player1
     [SerializeField] float decayTimeForHarmony = 7f;
     [SerializeField] GameObject harmonyAvalibleEffectObj;
     float decayTimeForHarmonyBase;
-    float maxTimeInHarmony = 10f;
+    float maxTimeInHarmony = 8f;
     float maxTimeInHarmonyBase;
     [SerializeField] float harmonySlow = 2;
 

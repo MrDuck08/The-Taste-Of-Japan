@@ -75,8 +75,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 2785017856
-  m_fontColor: {r: 0, g: 0, b: 0, a: 0.6509804}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd480bdb5fa99c5498985b4e180849f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FadeEffect
-  fadeSpeed: 0.5
+  fadeSpeed: 0.65
   destroyParent: 0
   goUpp: 0
   goUppSpeed: 1
@@ -318,7 +318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.14901961}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.2784314}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -403,9 +403,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5802242148937169472}
     m_Modifications:
+    - target: {fileID: 2515307194319547528, guid: a8720c2928bf743419b342857501673d, type: 3}
+      propertyPath: m_Color.a
+      value: 0.2784314
+      objectReference: {fileID: 0}
+    - target: {fileID: 2864998267558114532, guid: a8720c2928bf743419b342857501673d, type: 3}
+      propertyPath: fadeSpeed
+      value: 0.65
+      objectReference: {fileID: 0}
     - target: {fileID: 4175471601776963475, guid: a8720c2928bf743419b342857501673d, type: 3}
       propertyPath: m_Name
       value: HarmonyReadyEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 8554478878065015138, guid: a8720c2928bf743419b342857501673d, type: 3}
+      propertyPath: m_fontColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8554478878065015138, guid: a8720c2928bf743419b342857501673d, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
       objectReference: {fileID: 0}
     - target: {fileID: 8586509359901910112, guid: a8720c2928bf743419b342857501673d, type: 3}
       propertyPath: m_Pivot.x

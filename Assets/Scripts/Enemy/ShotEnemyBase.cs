@@ -1,5 +1,7 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class ShotEnemyBase : EnemyBase
 {
@@ -29,6 +31,10 @@ public class ShotEnemyBase : EnemyBase
     [SerializeField] float walkBackSpeed = 2f;
 
 
+    SpriteRenderer spriteRenderer;
+    SpriteRenderer[] spriteRenderer2;
+    Color32 originalColour;
+
     CameraFollow cameraFollow;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -37,6 +43,10 @@ public class ShotEnemyBase : EnemyBase
         base.Start();
 
         bullets = maxBullets;
+
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer2 = GetComponentsInChildren<SpriteRenderer>(false);
+        originalColour = spriteRenderer.color;
 
         cameraFollow = FindAnyObjectByType<CameraFollow>();
 
@@ -73,8 +83,22 @@ public class ShotEnemyBase : EnemyBase
         audioManager.PlayRevolverClickSound(transform.position, gameObject);
         audioManager.PlayRangedEnemyInhaleSound(transform.position, gameObject);
 
+
+        foreach (SpriteRenderer sprite in spriteRenderer2)
+        {
+            sprite.color = Color.yellow;
+        }
+
+
         // Hur lång tid det tar att "sikta in"
         yield return new WaitForSeconds(startShotingTime);
+
+
+        foreach (SpriteRenderer sprite in spriteRenderer2)
+        {
+            sprite.color = originalColour;
+        }
+
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, 1337, ~bulletIgnoreLayerMask);
 

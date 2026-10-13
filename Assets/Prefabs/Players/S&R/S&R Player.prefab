@@ -516,7 +516,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -55.599915, y: 94.765015}
+  m_AnchoredPosition: {x: -55.599854, y: 94.765015}
   m_SizeDelta: {x: 101.9415, y: 56.3178}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8194011758884165422
@@ -950,8 +950,8 @@ MonoBehaviour:
   movementInput: {x: 0, y: 0}
   inactiveMovementInput: {x: 0, y: 0}
   playerVelocity: {x: 0, y: 0}
-  maxSpeed: 40
-  speed: 40
+  maxSpeed: 39
+  speed: 39
   lookDirection: {x: 0, y: 0}
   dodgeLock: 0
   lookOffset: 0
@@ -975,7 +975,7 @@ MonoBehaviour:
   bulletIgnoreLayerMask:
     serializedVersion: 2
     m_Bits: 132
-  decayTimeForHarmony: 7
+  decayTimeForHarmony: 6
   harmonyAvalibleEffectObj: {fileID: 5146743954175057033, guid: 4f982f602833514429198eb2ce27a097, type: 3}
   harmonySlow: 1.7
   inHarmony: 0
@@ -1162,7 +1162,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -55.6, y: 31.3}
+  m_AnchoredPosition: {x: -55.600098, y: 31.300049}
   m_SizeDelta: {x: 101.9415, y: 56.3178}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6369641907739082325

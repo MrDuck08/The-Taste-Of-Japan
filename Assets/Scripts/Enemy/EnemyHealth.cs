@@ -16,6 +16,7 @@ public class EnemyHealth : MonoBehaviour
     bool startDoubleCheck = false;
     float doubleCheckTime;
     float maxDoubleCheckTime = 1f;
+    int whatTypeOfAttackDoubleCheck = 1;
 
 
     ScreenShake screenShake;
@@ -58,8 +59,8 @@ public class EnemyHealth : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght, obsticleCheck);
 
             if (!hit)
-            {// VIKTIGT VIKGTIGT!!! Den kollar bara för spelar attacker, inte explosionsattacker
-                TakeDamage(1, 1, player1.transform.position);
+            {
+                TakeDamage(1, whatTypeOfAttackDoubleCheck, player1.transform.position);
             }
 
         }
@@ -95,6 +96,19 @@ public class EnemyHealth : MonoBehaviour
             {
                 doubleCheckTime = maxDoubleCheckTime;
                 startDoubleCheck = true;
+
+                if (collision.transform.CompareTag("PlayerAttack"))
+                {
+                    whatTypeOfAttackDoubleCheck = 1;
+                }
+                if (collision.transform.CompareTag("StanceAttack"))
+                {
+                    whatTypeOfAttackDoubleCheck = 2;
+                }
+                if (collision.transform.CompareTag("HarmonyAttack"))
+                {
+                    whatTypeOfAttackDoubleCheck = 4;
+                }
             }
 
 
@@ -107,13 +121,24 @@ public class EnemyHealth : MonoBehaviour
             float lenght = Vector2.Distance(collision.transform.position, transform.position);
 
             // - 0.3 fär annars går rayen in i en väg och explosionen kommer ej räknas
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght - 0.3f, obsticleCheck);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght, obsticleCheck);
 
             // Kollar så att ingenting är ivägen för attacken (t ex en väg)
             if (!hit)
             {
 
                 TakeDamage(1, 5, collision.transform.position);
+
+            }
+            else
+            {
+                doubleCheckTime = maxDoubleCheckTime;
+                startDoubleCheck = true;
+
+                if (collision.transform.CompareTag("Explosion"))
+                {
+                    whatTypeOfAttackDoubleCheck = 5;
+                }
 
             }
 
@@ -249,6 +274,8 @@ public class EnemyHealth : MonoBehaviour
 
     }
 
+    #region Kill Effects
+
     public void KillEffects()
     {
 
@@ -327,5 +354,8 @@ public class EnemyHealth : MonoBehaviour
         }
 
     }
+
+    #endregion
+
 
 }

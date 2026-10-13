@@ -136,13 +136,13 @@ MonoBehaviour:
   mission3MaxTime: 90
   mission3MaxPoints: 20000
   comboIncrease: 0.2
-  maxTimeUntilComboDrop: 4
+  maxTimeUntilComboDrop: 3.2
   finalScoreFolder: {fileID: 2767586994964138261}
   finalScoreText: {fileID: 3311371775486040065}
   additionalScoreObj: {fileID: 4288894323875021923, guid: 378026244670ef0499c1a03d61d8fb4a, type: 3}
   additionalScoreMoveSpeed: 75
   nextLevelButtons: {fileID: 1062777232487998089}
-  countSpeed: 10
+  countSpeed: 13
   rankText: {fileID: 7269385937006137628}
   tutorialMissionRankList:
   - 0

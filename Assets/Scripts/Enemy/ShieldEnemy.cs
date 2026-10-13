@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class ShieldEnemy : EnemyBase
 {
@@ -11,6 +12,11 @@ public class ShieldEnemy : EnemyBase
 
     [SerializeField] float timeForAttack = 0.2f;
     [SerializeField] float timeForAttackToDisaappear = 0.1f;
+
+    bool startDoubleCheck = false;
+    float doubleCheckTime;
+    float maxDoubleCheckTime = 1f;
+    int whatTypeOfAttackDoubleCheck = 1;
 
     EnemyHealth health;
 
@@ -34,6 +40,45 @@ public class ShieldEnemy : EnemyBase
         if (inRangeForAttack && !attacking && playerObject != null)
         {
             StartCoroutine(BasicAttackRoutine());
+        }
+
+        if (startDoubleCheck)
+        {
+            doubleCheckTime -= Time.deltaTime;
+
+            if (doubleCheckTime < 0)
+            {
+                startDoubleCheck = false;
+                doubleCheckTime = maxDoubleCheckTime;
+
+            }
+
+
+            Vector2 direction = playerObject.transform.position - transform.position;
+            float lenght = Vector2.Distance(playerObject.transform.position, transform.position);
+
+            health.obsticleCheck &= ~(1 << LayerMask.NameToLayer("Shield"));
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, lenght - 0.3f, health.obsticleCheck);
+            // Lägger tillbaks
+            health.obsticleCheck |= (1 << LayerMask.NameToLayer("Shield"));
+
+            if (!hit)
+            {
+             // Om det itne finns någon sköld så ska den inte köra sköld ljud + effekter
+                if (ShieldObj != null)
+                {
+                    audioManager.PlayShieldDestroySound(transform.position);
+
+                    ParticleSystem spawnedShieldParticles = Instantiate(shieldDestroyParticles);
+                    spawnedShieldParticles.transform.position = ShieldObj.transform.position;
+                    scoreSystem.PointsForShieldDestroy(ShieldObj.transform.position);
+
+                    shieldDestroyParticles.Play();
+                }
+
+                health.TakeDamage(1, whatTypeOfAttackDoubleCheck, playerObject.transform.position);
+            }
+
         }
 
     }
@@ -112,6 +157,24 @@ public class ShieldEnemy : EnemyBase
                 if (collision.transform.CompareTag("Explosion"))
                 {
                     health.TakeDamage(1, 5, collision.transform.position);
+                }
+            }
+            else // Dubbelkollar så länge spelaren inte träffade en sköld (annars kan man springa igenom och döda)
+            {
+                doubleCheckTime = maxDoubleCheckTime;
+                startDoubleCheck = true;
+
+                if (collision.transform.CompareTag("StanceAttack"))
+                {
+                    whatTypeOfAttackDoubleCheck = 2;
+                }
+                if (collision.transform.CompareTag("HarmonyAttack"))
+                {
+                    whatTypeOfAttackDoubleCheck = 4;
+                }
+                if (collision.transform.CompareTag("Explosion"))
+                {
+                    whatTypeOfAttackDoubleCheck = 5;
                 }
             }
 
