@@ -55,6 +55,7 @@ public class SwordAndGunCharacter : Player1
 
     [HideInInspector] public bool harmonyDoorHit = false;
     [HideInInspector] public Vector3 harmonyDoorHitPos = Vector3.zero;
+    LineRenderer harmonyAttackLine;
 
 
 
@@ -106,6 +107,7 @@ public class SwordAndGunCharacter : Player1
         screenShake = FindAnyObjectByType<ScreenShake>();
 
         playerHealth = GetComponent<PlayerHealth>();
+        harmonyAttackLine = GetComponent<LineRenderer>();
     }
 
     public override void Update()
@@ -157,6 +159,8 @@ public class SwordAndGunCharacter : Player1
 
                 audioManager.PlayHarmonySounds();
 
+                harmonyAttackLine.enabled = true;
+
                 ThingsToFalse();
             }
 
@@ -181,6 +185,7 @@ public class SwordAndGunCharacter : Player1
                     lockRotationParent = true;
 
                     playerHealth.invincible = true;
+                    harmonyAttackLine.enabled = false;
 
                     audioManager.StopHarmonySounds();
                     Time.timeScale = 1;
@@ -192,37 +197,37 @@ public class SwordAndGunCharacter : Player1
                 #region Revolver
 
                 // Revolver attack harmony
-                if (Input.GetMouseButtonDown(1) && !dodgeLock)
-                {
-                    speed = maxSpeed;
+                //if (Input.GetMouseButtonDown(1) && !dodgeLock)
+                //{
+                //    speed = maxSpeed;
 
-                    bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Door"));
-                    bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Wall"));
-                    bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Shield"));
-                    RaycastHit2D hit = Physics2D.Raycast(transform.position, lookDirection, 1337, ~bulletIgnoreLayerMask);
-                    bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Door"));
-                    bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Wall"));
-                    bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Shield"));
+                //    bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Door"));
+                //    bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Wall"));
+                //    bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Shield"));
+                //    RaycastHit2D hit = Physics2D.Raycast(transform.position, lookDirection, 1337, ~bulletIgnoreLayerMask);
+                //    bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Door"));
+                //    bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Wall"));
+                //    bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Shield"));
 
-                    TrailRenderer trail = Instantiate(bulletTrail);
-                    trail.transform.position = transform.position;
+                //    TrailRenderer trail = Instantiate(bulletTrail);
+                //    trail.transform.position = transform.position;
 
-                    //SpawnTrail(trail, hit);
-                    trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(trail.transform.position, hit.point);
+                //    //SpawnTrail(trail, hit);
+                //    trail.GetComponent<BulletTrailScript>().MoveAndFadeTrail(trail.transform.position, hit.point);
 
-                    screenShake.ScreenRecoil(0.1f, 0.3f);
+                //    screenShake.ScreenRecoil(0.1f, 0.3f);
 
-                    audioManager.StopHarmonySounds();
-                    Time.timeScale = 1;
+                //    audioManager.StopHarmonySounds();
+                //    Time.timeScale = 1;
 
-                    Time.fixedDeltaTime = 0.02F;
+                //    Time.fixedDeltaTime = 0.02F;
 
-                    // Sätter den under reset så att man kan börja bygga harmoni av denna attack
-                    if (hit.transform.tag == "Enemy")
-                    {
-                        hit.transform.gameObject.GetComponent<EnemyHealth>().TakeDamage(1, 3, transform.position);
-                    }
-                }
+                //    // Sätter den under reset så att man kan börja bygga harmoni av denna attack
+                //    if (hit.transform.tag == "Enemy")
+                //    {
+                //        hit.transform.gameObject.GetComponent<EnemyHealth>().TakeDamage(1, 3, transform.position);
+                //    }
+                //}
 
                 #endregion
 
@@ -234,6 +239,43 @@ public class SwordAndGunCharacter : Player1
                     GameObject fadeObj = Instantiate(fadeEffectObj);
                     fadeObj.GetComponent<FadeEffect>().InstanciateInfo(gameObject.GetComponent<SpriteRenderer>(), transform, new Color32(170, 170, 170,255));
                 }
+
+                #region Harmony Line Effect
+
+
+                Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+                Vector3 direction = (mousePosition - transform.position).normalized;
+                float distance = Vector2.Distance(transform.position, mousePosition);
+
+
+                bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Door"));
+                bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Enemy"));
+                bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Shield"));
+                // Raycast toward the mouse
+                RaycastHit2D hitHarmonyRay = Physics2D.Raycast(transform.position, direction, distance, ~bulletIgnoreLayerMask);
+                // tar bort
+                bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Door"));
+                bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Enemy"));
+                bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Shield"));
+
+
+                Vector2 endPosition = Vector2.zero;
+                // Determine where the line should end
+                if (hitHarmonyRay.collider != null)
+                {
+                    endPosition = hitHarmonyRay.point;
+                }
+                else
+                {
+                    endPosition = mousePosition;
+                }
+
+                // Draw the line
+                harmonyAttackLine.SetPosition(0, transform.position);
+                harmonyAttackLine.SetPosition(1, endPosition);
+
+                #endregion
 
                 speed = maxSpeed / harmonySlow;
 
@@ -350,6 +392,7 @@ public class SwordAndGunCharacter : Player1
 
                 if (hit.transform.tag == "Enemy")
                 {
+
                     hit.transform.gameObject.GetComponent<EnemyHealth>().TakeDamage(1, 3, transform.position);
                 }
                 else
@@ -538,6 +581,7 @@ public class SwordAndGunCharacter : Player1
         ChargeKillImage.transform.GetChild(0).GetComponent<Image>().fillAmount = 1;
         bulletKillImage.gameObject.SetActive(false);
         ChargeKillImage.gameObject.SetActive(false);
+        harmonyAttackLine.enabled = false;
 
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02F;

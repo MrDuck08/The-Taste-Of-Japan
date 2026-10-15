@@ -11,6 +11,7 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
 
     [SerializeField] GameObject tempCameraFollowObj;
     GameObject tempObj;
+    LineRenderer harmonyLineAttack;
 
 
 
@@ -18,7 +19,7 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
     {
         base.Start();
 
-
+        harmonyLineAttack = GetComponent<LineRenderer>();
     }
 
     // Update is called once per frame
@@ -28,57 +29,95 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
 
         #region Harmony
 
-        if (lookingForDestination && Input.GetMouseButtonDown(0))
+
+        if (lookingForDestination)
         {
-
-            lookingForDestination = false;
-
-            harmonyAttackObj.SetActive(true);
+            #region Harmony Line Effect
 
 
-            float clickDistance = Vector2.Distance(tempObj.transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            Vector2 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - tempObj.transform.position;
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            // Behöver manuelt kolla om man träffar en dörr eftersom man åker för snabbt.
-            RaycastHit2D doorCheckHit = Physics2D.Raycast(tempObj.transform.position, dir, clickDistance, doorLayerMask);
+            Vector3 direction = (mousePosition - tempObj.transform.position).normalized;
+            float distance = Vector2.Distance(tempObj.transform.position, mousePosition);
 
-            // Tar bort och lägger till door layer så man kan åka igenom den. 
-            // Lägger till
+
             bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Door"));
-            RaycastHit2D hit = Physics2D.Raycast(tempObj.transform.position, dir, clickDistance, ~bulletIgnoreLayerMask);
+            bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Enemy"));
+            bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Shield"));
+            // Raycast toward the mouse
+            RaycastHit2D hitHarmonyRay = Physics2D.Raycast(tempObj.transform.position, direction, distance, ~bulletIgnoreLayerMask);
             // tar bort
             bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Door"));
+            bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Enemy"));
+            bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Shield"));
 
-            // Objekt var för långt bort
-            if (hit.point == Vector2.zero)
+
+            // Determine where the line should end
+            Vector2 endPosition = hitHarmonyRay.collider != null ? hitHarmonyRay.point : mousePosition;
+
+            // Draw the line
+            harmonyLineAttack.SetPosition(0, tempObj.transform.position);
+            harmonyLineAttack.SetPosition(1, endPosition);
+
+            #endregion
+
+
+            if (Input.GetMouseButtonDown(0))
             {
-                pointToRushTo = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            }
-            else
-            {
-                pointToRushTo = hit.point;
+                lookingForDestination = false;
 
-            }
-
-            // Dörr layer
-            if (doorCheckHit)
-            {
-
-                playerSpesifics.harmonyDoorHit = true;
-
-                playerSpesifics.harmonyDoorHitPos = transform.position;
-
-            }
+                harmonyAttackObj.SetActive(true);
 
 
-            posToGoToList.Add(pointToRushTo);
+                float clickDistance = Vector2.Distance(tempObj.transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                Vector2 dir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - tempObj.transform.position;
 
-            harmonyChargingToPos = true;
+                // Behöver manuelt kolla om man träffar en dörr eftersom man åker för snabbt.
+                RaycastHit2D doorCheckHit = Physics2D.Raycast(tempObj.transform.position, dir, clickDistance, doorLayerMask);
 
-            cam.GoBackToPlayer();
-            audioManager.HarmonyDashSound();
+                // Tar bort och lägger till door layer så man kan åka igenom den. 
+                // Lägger till
+                bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Door"));
+                bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Enemy"));
+                bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Shield"));
+                RaycastHit2D hit = Physics2D.Raycast(tempObj.transform.position, dir, clickDistance, ~bulletIgnoreLayerMask);
+                // tar bort
+                bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Door"));
+                bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Enemy"));
+                bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Shield"));
 
-            Time.timeScale = 1.0f;
+                // Objekt var för långt bort
+                if (hit.point == Vector2.zero)
+                {
+                    pointToRushTo = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                }
+                else
+                {
+                    pointToRushTo = hit.point;
+
+                }
+
+                // Dörr layer
+                if (doorCheckHit)
+                {
+
+                    playerSpesifics.harmonyDoorHit = true;
+
+                    playerSpesifics.harmonyDoorHitPos = transform.position;
+
+                }
+
+
+                posToGoToList.Add(pointToRushTo);
+
+                harmonyChargingToPos = true;
+
+                cam.GoBackToPlayer();
+                audioManager.HarmonyDashSound();
+
+                harmonyLineAttack.enabled = false;
+                Time.timeScale = 1.0f;
+            }    
 
         }
 
@@ -271,9 +310,13 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
         // Tar bort och lägger till door layer så man kan åka igenom den. 
         // Lägger till
         bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Door"));
+        bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Enemy"));
+        bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Shield"));
         RaycastHit2D hit = Physics2D.Raycast(transform.position, player.lookDirection, clickDistance, ~bulletIgnoreLayerMask);
         // tar bort
         bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Door"));
+        bulletIgnoreLayerMask &= ~(1 << LayerMask.NameToLayer("Enemy"));
+        bulletIgnoreLayerMask |= (1 << LayerMask.NameToLayer("Shield"));
 
         // Objekt var för långt bort
         if (hit.point == Vector2.zero)
@@ -309,6 +352,7 @@ public class QuiickDrawWeapon : MeleeWeaponsBase
 
         cam.ChangeTargetCam(tempObj, 3);
 
+        harmonyLineAttack.enabled = true;
         lookingForDestination = true;
 
     }
