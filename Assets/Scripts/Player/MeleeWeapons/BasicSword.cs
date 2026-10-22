@@ -69,6 +69,7 @@ public class BasicSword : MeleeWeaponsBase
                 harmonyFadeEffectTime = maxHarmonyFadeEffectTime;
                 player.dodgeLock = false;
                 player.lockRotationParent = false;
+                playerSpesifics.ResetHarmony();
             }
 
         }

@@ -146,22 +146,7 @@ public class SwordAndGunCharacter : Player1
             // Enter Harmony 
             if (Input.GetKeyDown(KeyCode.Space) && !dodgeLock && !inHarmony)
             {
-                inHarmony = true;
-
-                Time.timeScale = 0.1f;
-                // Måste ändra fixedDeltaTime annars laggar allting
-                Time.fixedDeltaTime = 0.016F * Time.timeScale;
-
-                bulletKillImage.fillAmount = 1;
-                bulletKillImage.transform.GetChild(0).GetComponent<Image>().fillAmount = 1;
-                ChargeKillImage.fillAmount = 1;
-                ChargeKillImage.transform.GetChild(0).GetComponent<Image>().fillAmount = 1;
-
-                audioManager.PlayHarmonySounds();
-
-                harmonyAttackLine.enabled = true;
-
-                ThingsToFalse();
+                ActivateHarmony();
             }
 
             // In harmony now
@@ -174,22 +159,7 @@ public class SwordAndGunCharacter : Player1
                 if (Input.GetMouseButtonDown(0) && !dodgeLock)
                 {
 
-                    // Aktiverar attacken i ens "meleeWeapon"
-                    meleeWeapon.HarmonyAttack();
-
-
-                    // Resetar variabler
-
-                    speed = maxSpeed;
-                    dodgeLock = true;
-                    lockRotationParent = true;
-
-                    playerHealth.invincible = true;
-                    harmonyAttackLine.enabled = false;
-
-                    audioManager.StopHarmonySounds();
-                    Time.timeScale = 1;
-                    Time.fixedDeltaTime = 0.02F;
+                    HarmonyAttack();    
                 }
 
                 #endregion
@@ -288,8 +258,7 @@ public class SwordAndGunCharacter : Player1
 
                 if (maxTimeInHarmony < 0)
                 {
-                    audioManager.StopHarmonySounds();
-                    ResetHarmony();
+                    HarmonyAttack();
                 }
 
             }
@@ -314,7 +283,7 @@ public class SwordAndGunCharacter : Player1
 
                 if (decayTimeForHarmony < 0)
                 {
-                    ResetHarmony();
+                    ActivateHarmony();
                 }
             }
 
@@ -562,6 +531,48 @@ public class SwordAndGunCharacter : Player1
 
     }
 
+    #region harmony
+
+    void ActivateHarmony()
+    {
+        inHarmony = true;
+
+        Time.timeScale = 0.1f;
+        // Måste ändra fixedDeltaTime annars laggar allting
+        Time.fixedDeltaTime = 0.016F * Time.timeScale;
+
+        bulletKillImage.fillAmount = 1;
+        bulletKillImage.transform.GetChild(0).GetComponent<Image>().fillAmount = 1;
+        ChargeKillImage.fillAmount = 1;
+        ChargeKillImage.transform.GetChild(0).GetComponent<Image>().fillAmount = 1;
+
+        audioManager.PlayHarmonySounds();
+
+        harmonyAttackLine.enabled = true;
+
+        ThingsToFalse();
+    }
+
+    void HarmonyAttack()
+    {
+        // Aktiverar attacken i ens "meleeWeapon"
+        meleeWeapon.HarmonyAttack();
+
+
+        // Resetar variabler
+
+        speed = maxSpeed;
+        dodgeLock = true;
+        lockRotationParent = true;
+
+        playerHealth.invincible = true;
+        harmonyAttackLine.enabled = false;
+
+        audioManager.StopHarmonySounds();
+        Time.timeScale = 1;
+        Time.fixedDeltaTime = 0.02F;
+    }
+
     public void ResetHarmony()
     {
 
@@ -586,6 +597,8 @@ public class SwordAndGunCharacter : Player1
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02F;
     }
+
+    #endregion
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

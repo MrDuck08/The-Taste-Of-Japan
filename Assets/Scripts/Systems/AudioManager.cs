@@ -41,6 +41,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] GameObject harmonyChoirSound;
     GameObject currentharmonyChoirSound;
     [SerializeField] List<GameObject> harmonyDingSoundList = new List<GameObject>();
+    [SerializeField] GameObject harmonyBuildUpSound;
+    float currentPitch;
 
     [Header("Gun")]
 
@@ -82,6 +84,11 @@ public class AudioManager : MonoBehaviour
     void Start()
     {
         playerObj = GameObject.FindGameObjectWithTag("Player");
+    }
+
+    private void Update()
+    {
+        
     }
 
     public void PlayDoorSlamSound(Vector2 newPos, bool playerPush)
@@ -271,6 +278,14 @@ public class AudioManager : MonoBehaviour
 
 
         SoundGeneral(dingSound, Vector3.zero, false);
+
+
+    }
+
+    public void PlayAnticipateHarmonySound(Vector2 newPos, GameObject parent)
+    {
+
+
 
 
     }
