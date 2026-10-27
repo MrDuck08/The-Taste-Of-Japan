@@ -41,8 +41,14 @@ public class AudioManager : MonoBehaviour
     [SerializeField] GameObject harmonyChoirSound;
     GameObject currentharmonyChoirSound;
     [SerializeField] List<GameObject> harmonyDingSoundList = new List<GameObject>();
+    [SerializeField] GameObject harmonyActivateSound;
     [SerializeField] GameObject harmonyBuildUpSound;
-    float currentPitch;
+    AudioSource harmonyBuildUpAudioSource;
+    // 7 sekunder är max tills harmony aktiveras automatiskt
+    float timeUntilHarmBUisZero = 7f;
+    float speedToZeroHarmonyBuildUp;
+    bool harmonyBuildUpActive = false;
+
 
     [Header("Gun")]
 
@@ -88,7 +94,14 @@ public class AudioManager : MonoBehaviour
 
     private void Update()
     {
-        
+
+        if (harmonyBuildUpActive)
+        {
+
+            harmonyBuildUpAudioSource.pitch -= speedToZeroHarmonyBuildUp * Time.deltaTime;
+
+        }
+
     }
 
     public void PlayDoorSlamSound(Vector2 newPos, bool playerPush)
@@ -282,12 +295,32 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public void PlayAnticipateHarmonySound(Vector2 newPos, GameObject parent)
+    public void PlayHarmonyBuildUpSound()
     {
 
 
+        GameObject harmonySound = Instantiate(harmonyBuildUpSound);
+        harmonyBuildUpAudioSource = harmonySound.GetComponent<AudioSource>();
+        harmonySound.GetComponent<AudioFade>().StartFadeIn();
+
+        harmonyBuildUpActive = true;
+        // 1 för att den startar på 1 och ska till 0
+        speedToZeroHarmonyBuildUp = 1 / timeUntilHarmBUisZero;
+
+        SoundGeneral(harmonySound, Vector2.zero, true);
+
+    }
+
+    public void StopharmonyBuildUpSound()
+    {
+
+        harmonyBuildUpActive = false;
+        Destroy(harmonyBuildUpAudioSource.gameObject);
 
 
+        GameObject harmonySound = Instantiate(harmonyActivateSound);
+
+        SoundGeneral(harmonySound, Vector2.zero, false);
     }
 
     #endregion

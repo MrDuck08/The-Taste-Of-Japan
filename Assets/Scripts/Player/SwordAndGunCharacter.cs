@@ -279,6 +279,7 @@ public class SwordAndGunCharacter : Player1
 
                     // 1 är pitch och 0.4 är volume (0.4 är normal)
                     audioManager.HarmonyDingSound(1, 0.4f);
+                    audioManager.PlayHarmonyBuildUpSound();
                 }
 
                 if (decayTimeForHarmony < 0)
@@ -547,6 +548,7 @@ public class SwordAndGunCharacter : Player1
         ChargeKillImage.transform.GetChild(0).GetComponent<Image>().fillAmount = 1;
 
         audioManager.PlayHarmonySounds();
+        audioManager.StopharmonyBuildUpSound();
 
         harmonyAttackLine.enabled = true;
 
